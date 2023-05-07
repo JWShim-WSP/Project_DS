@@ -1,0 +1,26 @@
+{% extends "base.html" %} 
+
+{% block title %}
+    Details about {{object.user.username}}
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <img src="{{ object.avatar.url }}" class="card-img-top avatar-big" alt="no-picture">
+    <div class="card-body">
+        <div calss="card-title">
+            <h1>Profile of {{object.user.username}}</h1>
+        </div>
+        <div class="card-text">
+            <p>First Name: {{object.user.first_name}}</p>
+            <p>Last Name: {{object.user.last_name}}</p>
+            <p>Email Address: {{object.user.email}}</p>
+            <p>Bio: {{ object.bio }}</p>
+            <p>Date Created: {{object.created}}</p>
+            <p>Date Updated: {{object.updated}}</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
