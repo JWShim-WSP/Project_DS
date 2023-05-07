@@ -44,10 +44,16 @@ INSTALLED_APPS = [
     'profiles',
     'products',
     'customers',
+    'myadmin',
+    'tools',
 
     # 3rd party apps
     'crispy_forms',
-    'crispy_bootstrap5'
+    'crispy_bootstrap5',
+
+    # Excel export
+    'import_export',
+
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'

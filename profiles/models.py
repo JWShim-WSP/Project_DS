@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 # Create your models here.
 
@@ -11,4 +12,8 @@ class Profile(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Profile of {self.user.username}"
+        return self.user.username
+    
+    # write your get_absolute_url instance method here for DetailView
+    def get_absolute_url(self):
+        return reverse('myadmin:memberdetails', kwargs={'pk':self.id})

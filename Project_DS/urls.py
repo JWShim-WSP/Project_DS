@@ -24,6 +24,8 @@ urlpatterns = [
     path('', include('sales.urls', namespace='sales')),
     path('reports/', include('reports.urls', namespace='reports')),
     path('my_profile/', include('profiles.urls', namespace='profiles')),
+    path('myadmin/', include('myadmin.urls', namespace='myadmin')),
+    path('tools/', include('tools.urls', namespace='tools')),
     path('admin/', admin.site.urls),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),

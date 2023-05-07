@@ -5,4 +5,3 @@ class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
         fields = {'name', 'remarks'}
-        export_order = fields

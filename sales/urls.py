@@ -22,12 +22,16 @@ Pass Converter
 """
 
 from django.urls import path
-from .views import home_view, SaleListView, SaleDetailView
+from .views import home_view, SaleListView, SaleDetailView, sale_list_view, sale_detail_view
 
 app_name = 'sales'
 
 urlpatterns = [
     path('', home_view, name='home'),
-    path('sales/', SaleListView.as_view(), name='list'),
-    path('sales/<pk>/', SaleDetailView.as_view(), name='detail'),
+    # permission required cannot be implemented for now for CBV
+    #path('sales/', SaleListView.as_view(), name='list'),
+    #path('sales/<pk>/', SaleDetailView.as_view(), name='detail'),
+    # go for FBV this time!
+    path('sales/', sale_list_view, name='list'),
+    path('sales/<pk>/', sale_detail_view, name='detail'),
 ]

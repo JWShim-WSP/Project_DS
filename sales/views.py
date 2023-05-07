@@ -7,6 +7,8 @@ import pandas as pd
 from .utils import get_customer_from_id, get_salesman_from_id, get_chart
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
@@ -89,15 +91,17 @@ class SaleDetailView(LoginRequiredMixin, DetailView):
     model = Sale
     template_name = 'sales/detail.html'
 
-@login_required
+
 # You can implement the Views above in FBV (Function Based View)
 # in the urls:
 # path('sales/', sale_list_view, name='listview')
 # path('sales/<pk>/', sale_detail_view, name='detailview')
+@staff_member_required
 def sale_list_view(request):
     qs = Sale.objects.all()
     return render(request, 'sales/main.html', {'object_list':qs})
 
+@staff_member_required
 def sale_detail_view(request, pk):
     obj = Sale.objects.get(pk=pk)
     # or
