@@ -84,12 +84,12 @@ def home_view(request):
 
 class SaleListView(LoginRequiredMixin, ListView):
     model = Sale
-    template_name = 'sales/main.html'
+    template_name = 'sales/sales_list.html'
     # context_object_name = 'sales' ; if you want a unique object name
 
 class SaleDetailView(LoginRequiredMixin, DetailView):
     model = Sale
-    template_name = 'sales/detail.html'
+    template_name = 'sales/sales_detail.html'
 
 
 # You can implement the Views above in FBV (Function Based View)
@@ -99,11 +99,11 @@ class SaleDetailView(LoginRequiredMixin, DetailView):
 @staff_member_required
 def sale_list_view(request):
     qs = Sale.objects.all()
-    return render(request, 'sales/main.html', {'object_list':qs})
+    return render(request, 'sales/sales_list.html', {'object_list':qs})
 
 @staff_member_required
 def sale_detail_view(request, pk):
     obj = Sale.objects.get(pk=pk)
     # or
     # obj = get_object_or_404(Sale, pk=pk)
-    return render(request, 'sales/detail.html', {'object':obj})
+    return render(request, 'sales/sales_detail.html', {'object':obj})

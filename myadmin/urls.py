@@ -1,11 +1,13 @@
 from django.urls import path
-from profiles.views import MemberList, MemberDetails
-from .views import myAdmin
+from myadmin.views import MemberList, MemberDetails, member_list_view, member_detail_view
 
 app_name = 'myadmin'
 
 urlpatterns = [
-    path('', MemberList, name='memberlist'),
-    path('<int:page>', MemberList, name='memberlist'),
-    path('details/<pk>', MemberDetails, name='memberdetails'),
+#    path('', MemberList.as_view(), name='memberlist'),
+#    path('<int:page>', MemberList.as_view(), name='memberlist'),
+#    path('details/<pk>', MemberDetails.as_view(), name='memberdetails'),
+    path('', member_list_view, name='memberlist'),
+    path('<int:page>', member_list_view, name='memberlist'),
+    path('details/<pk>', member_detail_view, name='memberdetails'),
 ]

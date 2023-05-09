@@ -45,7 +45,14 @@ INSTALLED_APPS = [
     'products',
     'customers',
     'myadmin',
+
+    # favorite tools
     'tools',
+    'calculator',
+    'calendarwithevent',
+    'excurrency',
+    'worldtime',
+    'todolist',
 
     # 3rd party apps
     'crispy_forms',

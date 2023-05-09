@@ -1,25 +1,19 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Tools
+Tools
 {% endblock title %}
 
 {% block content %}
+Tools List
+<br>
 
-    Tools
-    <hr>
-    {% for object in object_list %}
-        <div class="card mb-3">
-            {% if object.image %}
-                <img src="{{object.image.url}}" class="card-img-top" alt="{{object.name}}">
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{object.name}}</h5>
-                <p class="card-text">{{object.remarks|truncatewords:2}}</p>
-                <a href="{{ object.get_absolute_url }}" class="btn btn-primary">details</a>
-                <a href="{% url 'reports:pdf' object.pk %}" class="btn btn-danger">pdf</a>
-            </div>
-        </div>
-    {% endfor%}
+<div class="card mb-3">
+    <a href="{% url 'calculator:calculator' %}" class="card-body">Calculator</a>
+    <a href="{% url 'calendarwithevent:calendarwithevent' %}" class="card-body">Calendar with Event</a>
+    <a href="{% url 'excurrency:excurrency' %}" class="card-body">Currency Exchange Rate</a>
+    <a href="{% url 'worldtime:timeconvert' %}" class="card-body">World Time Conversion</a>
+    <a href="{% url 'todolist:todolist' %}" class="card-body">To-Do List</a>
+</div>
 
 {% endblock content %}

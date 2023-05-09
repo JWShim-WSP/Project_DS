@@ -1,5 +1,5 @@
 from django.shortcuts import render
 
 # Create your views here.
-def ToolsMain(request):
+def tools_main_view(request):
     return render(request, 'tools/main.html')
