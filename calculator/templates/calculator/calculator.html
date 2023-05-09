@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Calculator
+{% endblock %}
+
+{% block content %}
+{% load static %}
+
+{% if query %}
+  <!-- Modal -->
+  <div class="modal fade" id="calculatorModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Result</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          {% if error %}
+          <h3 class="modal-title">Expression Error: {{ query }}</h1>
+          {% else %}
+          <h3 class="modal-title">{{ query }} = {{ answer }}</h1>
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+  </div>
+{% endif %}
+
+<div class="container text-center">
+  <div class="row justify-content-center">
+    <div class="col-8">
+      <h3 class="text-primary"><b>Djangoon's Calculator</b></h3>
+      <br>
+      <form action="{% url 'calculator:submitquery' %}" method="get">
+        {% csrf_token %}
+        <div class="input-group input-group-lg">
+          <span class="input-group-text" id="inputGroup-sizing-lg">Expression</span>
+          {% if query %}
+            {% if error %}
+            <input type="text" name="query" id="query" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" 
+                  autofocus placeholder="Error: {{ query }}">
+            {% else %}
+            <input type="text" name="query" id="query" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" 
+                  autofocus placeholder="{{ query }} = {{ answer }}">
+            {% endif %}
+          {% else %}
+            <input type="text" name="query" id="query" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" autofocus>
+          {% endif %}
+        </div>
+        <br>
+        <div class="d-grid gap-2 d-md-block">
+          <button type="submit" class="buttons btn btn-primary"><b>Submit</b></button>
+          &nbsp
+          <button type="reset" class="buttons btn btn-warning"><b>Reset</b></button>
+        </div>
+      </form>
+      <br>
+      <br>
+      <hr>
+      <h3><b>Instructions</b></h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Operators</th>
+            <th>Functions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>+</td>
+            <td>Addition</td>
+          </tr>
+          <tr>
+            <td>-</td>
+            <td>Subtraction</td>
+          </tr>
+          <tr>
+            <td>*</td>
+            <td>Multiplication</td>
+          </tr>
+          <tr>
+            <td>/</td>
+            <td>Division</td>
+          </tr>
+          <tr>
+            <td>//</td>
+            <td>Floor Division</td>
+          </tr>
+          <tr>
+            <td>**</td>
+            <td>Exponential</td>
+          </tr>
+          <tr>
+            <td>%</td>
+            <td>Modulus</td>
+          </tr>
+          <tr>
+            <td>0b, 0o, 0x</td>
+            <td>Binary, Octal, Hex into Decimal</td>
+          </tr>
+          <tr>
+            <td>bin(), oct(), hex()</td>
+            <td>Convert into Binary, Octal, Hex</td>
+          </tr>
+          <tr>
+            <td><<, >>, &, ^, |</td>
+            <td>Bitwise Shift left & right, AND, XOR, OR</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- End Content -->
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %} 
+
+{% block title %}
+World Time Conversion
+{% endblock %}
+
+{% block content %}
+
+<!-- Here you start to edit the body of Currency Exchange Service -->
+
+<script type="text/javascript">
+
+  toggle_count = 0;
+
+  function getCurrentTimeDate() {
+    if (toggle_count == 1) {
+      window.location.href = "{% url 'worldtime:timeconvert' %}"
+    }
+    else {
+      toggle_count = toggle_count + 1;
+    }
+  }
+
+  setTimeout(getCurrentTimeDate, 1000);
+
+</script>
+
+<div class="col-6 text-center">
+  <h3 class="text-primary"><b>World Local Times </b></h3>
+  <table class="table" >
+    <thead>
+        <tr class="text-primary">
+            <th>Local City</th>
+            <th>Local Time</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for Key, Value in LocalTimes.items %}
+      <tr>
+        <td><b>{{Key}}</b></td>
+          <td>{{Value}}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Event Item Form
+{% endblock %}
+
+
+{% block content %}
+<div class="col-8 text-center">
+    <h2><b>[{{ title }}]</b></h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <input class="btn btn-primary"
+            value="Save"
+            type="submit">
+        <input class="btn btn-primary"
+            value="Cancel"
+            type="button"
+            onclick="location.href='{% url "calendarwithevent:calendarevents" %}'">
+        {% if object %}
+            <input class="btn btn-primary"
+            value="Delete this event"
+            type="button"
+            onclick="location.href='{% url "calendarwithevent:event-delete" object.id %}'">
+        {% endif %}                        
+    </form>
+</div>
+
+{% endblock %}

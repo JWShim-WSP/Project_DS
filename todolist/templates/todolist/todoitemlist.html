@@ -1,0 +1,53 @@
+{% extends "base.html" %} 
+
+{% block title %}
+    To Do Item List
+{% endblock %}
+
+{% block content %}
+<div class="text-center">
+<h3 class="text-primary"><b>[{{ todo_list.title }}]</b></h3>
+<table class="table" >
+    <thead>
+        <tr class="text-primary">
+            <th>To Do Item</th>
+            <th>Created Date</th>
+            <th>Due Date</th>
+            <th>Priority</th>
+            <th>Completed</th>
+        </tr>
+    </thead>
+    {% for x in todoitemlist %}
+    <tbody>
+        <tr onclick="window.location='{{x.get_absolute_url}}'">
+            <td>{{x.title}}</td>
+            <td>{{x.created_date}}</td>
+            <td>{{x.due_date}}</td>
+            <td>{{x.priority}}</td>
+            {% if x.item_completed == True %}
+                <td class="text-primary" style="font-size:x-large">&#9745</td>
+            {% else %}
+                <td style="font-size:x-large">&#9744</td>
+            {% endif %}
+    </tr>
+    </tbody>
+    {% empty %}
+    <h4>You have no to-do items in this list.</h4>
+    {% endfor %}
+</table>
+
+<input class="btn btn-primary"
+    value="Add a new item to {{ todo_list.title }}"
+    type="button"
+    onclick="location.href='{% url "todolist:item-add" todo_list.id %}'">
+<input class="btn btn-primary"
+    value="Delete this To-Do"
+    type="button"
+    onclick="location.href='{% url "todolist:list-delete" todo_list.id %}'">
+<input class="btn btn-primary"
+    value="Go to To-Do List"
+    type="button"
+    onclick="location.href='{% url "todolist:todolist" %}'">
+</div>
+
+{% endblock %}

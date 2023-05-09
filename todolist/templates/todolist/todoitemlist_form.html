@@ -1,0 +1,34 @@
+{% extends "base.html" %} 
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    To Do Item Form
+{% endblock %}
+
+
+{% block content %}
+
+<div class="text-center">
+    <h3><b>{{ title }}</b></h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form | crispy }}
+        
+        <input class="btn btn-primary"
+            value="Submit"
+            type="submit">
+        <input class="btn btn-primary"
+            value="Cancel"
+            type="button"
+            onclick="location.href='{% url "todolist:todoitemlist" todo_list.id %}'">
+        {% if object %}
+            <input class="btn btn-primary"
+            value="Delete this item"
+            type="button"
+            onclick="location.href='{% url "todolist:item-delete" todo_list.id object.id %}'">
+        {% endif %}        
+    </form>
+</div>
+
+{% endblock %}
