@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+# for hiding secret information such as email password, API key, etc.
+import environ
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +28,7 @@ SECRET_KEY = 'django-insecure-%s=9+)0+xd0_ruyyd_40x(xdyyrem8t=m6iv_%i4f8ext9e9ps
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -53,14 +56,13 @@ INSTALLED_APPS = [
     'excurrency',
     'worldtime',
     'todolist',
+    'emailsend',
 
     # 3rd party apps
     'crispy_forms',
     'crispy_bootstrap5',
-
-    # Excel export
+    # Excel import and export
     'import_export',
-
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
@@ -148,6 +150,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
     BASE_DIR / 'sales' / 'static',
     BASE_DIR / 'reports' / 'static',
+    BASE_DIR / 'excurrency' / 'static',
+    BASE_DIR / 'emailsend' / 'static',
 ]
 
 MEDIA_URL = 'media/'
@@ -157,3 +161,17 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+env = environ.Env()
+environ.Env.read_env()
+
+# Send e-mails through the SMTP-server defined in .env
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = 587
+
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+
+#Custom setting: To email
+RECIPIENT_ADDRESS = env('RECIPIENT_ADDRESS')

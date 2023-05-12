@@ -60,9 +60,10 @@ BST Project - Sales
     grouped by transaction_id df
     {{ df | safe }}
     <br>
-    
-    <img src="data:image/png;base64, {{chart|safe}}" id='img'>
-{% endif %}
+
+    <img src="data:image/png;base64, {{chart | safe}}" id='img'>
+
+    {% endif %}
 
 <br>
 <button type="button" class="btn btn-primary not-visible" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">add report</button>

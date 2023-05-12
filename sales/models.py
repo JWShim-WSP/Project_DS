@@ -34,8 +34,9 @@ class Position(models.Model):
 class Sale(models.Model):
     transaction_id = models.CharField(max_length=12, blank=True)
     positions = models.ManyToManyField(Position)
-
-    # This will be automatically calculated through the signal through changes of positions in signals.py
+    #if multi positions are allowed, it is not easy to trace down Sale and Position
+    #position = models.ForeignKey(Position, on_delete=models.CASCADE)
+    # This will be automatically calculated through the signal of changes of positions in signals.py
     total_price = models.FloatField(blank=True, null=True)
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
@@ -48,11 +49,14 @@ class Sale(models.Model):
             self.transaction_id = generate_code()
         if self.created is None:
             self.created = timezone.now()
+        #if self.total_price is None:
+        #    self.total_price = self.position.price
         return super().save(*args, **kwargs)
 
     # Have all positions, and calculate the sum of all prices of the postions to get total_price in signal.py
     def get_positions(self):
-        return self.positions.all()
+        return self.positions.all() # multi positions will not be used
+        #return self.position
 
     def get_absolute_url(self):
         return reverse('sales:detail', kwargs={'pk':self.pk})

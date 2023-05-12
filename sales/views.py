@@ -5,6 +5,9 @@ from .forms import SalesSearchForm
 from reports.forms import ReportForm
 import pandas as pd
 from .utils import get_customer_from_id, get_salesman_from_id, get_chart
+from products.models import Product
+from customers.models import Customer
+
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -16,6 +19,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 @login_required
 def home_view(request):
+
+    bst_products = Product.objects.all()
+
     sales_df = None
     positions_df = None
     merged_df = None
@@ -48,11 +54,17 @@ def home_view(request):
             for sale in sales_qs:
                 for pos in sale.get_positions():
                     obj = {
-                        'position_id': pos.id,
-                        'product': pos.product.name,
-                        'quantity': pos.quantity,
-                        'price': pos.price,
-                        'sales_id': pos.get_sales_id(), # reverse relationship to 'Sale' from 'Position'
+                    'position_id': pos.id,
+                    'product': pos.product.name,
+                    'quantity': pos.quantity,
+                    'price': pos.price,
+                    'sales_id': pos.get_sales_id(), # reverse relationship to 'Sale' from 'Position'
+
+                    #'position_id': sale.position.id,
+                    #'product': sale.position.product.name,
+                    #'quantity': sale.position.quantity,
+                    #'price': sale.position.price,
+                    #'sales_id': sale.id,
                     }
                     positions_data.append(obj)
 
@@ -63,10 +75,10 @@ def home_view(request):
 
             chart = get_chart(chart_type, sales_df, results_by)
 
-            sales_df = sales_df.to_html()
-            positions_df = positions_df.to_html()
-            merged_df = merged_df.to_html()
-            df = df.to_html()
+            sales_df = sales_df.to_html(classes='table table-striped text-center', justify='center')
+            positions_df = positions_df.to_html(classes='table table-striped text-center', justify='center')
+            merged_df = merged_df.to_html(classes='table table-striped text-center', justify='center')
+            df = df.to_html(classes='table table-striped text-center', justify='center')
         else:
             no_data = 'No data is availablein in this date range'
 

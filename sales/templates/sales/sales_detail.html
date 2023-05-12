@@ -21,14 +21,22 @@
 <table class="table">
     <thead>
       <tr>
-        <th scope="col">#</th>
         <th scope="col">Product</th>
         <th scope="col">Quantity</th>
         <th scope="col">Price</th>
         <th scope="col">Customer</th>
+        <th scope="col">Sale Date</th>
       </tr>
     </thead>
     <tbody>
+        <tr>
+            <td>{{ object.position.product.name }}</td>
+            <td>{{ object.position.quantity }}</td>
+            <td>{{ object.total_price }}</td>
+            <td>{{ object.customer.name }}</td>
+            <td>{{ object.created }}</td>
+        </tr>
+<!--
         {% for pos in object.get_positions %}
             <tr>
                 <th scope="row">{{ forloop.counter }}</th>
@@ -38,6 +46,7 @@
                 <td>{{ pos.get_sales_customer }}</td>
             </tr>
         {% endfor %}
+-->                
     </tbody>
 </table>
   

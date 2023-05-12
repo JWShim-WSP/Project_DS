@@ -31,6 +31,7 @@ urlpatterns = [
     path('excurrency/', include('excurrency.urls', namespace='excurrency')),
     path('worldtime/', include('worldtime.urls', namespace='worldtime')),
     path('todolist/', include('todolist.urls', namespace='todolist')),
+    path('emailsend/', include('emailsend.urls', namespace='emailsend')),
     path('admin/', admin.site.urls),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
