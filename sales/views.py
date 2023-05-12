@@ -48,7 +48,7 @@ def home_view(request):
             sales_df['created'] = sales_df['created'].apply(lambda x: x.strftime('%Y-%m-%d')) # lambda argument: expression
             sales_df['updated'] = sales_df['updated'].apply(lambda x: x.strftime('%Y-%m-%d')) # lambda argument: expression
             sales_df.rename({'customer_id': 'customer', 'salesman_id': 'salesman', 'id': 'sales_id'}, axis=1, inplace=True)
-            sales_df['sales_id'] = sales_df['id'] # or, you can add a new 'sales_id' column
+            #sales_df['sales_id'] = sales_df['id'] # or, you can add a new 'sales_id' column
 
             positions_data = []
             for sale in sales_qs:
@@ -59,7 +59,6 @@ def home_view(request):
                     'quantity': pos.quantity,
                     'price': pos.price,
                     'sales_id': pos.get_sales_id(), # reverse relationship to 'Sale' from 'Position'
-
                     #'position_id': sale.position.id,
                     #'product': sale.position.product.name,
                     #'quantity': sale.position.quantity,

@@ -29,6 +29,7 @@
       </tr>
     </thead>
     <tbody>
+<!--
         <tr>
             <td>{{ object.position.product.name }}</td>
             <td>{{ object.position.quantity }}</td>
@@ -36,7 +37,7 @@
             <td>{{ object.customer.name }}</td>
             <td>{{ object.created }}</td>
         </tr>
-<!--
+-->                
         {% for pos in object.get_positions %}
             <tr>
                 <th scope="row">{{ forloop.counter }}</th>
@@ -46,7 +47,6 @@
                 <td>{{ pos.get_sales_customer }}</td>
             </tr>
         {% endfor %}
--->                
     </tbody>
 </table>
   
