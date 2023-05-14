@@ -8,13 +8,13 @@
 
 {% block content %}
 
-<div class="text-center">
-    <h3><b>[{{ title }}]</b></h3>
+<h3 class="text-center text-primary"><b>[{{ title }}]</b></h3>
+<div>
     <div>
-        <div>
-            <form method="post">
-                {% csrf_token %}
-                {{ form | crispy }}
+        <form method="post">
+            {% csrf_token %}
+            {{ form | crispy }}
+            <div class="text-center">
                 <input class="btn btn-primary"
                     value="Save"
                     type="submit">
@@ -22,8 +22,8 @@
                     value="Cancel"
                     type="button"
                     onclick="location.href='{% url "todolist:todolist" %}'">
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 

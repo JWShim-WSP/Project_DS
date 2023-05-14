@@ -9,14 +9,22 @@ CHART_CHOICES = (
 
 RESULT_CHOICES = (
     ('#1', 'transaction'),
-    ('#2', 'position'),
-    ('#3', 'sales date'),
-    ('#4', 'customer'),
-    ('#5', 'salesman'),
+    ('#2', 'product'),
+    ('#3', 'position'),
+    ('#4', 'sales date'),
+    ('#5', 'customer'),
+    ('#6', 'salesman'),
 )
 
+SUM_CHOICES = (
+    ('#1', 'price'),
+    ('#2', 'quantity'),
+)
+
+
 class SalesSearchForm(forms.Form):
-    date_from = forms.DateField(widget=forms.DateInput(attrs={'type':'date'}))
-    date_to = forms.DateField(widget=forms.DateInput(attrs={'type':'date'}))
-    chart_type = forms.ChoiceField(choices=CHART_CHOICES)
-    results_by = forms.ChoiceField(choices=RESULT_CHOICES)    
+    date_from = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 25%', 'autofocus':True}))
+    date_to = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 25%'}))
+    chart_type = forms.ChoiceField(choices=CHART_CHOICES, widget=forms.Select(attrs={'style':'width: 25%'}))
+    results_by = forms.ChoiceField(choices=RESULT_CHOICES, widget=forms.Select(attrs={'style':'width: 25%'}))
+    sum_by = forms.ChoiceField(choices=SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 25%'}))

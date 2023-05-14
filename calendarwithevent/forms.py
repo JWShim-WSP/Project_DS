@@ -1,5 +1,5 @@
 from .models import Event
-from django.forms import ModelForm, TextInput, EmailInput, NumberInput, Textarea, DateTimeInput
+from django.forms import ModelForm, TextInput, EmailInput, NumberInput, Textarea, DateInput
 
 
 
@@ -8,6 +8,7 @@ class EventForm(ModelForm):
         model = Event
         fields= ["title", "description", "start_date", "end_date", "event_completed"]
         widgets = {
-            'start_date': DateTimeInput(attrs={'class':"form-control", 'type':'date'}),
-            'end_date': DateTimeInput(attrs={'class':"form-control",'type':'date'}),
+            'title': TextInput(attrs={'class':"form-control", 'autofocus':True}),
+            'start_date': DateInput(attrs={'class':"form-control", 'type':'date', 'style':'width: 25%' }),
+            'end_date': DateInput(attrs={'class':"form-control",'type':'date', 'style':'width: 25%'}),
         }

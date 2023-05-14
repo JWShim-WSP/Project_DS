@@ -8,11 +8,11 @@
 
 
 {% block content %}
-<div class="col-8 text-center">
-    <h2><b>[{{ title }}]</b></h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form | crispy }}
+<h2 class="text-center text-primary"><b>[{{ title }}]</b></h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <div class="text-center">
         <input class="btn btn-primary"
             value="Save"
             type="submit">
@@ -25,8 +25,8 @@
             value="Delete this event"
             type="button"
             onclick="location.href='{% url "calendarwithevent:event-delete" object.id %}'">
-        {% endif %}                        
-    </form>
-</div>
+        {% endif %}
+    </div>          
+</form>
 
 {% endblock %}

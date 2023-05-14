@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from .models import ToDoList, ToDoItemList
-from .forms import ToDoItemForm
+from .forms import ToDoItemForm, ToDoForm
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 # Create your views here.
@@ -27,8 +27,8 @@ class TodoItemListView(ListView):
 # CreateView: A view that displays a form for creating an object, redisplaying the form with any validation errors highlighted, and eventually saving the object.
 # Therefore, simply call the CBV of ListCreate and ItemCreate with display the form and save the new objects in db
 class ListCreate(CreateView):
-    model = ToDoList
-    fields = ["title", "priority"]
+    form_class = ToDoForm
+    template_name = 'todolist/todolist_form.html'
 
     def get_context_data(self, **kwargs):
         context = super(ListCreate, self).get_context_data(**kwargs)

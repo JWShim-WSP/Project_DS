@@ -58,9 +58,25 @@ BST Project - Sales
     <br>
 
     grouped by transaction_id df
-    {{ df | safe }}
+    {{ df_transaction | safe }}
     <br>
 
+    grouped by position_id df
+    {{ df_position | safe }}
+    <br>
+
+    grouped by created
+    {{ df_created | safe }}
+    <br>
+
+    grouped by customer
+    {{ df_customer | safe }}
+    <br>
+
+    grouped by salesman
+    {{ df_salesman | safe }}
+
+    <br>
     <img src="data:image/png;base64, {{chart | safe}}" id='img'>
 
     {% endif %}

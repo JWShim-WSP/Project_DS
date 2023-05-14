@@ -4,7 +4,7 @@ from .models import Sale
 from .forms import SalesSearchForm
 from reports.forms import ReportForm
 import pandas as pd
-from .utils import get_customer_from_id, get_salesman_from_id, get_chart
+from .utils import get_customer_from_id, get_salesman_from_id, get_chart, get_sum_by, get_key_by
 from products.models import Product
 from customers.models import Customer
 
@@ -25,7 +25,11 @@ def home_view(request):
     sales_df = None
     positions_df = None
     merged_df = None
-    df = None
+    df_transaction = None
+    df_position = None
+    df_created = None
+    df_customer = None
+    df_salesman = None
     chart = None
     no_data = None
 
@@ -37,6 +41,7 @@ def home_view(request):
         date_to = request.POST.get('date_to')
         chart_type = request.POST.get('chart_type')
         results_by = request.POST.get('results_by')
+        sum_by = request.POST.get('sum_by')
 
         #qs = Sale.objects.all()
         # filter the data with lte (less than equal) and gte (greater than equal)
@@ -69,15 +74,28 @@ def home_view(request):
 
             positions_df = pd.DataFrame(positions_data)
             merged_df = pd.merge(sales_df, positions_df, on='sales_id')
+            sum_by = get_sum_by(sum_by)
+            key_by = get_key_by(results_by)
 
-            df = merged_df.groupby('transaction_id', as_index=False)['price'].agg('sum') # aggregate
+            # sum by the choice of 'price' or 'quantity' to show in graph
+            df_transaction = merged_df.groupby('transaction_id', as_index=False)[sum_by].agg('sum') # aggregate
+            df_position = merged_df.groupby('position_id', as_index=False)[sum_by].agg('sum') # aggregate
+            df_created = merged_df.groupby('created', as_index=False)[sum_by].agg('sum') # aggregate
+            df_customer = merged_df.groupby('customer', as_index=False)[sum_by].agg('sum') # aggregate
+            df_salesman = merged_df.groupby('salesman', as_index=False)[sum_by].agg('sum') # aggregate
 
-            chart = get_chart(chart_type, sales_df, results_by)
+            #chart = get_chart(chart_type, sales_df, results_by)
+            chart = get_chart(chart_type, merged_df, key_by, sum_by)
 
             sales_df = sales_df.to_html(classes='table table-striped text-center', justify='center')
             positions_df = positions_df.to_html(classes='table table-striped text-center', justify='center')
             merged_df = merged_df.to_html(classes='table table-striped text-center', justify='center')
-            df = df.to_html(classes='table table-striped text-center', justify='center')
+
+            df_transaction = df_transaction.to_html(classes='table table-striped text-center', justify='center')
+            df_position = df_position.to_html(classes='table table-striped text-center', justify='center')
+            df_created = df_created.to_html(classes='table table-striped text-center', justify='center')
+            df_customer = df_customer.to_html(classes='table table-striped text-center', justify='center')
+            df_salesman = df_salesman.to_html(classes='table table-striped text-center', justify='center')
         else:
             no_data = 'No data is availablein in this date range'
 
@@ -87,9 +105,13 @@ def home_view(request):
         'sales_df': sales_df,
         'positions_df': positions_df,
         'merged_df': merged_df,
-        'df': df,
+        'df_transaction': df_transaction,
+        'df_position': df_position,
+        'df_created': df_created,
+        'df_customer': df_customer,
+        'df_salesman': df_salesman,
         'chart': chart,
-        'no_data': no_data
+        'no_data': no_data,
     }
     return render(request, 'sales/home.html', context)
 

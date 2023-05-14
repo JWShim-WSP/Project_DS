@@ -21,11 +21,13 @@
 <table class="table">
     <thead>
       <tr>
+        <th scope="col">#</th>
         <th scope="col">Product</th>
         <th scope="col">Quantity</th>
         <th scope="col">Price</th>
         <th scope="col">Customer</th>
         <th scope="col">Sale Date</th>
+        <th scope="col">Update Date</th>
       </tr>
     </thead>
     <tbody>
@@ -45,6 +47,8 @@
                 <td>{{ pos.quantity }}</td>
                 <td>{{ pos.price }}</td>
                 <td>{{ pos.get_sales_customer }}</td>
+                <td>{{ pos.created }}</td>
+                <td>{{ pos.updated }}</td>
             </tr>
         {% endfor %}
     </tbody>
