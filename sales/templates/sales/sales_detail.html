@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<div class="row mt-3 mb-3">
+<div class="row mt-5 mb-3">
     <div class="col-3">
         <img src="{{ object.customer.logo.url }}" class="img-fluid" alt="{{ object.customer.name }}">
     </div>
@@ -18,28 +18,19 @@
     </div>
 </div>
 
-<table class="table">
+<table class="table text-center">
     <thead>
       <tr>
         <th scope="col">#</th>
         <th scope="col">Product</th>
         <th scope="col">Quantity</th>
-        <th scope="col">Price</th>
+        <th scope="col">Total Price</th>
         <th scope="col">Customer</th>
         <th scope="col">Sale Date</th>
         <th scope="col">Update Date</th>
       </tr>
     </thead>
     <tbody>
-<!--
-        <tr>
-            <td>{{ object.position.product.name }}</td>
-            <td>{{ object.position.quantity }}</td>
-            <td>{{ object.total_price }}</td>
-            <td>{{ object.customer.name }}</td>
-            <td>{{ object.created }}</td>
-        </tr>
--->                
         {% for pos in object.get_positions %}
             <tr>
                 <th scope="row">{{ forloop.counter }}</th>

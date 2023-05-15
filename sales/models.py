@@ -22,7 +22,10 @@ class Position(models.Model):
         # reverse relationship to sale (sale_set: set of 'Sale' model with the first item)
         sale_obj = self.sale_set.first()
         return sale_obj.id
-
+    
+    def get_absolute_url(self):
+        return reverse('sales:position_detail', kwargs={'pk':self.pk})
+    
     def get_sales_customer(self):
         # reverse relationship to sale (sale_set: set of 'Sale' model with the first item)
         sale_obj = self.sale_set.first()
@@ -59,7 +62,7 @@ class Sale(models.Model):
         #return self.position
 
     def get_absolute_url(self):
-        return reverse('sales:detail', kwargs={'pk':self.pk})
+        return reverse('sales:sales_detail', kwargs={'pk':self.pk})
     
     def __str__(self):
         return f"Sales for the amount of ${self.total_price}"

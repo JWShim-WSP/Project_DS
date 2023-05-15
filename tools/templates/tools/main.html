@@ -5,16 +5,44 @@ Tools
 {% endblock title %}
 
 {% block content %}
-Tools List
-<br>
 
-<div class="card mb-3">
-    <a href="{% url 'calculator:calculator' %}" class="card-body">Calculator</a>
-    <a href="{% url 'calendarwithevent:calendarwithevent' %}" class="card-body">Calendar with Event</a>
-    <a href="{% url 'excurrency:excurrency' %}" class="card-body">Currency Exchange Rate</a>
-    <a href="{% url 'worldtime:timeconvert' %}" class="card-body">World Time Conversion</a>
-    <a href="{% url 'todolist:todolist' %}" class="card-body">To-Do List</a>
-    <a href="{% url 'emailsend:contactview' %}" class="card-body">Send Email</a>
+<div class="row mt-5 text-center">
+    <h3 class="text-primary">Tools</h3>
+    <div class="card mt-3 pt-5">
+        <div class="row">
+            <div class="col-4">
+                <i class="fa-regular fa-calendar-days fa-2xl" style="color: #511f44;"></i>
+                <a href="{% url 'calendarwithevent:calendarwithevent' %}" class="card-body">Calendar with Event</a>
+            </div>
+            <div class="col-4">
+                <i class="fa-regular fa-rectangle-list fa-2xl" style="color: #1f5141;"></i>
+                <a href="{% url 'todolist:todolist' %}" class="card-body">To-Do List</a>
+            </div>
+            <div class="col-4">
+                <i class="fa-regular fa-envelope fa-2xl"></i>
+                <a href="{% url 'emailsend:contactview' %}" class="card-body">Send Email</a>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="row mb-3 pb-5">
+            <div class="col-4">
+                <i class="fa-solid fa-calculator fa-2xl"></i>
+                <a href="{% url 'calculator:calculator' %}" class="card-body">Calculator</a>
+            </div>
+            <div class="col-4">
+                <i class="fa-solid fa-dollar-sign fa-2xl" style="color: #511f48;"></i>
+                <a href="{% url 'excurrency:excurrency' %}" class="card-body">Currency Exchange</a>
+            </div>
+            <div class="col-4">
+                <i class="fa-solid fa-clock-rotate-left fa-2xl" style="color: #511f48;"></i>
+                <a href="{% url 'worldtime:timeconvert' %}" class="card-body">World Time Conversion</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock content %}

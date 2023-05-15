@@ -1,12 +1,10 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
-from .models import Sale
+from .models import Sale, Position
 from .forms import SalesSearchForm
 from reports.forms import ReportForm
 import pandas as pd
 from .utils import get_customer_from_id, get_salesman_from_id, get_chart, get_sum_by, get_key_by
-from products.models import Product
-from customers.models import Customer
 
 
 from django.contrib.auth.decorators import login_required
@@ -20,7 +18,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 @login_required
 def home_view(request):
 
-    bst_products = Product.objects.all()
+    bst_positions = Position.objects.all()
+    bst_sales = Sale.objects.all()
 
     sales_df = None
     positions_df = None
@@ -100,6 +99,8 @@ def home_view(request):
             no_data = 'No data is availablein in this date range'
 
     context = {
+        'bst_positions': bst_positions,
+        'bst_sales': bst_sales,
         'search_form': search_form,
         'report_form': report_form,
         'sales_df': sales_df,
@@ -140,3 +141,10 @@ def sale_detail_view(request, pk):
     # or
     # obj = get_object_or_404(Sale, pk=pk)
     return render(request, 'sales/sales_detail.html', {'object':obj})
+
+@staff_member_required
+def position_detail_view(request, pk):
+    obj = Position.objects.get(pk=pk)
+    # or
+    # obj = get_object_or_404(Sale, pk=pk)
+    return render(request, 'sales/position_detail.html', {'object':obj})

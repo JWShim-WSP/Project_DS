@@ -11,6 +11,19 @@ BST Project - Sales
 {% endblock title %}
 
 {% block content %}
+
+<div class="card mb-3">
+  {% for obj in bst_sales %}
+    <a href="{{obj.get_absolute_url}}" class="card-body">{{obj.transaction_id}}</a>
+  {% endfor %}
+  </div>
+  
+<div class="card mb-3">
+{% for obj in bst_positions %}
+  <a href="{{obj.get_absolute_url}}" class="card-body">{{obj.product.name}}: #{{obj.id}}</a>
+{% endfor %}
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
