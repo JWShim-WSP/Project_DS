@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Detail of position #{{object.id}}
+{% endblock title %}
+
+{% block content %}
+
+<div class="row mt-5 mb-3 text-center">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Product</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total Price</th>
+            <th scope="col">Created Date</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ object.id }}</td>
+                <td>{{ object.product.name }}</td>
+                <td>{{ object.quantity }}</td>
+                <td>{{ object.price }}</td>
+                <td>{{ object.created }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}

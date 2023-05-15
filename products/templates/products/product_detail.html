@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+    detail {{object.name}}
+{% endblock title %}
+
+{% block content %}
+
+<div class="row mt-5 mb-3">
+    <div class="col-3">
+        <img src="{{ object.image.url }}" class="img-fluid" alt="{{ object.name }}">
+    </div>
+    <div class="col-9">
+        <ul>
+            <li>Product Name: <b>{{ object.name }}</b></li>
+            <li>Product Type: <b>{{ object.product_type }}</b></li>
+        </ul>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Remark</th>
+        <th scope="col">Created Date</th>
+        <th scope="col">Updated Date</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ object.id }}</th>
+            <td>{{ object.name }}</td>
+            <td>{{ object.price }}</td>
+            <td>{{ object.remark }}</td>
+            <td>{{ object.created }}</td>
+            <td>{{ object.updated }}</td>
+        </tr>
+    </tbody>
+</table>
+  
+{% endblock content %}

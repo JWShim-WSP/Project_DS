@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+    detail {{object.name}}
+{% endblock title %}
+
+{% block content %}
+
+<div class="row mt-5 mb-3">
+    <div class="col-3">
+        <img src="{{ object.logo.url }}" class="img-fluid" alt="{{ object.name }}">
+    </div>
+    <div class="col-9">
+        <ul>
+            <li>Customer Name: <b>{{ object.name }}</b></li>
+        </ul>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Created Date</th>
+        <th scope="col">Remark</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ object.id }}</td>
+            <td>{{ object.name }}</td>
+            <td>{{ object.email }}</td>
+            <td>{{ object.phone_number }}</td>
+            <td>{{ object.created }}</td>
+            <td>{{ object.remark }}</td>
+        </tr>
+    </tbody>
+</table>
+  
+{% endblock content %}
