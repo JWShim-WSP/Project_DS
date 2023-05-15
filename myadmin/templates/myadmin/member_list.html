@@ -84,9 +84,10 @@ BST Project - List of Members
     </nav>
 </div>
 
+{% if request.user.is_superuser %}
 <div class="card mb-3">
-    <a href="/admin/" class="card-body">Admin Site</a>
+    <a href="/admin/" class="card-body">Django Admin Site</a>
 </div>
-
+{% endif %}
 
 {% endblock %}

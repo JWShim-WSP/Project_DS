@@ -14,10 +14,13 @@ from pathlib import Path
 
 # for hiding secret information such as email password, API key, etc.
 import environ
+env = environ.Env()
+environ.Env.read_env()
+
+HOST_IP_ADDRESS = env('HOST_IP_ADDRESS')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -28,7 +31,7 @@ SECRET_KEY = 'django-insecure-%s=9+)0+xd0_ruyyd_40x(xdyyrem8t=m6iv_%i4f8ext9e9ps
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.45.227', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [HOST_IP_ADDRESS, 'localhost', '127.0.0.1']
 #ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -161,9 +164,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-env = environ.Env()
-environ.Env.read_env()
 
 # Send e-mails through the SMTP-server defined in .env
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
