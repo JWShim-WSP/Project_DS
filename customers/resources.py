@@ -5,6 +5,6 @@ class CustomerResource(resources.ModelResource):
     class Meta:
         model = Customer
         # enumerate the fields to export
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'email', 'phone_number', 'remark')
         export_order = fields
 

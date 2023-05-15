@@ -6,7 +6,7 @@ from products.resources import ProductResource
 # Register your models here.
 class ProductAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
     resource_class = ProductResource
-    list_display = ("name", "image", "price", "created", "updated")
+    list_display = ("name", "image", "price", "created", "updated", "remark")
 
 
 admin.site.register(Product, ProductAdmin)

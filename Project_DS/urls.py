@@ -22,6 +22,8 @@ from .views import login_view, logout_view
 
 urlpatterns = [
     path('', include('sales.urls', namespace='sales')),
+    path('products/', include('products.urls', namespace='products')),
+    path('customers/', include('customers.urls', namespace='customers')),
     path('reports/', include('reports.urls', namespace='reports')),
     path('my_profile/', include('profiles.urls', namespace='profiles')),
     path('myadmin/', include('myadmin.urls', namespace='myadmin')),

@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -8,8 +9,11 @@ class Customer(models.Model):
     email = models.EmailField(max_length=256, blank=True)
     phone_number = models.CharField(max_length=265, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    remarks = models.TextField(blank=True)
+    remark = models.TextField(blank=True)
+
+    def get_absolute_url(self):
+        return reverse('customers:detail', kwargs={'pk':self.pk})
 
     def __str__(self):
-        return str(self.name)
+        return f"{self.name}-{self.created.strftime('%d/%m/%Y')}"
  

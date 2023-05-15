@@ -5,6 +5,6 @@ class ProductResource(resources.ModelResource):
     class Meta:
         model = Product
         # enumerate the fields to export
-        fields = ('id', 'name', 'price', 'created', 'updated')
+        fields = ('id', 'name', 'price', 'created', 'updated', 'product_type', 'remark')
         export_order = fields
 
