@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+Sales List
+{% endblock title %}
+
+{% block content %}
+Prodcut List
+<br>
+
+<div class="card mb-3">
+    {% for obj in object_list %}
+        <a href="{{obj.get_absolute_url}}" class="card-body">{{obj.name}}</a>
+    {% endfor %}
+</div>
+
+{% endblock content %}
