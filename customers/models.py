@@ -15,5 +15,5 @@ class Customer(models.Model):
         return reverse('customers:detail', kwargs={'pk':self.pk})
 
     def __str__(self):
-        return f"{self.name}-{self.created.strftime('%d/%m/%Y')}"
+        return f"{self.name}"
  

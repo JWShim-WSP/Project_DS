@@ -1,24 +1,25 @@
 from django import forms
 
+# The first value is for the choice value, the second value is used for displaying in the form
 CHART_CHOICES = (
-    ('#1', 'Bar Chart'),
-    ('#2', 'Bar Horizontal Chart'),
-    ('#3', 'Pie Chart'),
-    ('#4', 'Line Chart'),
+    ('Bar Chart', 'Bar Chart'),
+    ('Horizontal Bar Chart', 'Horizontal Bar Chart'),
+    ('Pie Chart', 'Pie Chart'),
+    ('Line Chart', 'Line Chart'),
 )
 
 RESULT_CHOICES = (
-    ('#1', 'transaction'),
-    ('#2', 'product'),
-    ('#3', 'position'),
-    ('#4', 'sales date'),
-    ('#5', 'customer'),
-    ('#6', 'salesman'),
+    ('transaction_id', 'Transaction'),
+    ('product', 'Product'),
+    ('position_id', 'Position'),
+    ('created', 'Sales date'),
+    ('customer', 'Customer'),
+    ('salesman', 'Salesman'),
 )
 
 SUM_CHOICES = (
-    ('#1', 'price'),
-    ('#2', 'quantity'),
+    ('price', 'price'),
+    ('quantity', 'quantity'),
 )
 
 

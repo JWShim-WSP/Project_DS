@@ -27,30 +27,6 @@ def get_graph():
     buffer.close()
     return graph
 
-def get_key_by(res_by):
-    if res_by == '#1':
-        key_by = 'transaction_id'
-    elif res_by == '#2':
-        key_by = 'product'
-    elif res_by == '#3':
-        key_by = 'position_id'
-    elif res_by == '#4':
-        key_by = 'created'
-    elif res_by == '#5':
-        key_by = 'customer'
-    elif res_by == '#6':
-        key_by = 'salesman'
-
-    return key_by
-
-def get_sum_by(sum_by):
-    if sum_by == '#1':
-        sum_choice = 'price'
-    elif sum_by == '#2':
-        sum_choice = 'quantity'
-
-    return sum_choice
-
 # function to add value labels
 def addlabels(x, y, chart_type):
     sales_total = 0
@@ -72,19 +48,19 @@ def get_chart(chart_type, data, key_by, sum_by, **kwargs):
     d = data.groupby(key_by, as_index=False)[sum_by].agg('sum')
     plt.title(f"Sales Total: {addlabels(d[key_by], d[sum_by], chart_type)}")
 
-    if chart_type == '#1':
+    if chart_type == 'Bar Chart':
         #plt.bar(d[key], d['total_price'])
         plt.xlabel(key_by, color='purple')
         plt.ylabel(sum_by, color='blue')
         sns.barplot(x=key_by, y=sum_by, data=d)
-    elif chart_type == '#2':
+    elif chart_type == 'Horizontal Bar Chart':
         #plt.barh(d[key], d['total_price'])
         plt.xlabel(sum_by, color='purple')
         plt.ylabel(key_by, color='blue')
         sns.barplot(orient='h', x=sum_by, y=key_by, data=d)
-    elif chart_type == '#3':
+    elif chart_type == 'Pie Chart':
         plt.pie(data=d, x=sum_by, labels=d[key_by].values, autopct='%1.1f%%')
-    elif chart_type == '#4':
+    elif chart_type == 'Line Chart':
         plt.plot(d[key_by], d[sum_by], color='green', marker='o', linestyle='dashed')
     else:
         print('No...!!!')

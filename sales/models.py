@@ -58,8 +58,7 @@ class Sale(models.Model):
 
     # Have all positions, and calculate the sum of all prices of the postions to get total_price in signal.py
     def get_positions(self):
-        return self.positions.all() # multi positions will not be used
-        #return self.position
+        return self.positions.all()
 
     def get_absolute_url(self):
         return reverse('sales:sales_detail', kwargs={'pk':self.pk})
