@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+BST Project - Position List
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'pagination.css' %}">
+
+<h3 class="text-center"><b>BST Positions</b></h3>
+
+<div class="text-end">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+    download
+    </button>
+</div>
+
+<!-- Modal for Form Post-->
+<div class="modal fade" id="download-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Download Positions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <button type="submit" class="btn btn-primary">save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table text-center">
+    <thead>
+        <tr>
+        <th scope="col">#</th>
+        <th scope="col">Product</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Price</th>
+        <th scope="col">Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for object in object_list %}
+            <tr onclick="window.location='{{object.get_absolute_url}}'">
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ object.product.name }}</td>
+                <td>{{ object.quantity }}</td>
+                <td>{{ object.price }}</td>
+                <td>{{ object.created }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="text-center">
+    <nav class="pagination">
+        {% if object_list.has_previous %}
+            {% if object_list.previous_page_number != 1 %}
+                <a href="?page=1">&laquo;</a>
+            {% endif %}
+            <a href="?page={{object_list.previous_page_number}}"><</a>
+        {% endif %}
+
+        <a class="active">Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}</a>
+
+        {% if object_list.has_next %}
+            <a href="?page={{object_list.next_page_number}}">></a>
+            {% if object_list.next_page_number != object_list.paginator.num_pages %}
+                <a href="?page={{object_list.paginator.num_pages}}">&raquo;</a>
+            {% endif %}
+        {% endif %}
+    </nav>
+</div>
+
+{% endblock %}
