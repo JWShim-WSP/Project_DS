@@ -25,13 +25,14 @@ class SaleResource(resources.ModelResource):
         fields = ('id', 'transaction_id', 'positions', 'total_price', 'customer', 'salesman', 'created', 'updated')
         export_order = fields
 
-    # To change (dehydrate) the display from number('1 or 0') to text ('Ture or False')
-    def dehydrate_positions(self, obj):
-        position_names = []
-        for position in obj.get_positions():
-            position_names.append(position.product.name + ', ')
-        return position_names
+    # position_id is a better information than product.name of the position
+    #def dehydrate_positions(self, obj):
+    #    position_names = []
+    #    for position in obj.get_positions():
+    #        position_names.append(position.product.name + ', ')
+    #    return position_names
     
+    # To change (dehydrate) the display from number('1 or 0') to text ('Ture or False')
     def dehydrate_customer(self, obj):
         return obj.customer.name
         

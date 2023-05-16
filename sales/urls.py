@@ -22,7 +22,7 @@ Pass Converter
 """
 
 from django.urls import path
-from .views import home_view, SaleListView, SaleDetailView, sale_list_view, sale_detail_view, position_detail_view
+from .views import home_view, SaleListView, SaleDetailView, sales_list_view, sales_detail_view, positions_list_view, position_detail_view
 
 app_name = 'sales'
 
@@ -32,7 +32,8 @@ urlpatterns = [
     #path('sales/', SaleListView.as_view(), name='list'),
     #path('sales/<pk>/', SaleDetailView.as_view(), name='detail'),
     # go for FBV this time!
+    path('sales/positions/', positions_list_view, name='positions_list'),
     path('sales/position/<int:pk>/', position_detail_view, name='position_detail'),
-    path('sales/', sale_list_view, name='slaes_list'),
-    path('sales/<int:pk>/', sale_detail_view, name='sales_detail'),
+    path('sales/', sales_list_view, name='sales_list'),
+    path('sales/<int:pk>/', sales_detail_view, name='sales_detail'),
 ]

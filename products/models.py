@@ -3,11 +3,11 @@ from django.urls import reverse
 
 # Create your models here.
 
-PRODUCT_CHOICES = (
-    ('#1', 'sensor'),
-    ('#2', 'torch'),
-    ('#3', 'pump'),
-    ('#4', 'etc'),
+PRODUCT_TYPE_CHOICES = (
+    ('Sensor', 'Sensor'),
+    ('Plasma Torch', 'Plasma Torch'),
+    ('Pump', 'Pump'),
+    ('Etc', 'Etc'),
 )
 
 class Product(models.Model):
@@ -17,10 +17,10 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     remark = models.TextField(max_length=1024, blank=True)
-    product_type = models.CharField(max_length=2, choices=PRODUCT_CHOICES)
+    product_type = models.CharField(max_length=50, choices=PRODUCT_TYPE_CHOICES)
 
     def get_absolute_url(self):
         return reverse('products:detail', kwargs={'pk':self.pk})
 
     def __str__(self):
-        return f"{self.name}-{self.created.strftime('%d/%m/%Y')}"
+        return f"{self.name}-{self.product_type}"

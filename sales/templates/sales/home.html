@@ -13,15 +13,11 @@ BST Project - Sales
 {% block content %}
 
 <div class="card mb-3">
-  {% for obj in bst_sales %}
-    <a href="{{obj.get_absolute_url}}" class="card-body">{{obj.transaction_id}}</a>
-  {% endfor %}
-  </div>
-  
+  <a href="{% url 'sales:sales_list' %}" class="card-body">Sales</a>
+</div>
+
 <div class="card mb-3">
-{% for obj in bst_positions %}
-  <a href="{{obj.get_absolute_url}}" class="card-body">{{obj.product.name}}: #{{obj.id}}</a>
-{% endfor %}
+  <a href="{% url 'sales:positions_list' %}" class="card-body">Positions</a>
 </div>
 
 <!-- Modal -->
@@ -57,7 +53,8 @@ BST Project - Sales
 </form>
 <br>
 
-{% if sales_df %}
+{% if merged_df %}
+<!--
     sales df
     {{ sales_df | safe }}
     <br>
@@ -65,11 +62,13 @@ BST Project - Sales
     positions df
     {{ positions_df | safe }}
     <br>
+-->
 
     merged df
     {{ merged_df | safe }}
     <br>
 
+<!--
     grouped by transaction_id df
     {{ df_transaction | safe }}
     <br>
@@ -88,11 +87,12 @@ BST Project - Sales
 
     grouped by salesman
     {{ df_salesman | safe }}
+-->
 
     <br>
     <img src="data:image/png;base64, {{chart | safe}}" id='img'>
 
-    {% endif %}
+{% endif %}
 
 <br>
 <button type="button" class="btn btn-primary not-visible" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">add report</button>

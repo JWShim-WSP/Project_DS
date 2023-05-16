@@ -1,19 +1,89 @@
 {% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}
-Sales List
-{% endblock title %}
+BST Project - Sales List
+{% endblock %}
 
 {% block content %}
-Sales List
-<br>
+{% load static %}
+<link rel="stylesheet" href="{% static 'pagination.css' %}">
 
-<div class="row mt-5 mb-3">
-    {% for obj in object_list %}
-    <div class="card mb-3">
-        <a href="{{obj.get_absolute_url}}" class="card-body">{{obj.transaction_id}}</a>
-    </div>
-    {% endfor %}
+<h3 class="text-center"><b>BST Sales</b></h3>
+
+<div class="text-end">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+    download
+    </button>
 </div>
 
-{% endblock content %}
+<!-- Modal for Form Post-->
+<div class="modal fade" id="download-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Download Sales</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <button type="submit" class="btn btn-primary">save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table text-center">
+    <thead>
+        <tr>
+        <th scope="col">#</th>
+        <th scope="col">Transaction id</th>
+        <th scope="col">Positions</th>
+        <th scope="col">Total Price</th>
+        <th scope="col">Customer</th>
+        <th scope="col">Salesman</th>
+        <th scope="col">Created</th>
+        <th scope="col">Updated</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for object in object_list %}
+            <tr onclick="window.location='{{object.get_absolute_url}}'">
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ object.transaction_id }}</td>
+                <td>{{ object.positions }}</td>
+                <td>{{ object.total_price }}</td>
+                <td>{{ object.customer }}</td>
+                <td>{{ object.salesman }}</td>
+                <td>{{ object.created }}</td>
+                <td>{{ object.updated }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="text-center">
+    <nav class="pagination">
+        {% if object_list.has_previous %}
+            {% if object_list.previous_page_number != 1 %}
+                <a href="?page=1">&laquo;</a>
+            {% endif %}
+            <a href="?page={{object_list.previous_page_number}}"><</a>
+        {% endif %}
+
+        <a class="active">Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}</a>
+
+        {% if object_list.has_next %}
+            <a href="?page={{object_list.next_page_number}}">></a>
+            {% if object_list.next_page_number != object_list.paginator.num_pages %}
+                <a href="?page={{object_list.paginator.num_pages}}">&raquo;</a>
+            {% endif %}
+        {% endif %}
+    </nav>
+</div>
+
+{% endblock %}
