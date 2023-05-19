@@ -15,11 +15,11 @@
 
     <form method="POST">
         {% csrf_token %}
-        <input class="btn btn-primary"
+        <input class="btn btn-outline-primary"
             value="Yes, Delete"
             type="submit">
 
-        <input class="btn btn-primary"
+        <input class="btn btn-outline-primary"
             value="Cancel"
             type="button"
             onclick="location.href='{% url "calendarwithevent:calendarevents" %}'">

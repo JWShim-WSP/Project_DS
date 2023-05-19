@@ -14,15 +14,15 @@
     {% csrf_token %}
     {{ form | crispy }}
     <div class="text-center">
-        <input class="btn btn-primary"
+        <input class="btn btn-outline-primary"
             value="Submit"
             type="submit">
-        <input class="btn btn-primary"
+        <input class="btn btn-outline-primary"
             value="Cancel"
             type="button"
             onclick="location.href='{% url "todolist:todoitemlist" todo_list.id %}'">
         {% if object %}
-            <input class="btn btn-primary"
+            <input class="btn btn-outline-primary"
             value="Delete this item"
             type="button"
             onclick="location.href='{% url "todolist:item-delete" todo_list.id object.id %}'">

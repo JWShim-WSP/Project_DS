@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}
     detail {{object.name}}
@@ -6,38 +8,35 @@
 
 {% block content %}
 
-<div class="row mt-5 mb-3">
-    <div class="col-3">
-        <img src="{{ object.logo.url }}" class="img-fluid" alt="{{ object.name }}">
+{% if confirm %}
+    <div class="alert alert-primary" role="alert">
+        Profile of {{profile.name}} has been updated
     </div>
-    <div class="col-9">
-        <ul>
-            <li>Customer Name: <b>{{ object.name }}</b></li>
-        </ul>
-    </div>
+{% endif %}
+
+<div class="text-center">
+    <img src="{{ profile.logo.url }}" alt="my-profile" class="avatar-big">
 </div>
 
-<table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Name</th>
-        <th scope="col">Email</th>
-        <th scope="col">Phone</th>
-        <th scope="col">Created Date</th>
-        <th scope="col">Remark</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{ object.id }}</td>
-            <td>{{ object.name }}</td>
-            <td>{{ object.email }}</td>
-            <td>{{ object.phone_number }}</td>
-            <td>{{ object.created }}</td>
-            <td>{{ object.remark }}</td>
-        </tr>
-    </tbody>
-</table>
+<br>
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <input class="btn btn-outline-primary"
+    value="Update"
+    type="submit">
+    <input class="btn btn-outline-primary"
+    value="Cancel"
+    type="button"
+    onclick="location.href='{% url "customers:customerlist" %}'">
+    {% if profile.id %}
+        <input class="btn btn-outline-primary"
+        value="Delete"
+        type="button"
+        onclick="location.href='{% url "customers:customer-delete" profile.id %}'">
+    {% endif %}
+</form>
+
   
 {% endblock content %}

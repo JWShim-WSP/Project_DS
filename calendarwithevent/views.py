@@ -63,7 +63,7 @@ class CalendarEvents(ListView):
     template_name = 'calendarwithevent/eventlist.html'
 
     def get_queryset(self, *args, **kwargs):
-        p = Paginator(Event.objects.order_by('-start_date'), 5)
+        p = Paginator(Event.objects.order_by('start_date'), 10)
         try:
             return p.get_page(self.request.GET.get("page"))
         except:
@@ -145,8 +145,8 @@ class Calendar(HTMLCalendar):
 	# formats a month as a table
 	# filter events by year and month
     def formatmonth(self, dateOfToday, withyear=True):
-        events = Event.objects.filter(start_date__year=self.year, start_date__month=self.month).order_by('-start_date')
-        todoitems = ToDoItemList.objects.filter(due_date__year=self.year, due_date__month = self.month).order_by('-due_date')
+        events = Event.objects.filter(start_date__year=self.year, start_date__month=self.month).order_by('start_date')
+        todoitems = ToDoItemList.objects.filter(due_date__year=self.year, due_date__month = self.month).order_by('due_date')
 
         cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
         cal += f'<id=MonthYearofToday>{self.formatmonthname(self.year, self.month, withyear=withyear)}\n' # <tr><th>  </th></tr> is in the function itself (formatmonthname)

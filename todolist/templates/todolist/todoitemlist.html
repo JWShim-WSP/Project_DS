@@ -7,7 +7,7 @@
 {% block content %}
 <div class="text-center">
     <h3 class="text-primary"><b>[{{ todo_list.title }}]</b></h3>
-    <table class="table" >
+    <table class="table table-hover table-light" >
         <thead>
             <tr class="text-primary">
                 <th>To Do Item</th>
@@ -36,15 +36,15 @@
         {% endfor %}
     </table>
 
-    <input class="btn btn-primary"
+    <input class="btn btn-outline-primary"
         value="Add a new item to {{ todo_list.title }}"
         type="button"
         onclick="location.href='{% url "todolist:item-add" todo_list.id %}'">
-    <input class="btn btn-primary"
+    <input class="btn btn-outline-primary"
         value="Delete this To-Do"
         type="button"
         onclick="location.href='{% url "todolist:list-delete" todo_list.id %}'">
-    <input class="btn btn-primary"
+    <input class="btn btn-outline-primary"
         value="Go to To-Do List"
         type="button"
         onclick="location.href='{% url "todolist:todolist" %}'">

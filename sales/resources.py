@@ -7,7 +7,7 @@ class PositionResource(resources.ModelResource):
     class Meta:
         model = Position
         # enumerate the fields to export
-        fields = ('id', 'product', 'quantity', 'price', 'created')
+        fields = ("id", "product", "quantity", "net_unit_price", "added_cost", "total_net_price", "total_added_price", "ex_rate_to_KRW", "added_cost_KRW", "total_net_price_KRW", "total_added_price_KRW", 'created')
         export_order = fields
 
     # To change (dehydrate) the display from number('1 or 0') to text ('Ture or False')
@@ -22,7 +22,7 @@ class SaleResource(resources.ModelResource):
     class Meta:
         model = Sale
         # enumerate the fields to export
-        fields = ('id', 'transaction_id', 'positions', 'total_price', 'customer', 'salesman', 'created', 'updated')
+        fields = ('id', 'transaction_id', 'positions', "total_net_price", "total_added_price", "total_net_price_KRW", "total_added_price_KRW", 'customer', 'salesman', 'created', 'updated')
         export_order = fields
 
     # position_id is a better information than product.name of the position

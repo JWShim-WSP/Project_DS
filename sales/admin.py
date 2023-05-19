@@ -6,7 +6,6 @@ from .models import Position, Sale, CSV
 # Register your models here.
 class PositionAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
     resource_class = PositionResource
-    list_display = ("product", "quantity", "price", "created")
 
 class SaleAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
     resource_class = SaleResource

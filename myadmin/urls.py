@@ -9,5 +9,5 @@ urlpatterns = [
 #    path('details/<pk>', MemberDetails.as_view(), name='memberdetails'),
     path('', member_list_view, name='memberlist'),
     path('<int:page>', member_list_view, name='memberlist'),
-    path('details/<pk>', member_detail_view, name='memberdetails'),
+    path('details/<int:pk>', member_detail_view, name='memberdetails'),
 ]

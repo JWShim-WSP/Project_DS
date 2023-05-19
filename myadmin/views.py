@@ -7,6 +7,7 @@ from django.urls import reverse
 
 from django.views.generic import ListView, DetailView, FormView
 from profiles.models import Profile
+from .forms import MemberForm
 from profiles.forms import FormatForm
 from profiles.resources import MemberResource
 from django.core.paginator import Paginator
@@ -25,7 +26,7 @@ def member_list_view(request):
         else:
             dataset_format = dataset.json
         response = HttpResponse(dataset_format, content_type=f"text/{format}")
-        response['Content-Disposition'] = f"attachement; filename=membership.{format}"
+        response['Content-Disposition'] = f"attachement; filename=bstmember.{format}"
         return response
     else:
         p = Paginator(Profile.objects.order_by('user__is_staff'), 10)
@@ -44,8 +45,21 @@ def member_list_view(request):
 
 @staff_member_required
 def member_detail_view(request, pk):
-    obj = Profile.objects.get(pk=pk)
-    return render(request, 'myadmin/member_detail.html', {'object': obj})
+    profile = Profile.objects.get(pk=pk)
+    form = MemberForm(request.POST or None, request.FILES or None, instance=profile)
+    confirm = False
+
+    if form.is_valid():
+        form.save()
+        confirm = True
+
+    context = {
+        'name': profile.user.username,
+        'profile': profile,
+        'form': form,
+        'confirm': confirm,
+    }
+    return render(request, 'myadmin/member_detail.html', context)
 
 # Create your CBV views here. ==> security reason to go to FBV above
 class MemberList(LoginRequiredMixin, ListView, FormView):
@@ -76,7 +90,7 @@ class MemberList(LoginRequiredMixin, ListView, FormView):
             dataset_format = dataset.json
         
         response = HttpResponse(dataset_format, content_type=f"text/{format}")
-        response['Content-Disposition'] = f"attachement; filename=membership.{format}"
+        response['Content-Disposition'] = f"attachement; filename=bstcustomer.{format}"
         return response
 
 class MemberDetails(LoginRequiredMixin, DetailView):

@@ -13,15 +13,15 @@
     {% csrf_token %}
     {{ form | crispy }}
     <div class="text-center">
-        <input class="btn btn-primary"
+        <input class="btn btn-outline-primary"
             value="Save"
             type="submit">
-        <input class="btn btn-primary"
+        <input class="btn btn-outline-primary"
             value="Cancel"
             type="button"
             onclick="location.href='{% url "calendarwithevent:calendarevents" %}'">
         {% if object %}
-            <input class="btn btn-primary"
+            <input class="btn btn-outline-primary"
             value="Delete this event"
             type="button"
             onclick="location.href='{% url "calendarwithevent:event-delete" object.id %}'">

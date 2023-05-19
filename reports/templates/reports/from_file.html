@@ -20,5 +20,10 @@
             <input name="file" type="file" multiple />
         </div>
     </form>
+    
+    <input class="btn btn-outline-primary mt-3"
+    value="Cancel"
+    type="button"
+    onclick="location.href='{% url "sales:saleslist" %}'">
 
 {% endblock content %}

@@ -3,21 +3,32 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-BST Project - Sales List
+Sales List
 {% endblock %}
 
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'pagination.css' %}">
 
-<h3 class="text-center"><b>BST Sales</b></h3>
+<h3 class="text-center mt-3"><b>Sales List</b></h3>
 
-<div class="text-end">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
-    download
-    </button>
+<div class="d-flex mb-3">
+    <div class="p-1">
+        <a class="btn btn-outline-primary" href="{% url 'sales:home' %}" role="button">Go Back</a>
+    </div>
+    <div class="me-auto p-1">
+        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">Add Sales</a>
+    </div>
+    <div class="p-1">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+            Download
+        </button>
+    </div>
+    <div class="p-1">
+        <a class="btn btn-outline-danger" href="{% url 'reports:from-file' %}" role="button">Upload from File</a>
+    </div>
 </div>
-
+    
 <!-- Modal for Form Post-->
 <div class="modal fade" id="download-modal" tabindex="-1">
     <div class="modal-dialog">
@@ -30,20 +41,26 @@ BST Project - Sales List
                 <form action="" method="POST">
                     {% csrf_token %}
                     {{ form | crispy }}
-                    <button type="submit" class="btn btn-primary">save</button>
+                    <button type="submit" class="btn btn-outline-primary">save</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<table class="table text-center">
+<table class="table text-center table-hover table-light">
     <thead>
         <tr>
         <th scope="col">#</th>
         <th scope="col">Transaction id</th>
         <th scope="col">Positions</th>
+
+        <th scope="col">Total Net-Price</th>
         <th scope="col">Total Price</th>
+
+        <th scope="col">Total Net-Price-KRW</th>
+        <th scope="col">Total Price-KRW</th>
+
         <th scope="col">Customer</th>
         <th scope="col">Salesman</th>
         <th scope="col">Created</th>
@@ -56,7 +73,12 @@ BST Project - Sales List
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ object.transaction_id }}</td>
                 <td>{{ object.positions }}</td>
-                <td>{{ object.total_price }}</td>
+
+                <td>{{ object.total_net_price }}</td>
+                <td>{{ object.total_added_price }}</td>
+                <td>{{ object.total_net_price_KRW }}</td>
+                <td>{{ object.total_added_price_KRW }}</td>
+
                 <td>{{ object.customer }}</td>
                 <td>{{ object.salesman }}</td>
                 <td>{{ object.created }}</td>

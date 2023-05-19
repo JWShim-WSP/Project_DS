@@ -1,42 +1,41 @@
 {% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}
-    Detail of position #{{object.id}}
+    Detail of position #{{name}}
 {% endblock title %}
 
 {% block content %}
 
-<div class="row mt-5 mb-3">
-    <div class="col-3">
-        <img src="{{ object.product.image.url }}" class="img-fluid" alt="{{ object.product.name }}">
+{% if confirm %}
+    <div class="alert alert-primary" role="alert">
+        Position of #{{profile.id}} has been saved!
     </div>
-    <div class="col-9">
-        <ul>
-            <li>Product Type: <b>{{ object.product.product_type }}</b></li>
-            <li>Unit Price: <b>{{ object.product.price }}</b></li>
-        </ul>
-    </div>
+{% endif %}
+
+<div class="text-center">
+    <img src="{{ profile.product.image.url }}" alt="new profile" class="avatar-big">
 </div>
 
-<table class="table text-center">
-    <thead>
-    <tr>
-        <th scope="col">Position id</th>
-        <th scope="col">Product</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">Price</th>
-        <th scope="col">Created Date</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{ object.id }}</td>
-            <td>{{ object.product.name }}</td>
-            <td>{{ object.quantity }}</td>
-            <td>{{ object.price }}</td>
-            <td>{{ object.created }}</td>
-        </tr>
-    </tbody>
-</table>
+<br>
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <input class="btn btn-outline-primary"
+    value="Save"
+    type="submit">
+    <input class="btn btn-outline-primary"
+    value="Cancel"
+    type="button"
+    onclick="location.href='{% url "sales:positionlist" %}'">
+    {% if profile.id %}
+        <input class="btn btn-outline-primary"
+        value="Delete"
+        type="button"
+        onclick="location.href='{% url "sales:position-delete" profile.id %}'">
+    {% endif %}
+</form>
 
 {% endblock content %}

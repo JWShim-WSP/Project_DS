@@ -13,8 +13,8 @@ BST Project - List of Members
 <h3 class="text-center"><b>BST Members</b></h3>
 
 <div class="text-end">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
-    download
+    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+    Download
     </button>
 </div>
 
@@ -23,21 +23,21 @@ BST Project - List of Members
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">download members</h5>
+                <h5 class="modal-title">Download Members</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="" method="POST">
                     {% csrf_token %}
                     {{ form | crispy }}
-                    <button type="submit" class="btn btn-primary">save</button>
+                    <button type="submit" class="btn btn-outline-primary">save</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<table class="table text-center">
+<table class="table text-center table-hover table-light">
     <thead>
         <tr>
         <th scope="col">#</th>

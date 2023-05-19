@@ -12,13 +12,11 @@ BST Project - Sales
 
 {% block content %}
 
-<div class="card mb-3">
-  <a href="{% url 'sales:sales_list' %}" class="card-body">Sales</a>
-</div>
-
-<div class="card mb-3">
-  <a href="{% url 'sales:positions_list' %}" class="card-body">Positions</a>
-</div>
+<a class="btn btn-outline-primary mt-3" href="{% url 'sales:saleslist' %}" role="button">Sales List</a>
+<a class="btn btn-outline-primary mt-3" href="{% url 'sales:positionlist' %}" role="button">Position List</a>
+<br>
+<br>
+<br>
 
 <!-- Modal -->
 <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -33,7 +31,7 @@ BST Project - Sales
           <form id="report-form" autocomplete="off">
             {% csrf_token %}
             {{ report_form | crispy }}
-            <button type="submit" class="btn btn-info mt-2">save</button>
+            <button type="submit" class="btn btn-outline-primary mt-2">save</button>
           </form>
         </div>
       </div>
@@ -49,7 +47,7 @@ BST Project - Sales
 <form action="" method="POST">
     {% csrf_token %}
     {{ search_form | crispy }}
-    <button type="submit" class="btn btn-primary mt-3">Search</button>
+    <button type="submit" class="btn btn-outline-primary mt-3">Search</button>
 </form>
 <br>
 
@@ -95,6 +93,6 @@ BST Project - Sales
 {% endif %}
 
 <br>
-<button type="button" class="btn btn-primary not-visible" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">add report</button>
+<button type="button" class="btn btn-outline-primary not-visible" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">add report</button>
 
 {% endblock content %}
