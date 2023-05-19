@@ -8,10 +8,10 @@
 {% load static %} 
 <link rel="stylesheet" href="{% static 'pagination.css' %}">
 
-<!-- Here you start to edit the body of Bulletin -->
+<!-- Here you start to edit the body of Event -->
 <div class="text-center">
     <h2 class="text-primary"><b>Events</b></h2>
-    <table class="table" >
+    <table class="table table-hover table-light" >
         <thead>
             <tr class="text-primary">
                 <th>No.</th>
@@ -61,9 +61,9 @@
     </nav>
     <br>
     <br>
-    <a href="{% url 'calendarwithevent:calendarwithevent' %}" class="btn btn-primary" role="button">Go to Calendar & Event</a>
+    <a href="{% url 'calendarwithevent:calendarwithevent' %}" class="btn btn-outline-primary" role="button">Go to Calendar & Event</a>
     &nbsp
-    <a href="{% url 'calendarwithevent:event-add' %}" class="btn btn-primary" role="button">Add a new event</a>
+    <a href="{% url 'calendarwithevent:event-add' %}" class="btn btn-outline-primary" role="button">Add a new event</a>
 </div>
 <!-- End Content -->
 

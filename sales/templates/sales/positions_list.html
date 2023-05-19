@@ -10,13 +10,22 @@ BST Project - Position List
 {% load static %}
 <link rel="stylesheet" href="{% static 'pagination.css' %}">
 
-<h3 class="text-center"><b>BST Positions</b></h3>
+<h3 class="text-center"><b>Position List</b></h3>
 
-<div class="text-end">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
-    download
-    </button>
+<div class="d-flex mb-3">
+    <div class="p-1">
+        <a class="btn btn-outline-primary" href="{% url 'sales:home' %}" role="button">Go Back</a>
+    </div>
+    <div class="me-auto p-1">
+        <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">Add Position</a>
+    </div>
+    <div class="p-1">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+            Download
+        </button>
+    </div>
 </div>
+
 
 <!-- Modal for Form Post-->
 <div class="modal fade" id="download-modal" tabindex="-1">
@@ -30,20 +39,31 @@ BST Project - Position List
                 <form action="" method="POST">
                     {% csrf_token %}
                     {{ form | crispy }}
-                    <button type="submit" class="btn btn-primary">save</button>
+                    <button type="submit" class="btn btn-outline-primary">save</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<table class="table text-center">
+<table class="table text-center table-hover table-light">
     <thead>
         <tr>
         <th scope="col">#</th>
         <th scope="col">Product</th>
+
         <th scope="col">Quantity</th>
-        <th scope="col">Price</th>
+        <th scope="col">Unit Price</th>
+        <th scope="col">Added Cost</th>
+
+        <th scope="col">Total Net-Price</th>
+        <th scope="col">Total Price</th>
+
+        <th scope="col">Exchange Rate to KRW</th>
+        <th scope="col">Added Cost-KRW</th>
+        <th scope="col">Total Net-Price-KRW</th>
+        <th scope="col">Total Price-KRW</th>
+        
         <th scope="col">Created</th>
         </tr>
     </thead>
@@ -52,8 +72,19 @@ BST Project - Position List
             <tr onclick="window.location='{{object.get_absolute_url}}'">
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ object.product.name }}</td>
+
                 <td>{{ object.quantity }}</td>
-                <td>{{ object.price }}</td>
+                <td>{{ object.net_unit_price }}</td>
+                <td>{{ object.added_cost }}</td>
+
+                <td>{{ object.total_net_price }}</td>
+                <td>{{ object.total_added_price }}</td>
+
+                <td>{{ object.ex_rate_to_KRW }}</td>
+                <td>{{ object.added_cost_KRW }}</td>
+                <td>{{ object.total_net_price_KRW }}</td>
+                <td>{{ object.total_added_price_KRW }}</td>
+
                 <td>{{ object.created }}</td>
             </tr>
         {% endfor %}

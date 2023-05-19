@@ -160,9 +160,9 @@ Calendar with Event
 
         <br>
         <div class="d-grid gap-2 d-md-flex justify-content-between">
-            <a class="btn btn-primary" href="{% url 'calendarwithevent:calendarwithevent' %}?{{ prev_month }}" role="button"> Previous Month </a>
-            <a class="btn btn-info" href="{% url 'calendarwithevent:calendarevents' %}" role="button"> Events </a>
-            <a class="btn btn-primary" href="{% url 'calendarwithevent:calendarwithevent' %}?{{ next_month }}" role="button"> Next Month </a>
+            <a class="btn btn-outline-primary" href="{% url 'calendarwithevent:calendarwithevent' %}?{{ prev_month }}" role="button"> Previous Month </a>
+            <a class="btn btn-outline-info" href="{% url 'calendarwithevent:calendarevents' %}" role="button"> Events </a>
+            <a class="btn btn-outline-primary" href="{% url 'calendarwithevent:calendarwithevent' %}?{{ next_month }}" role="button"> Next Month </a>
         </div>
 
         <h3 id="timeanddate" class="text-primary">10:50 PM, SUN, 2023/3/23</h3>
@@ -171,7 +171,7 @@ Calendar with Event
 
     <div class="col-6">
         <h5 class="text-primary"><b>Events in {{ month }}</b></h5>
-        <table class="table">
+        <table class="table table-hover table-light">
             <thead>
                 <tr class="text-primary">
                     <th><b>Title</b></th>
@@ -217,7 +217,7 @@ Calendar with Event
         <br>
 
         <h5 class="text-primary"><b>To-Do Items in {{month}}</b></h5>
-        <table class="table">
+        <table class="table table-hover table-light">
             <thead>
                 <tr class="text-primary">
                     <th><b>What to do</b></th>

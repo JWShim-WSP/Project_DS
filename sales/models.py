@@ -11,11 +11,26 @@ from django.urls import reverse
 class Position(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-    price = models.FloatField(blank=True)
-    created = models.DateTimeField(blank=True)
+    unit_price = models.FloatField()
+
+    added_cost = models.FloatField()
+
+    net_price = models.FloatField(blank=True)
+    added_price = models.FloatField(blank=True)
+
+    ex_rate_to_KRW = models.FloatField()
+    added_cost_KRW = models.FloatField()
+    net_price_KRW = models.FloatField(blank=True)
+    added_price_KRW = models.FloatField(blank=True)
+
+    created = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        self.price = self.product.price * self.quantity
+        self.net_price = self.unit_price * self.quantity
+        self.added_price = self.net_price + self.added_cost
+
+        self.net_price_KRW = self.net_price * self.ex_rate_to_KRW
+        self.added_price_KRW = (self.added_price * self.ex_rate_to_KRW) + self.added_cost_KRW
         return super().save(*args, **kwargs)
 
     def get_sales_id(self):
@@ -24,7 +39,7 @@ class Position(models.Model):
         return sale_obj.id
     
     def get_absolute_url(self):
-        return reverse('sales:position_detail', kwargs={'pk':self.pk})
+        return reverse('sales:positiondetails', kwargs={'pk':self.pk})
     
     def get_sales_customer(self):
         # reverse relationship to sale (sale_set: set of 'Sale' model with the first item)
@@ -40,19 +55,22 @@ class Sale(models.Model):
     #if multi positions are allowed, it is not easy to trace down Sale and Position
     #position = models.ForeignKey(Position, on_delete=models.CASCADE)
     # This will be automatically calculated through the signal of changes of positions in signals.py
-    total_price = models.FloatField(blank=True, null=True)
+    total_net_price = models.FloatField(blank=True, null=True)
+    total_added_price = models.FloatField(blank=True, null=True)
+    total_net_price_KRW = models.FloatField(blank=True, null=True)
+    total_added_price_KRW = models.FloatField(blank=True, null=True)
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     salesman = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    created = models.DateTimeField(blank=True)
+    created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    def save(self,*args, **kwargs):
+    def save(self, *args, **kwargs):
         if self.transaction_id == "":
             self.transaction_id = generate_code()
         if self.created is None:
             self.created = timezone.now()
-        #if self.total_price is None:
+        #if self.total_price is None: /* Signal from m2m 'post_add' or 'post_remove' will make the total_price
         #    self.total_price = self.position.price
         return super().save(*args, **kwargs)
 
@@ -61,7 +79,7 @@ class Sale(models.Model):
         return self.positions.all()
 
     def get_absolute_url(self):
-        return reverse('sales:sales_detail', kwargs={'pk':self.pk})
+        return reverse('sales:salesdetails', kwargs={'pk':self.pk})
     
     def __str__(self):
         return f"Sales for the amount of ${self.total_price}"

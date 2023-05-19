@@ -1,4 +1,6 @@
 {% extends "base.html" %} 
+{% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}
     Details about {{object.user.username}}
@@ -6,21 +8,28 @@
 
 {% block content %}
 
-<div class="card">
-    <img src="{{ object.avatar.url }}" class="card-img-top avatar-big" alt="no-picture">
-    <div class="card-body">
-        <div calss="card-title">
-            <h1>Profile of {{object.user.username}}</h1>
-        </div>
-        <div class="card-text">
-            <p>First Name: {{object.user.first_name}}</p>
-            <p>Last Name: {{object.user.last_name}}</p>
-            <p>Email Address: {{object.user.email}}</p>
-            <p>Bio: {{ object.bio }}</p>
-            <p>Date Created: {{object.created}}</p>
-            <p>Date Updated: {{object.updated}}</p>
-        </div>
+{% if confirm %}
+    <div class="alert alert-primary" role="alert">
+        Profile of {{name}} has been updated
     </div>
+{% endif %}
+
+<div class="text-center">
+    <img src="{{ profile.avatar.url }}" alt="my-profile" class="avatar-big">
 </div>
+
+<br>
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <input class="btn btn-outline-primary"
+    value="Update"
+    type="submit">
+    <input class="btn btn-outline-primary"
+    value="Cancel"
+    type="button"
+    onclick="location.href='{% url "myadmin:memberlist" %}'">
+</form>
 
 {% endblock %}

@@ -34,8 +34,8 @@ urlpatterns = [
     # Events View
     path('calendarevents', views.CalendarEvents.as_view(), name='calendarevents'),
     # CRUD patterns for EventList
-    path("calendarevents/add/", views.EventCreate.as_view(), name="event-add"),
     path("calendarevents/item/<int:pk>/", views.EventUpdate.as_view(), name="event-update"),
+    path("calendarevents/add/", views.EventCreate.as_view(), name="event-add"),
     path("calendarevents/<int:pk>/delete/", views.EventDelete.as_view(), name="event-delete"),
 ]
     

@@ -3,10 +3,10 @@
 <!--
 {% url 'sales:sales_list' as path_to_sales %}
 {% url 'reports:from-file' as path_to_from_file %}
-{% url 'reports:main' as path_to_reports %}
 -->
-{% url 'products:list' as path_to_products %}
-{% url 'customers:list' as path_to_customers %}
+{% url 'reports:main' as path_to_reports %}
+{% url 'products:productlist' as path_to_products %}
+{% url 'customers:customerlist' as path_to_customers %}
 {% url 'profiles:my' as path_to_my_profile %}
 {% url 'myadmin:memberlist' as path_to_myadmin %}
 {% url 'tools:main' as path_to_tools %}
@@ -33,10 +33,10 @@
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_from_file %}active{% endif %}" href="{{path_to_from_file}}">Add from file</a>
         </li>
+        -->
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_reports %}active{% endif %}" href="{{path_to_reports}}">Reports</a>
         </li>
-        -->
         {% if request.user.is_staff %}
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_myadmin %}active{% endif %}" href="{{path_to_myadmin}}">Admin</a>

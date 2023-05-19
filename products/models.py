@@ -20,7 +20,7 @@ class Product(models.Model):
     product_type = models.CharField(max_length=50, choices=PRODUCT_TYPE_CHOICES)
 
     def get_absolute_url(self):
-        return reverse('products:detail', kwargs={'pk':self.pk})
+        return reverse('products:productdetails', kwargs={'pk':self.pk})
 
     def __str__(self):
         return f"{self.name}-{self.product_type}"

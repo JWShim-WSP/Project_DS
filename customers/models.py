@@ -12,7 +12,7 @@ class Customer(models.Model):
     remark = models.TextField(blank=True)
 
     def get_absolute_url(self):
-        return reverse('customers:detail', kwargs={'pk':self.pk})
+        return reverse('customers:customerdetails', kwargs={'pk':self.pk})
 
     def __str__(self):
         return f"{self.name}"

@@ -31,7 +31,7 @@ Email Send
     <form method="POST" action ="" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form | crispy }}
-        <button type="submit" class="btn btn-primary">Send Email</button>
+        <button type="submit" class="btn btn-outline-primary">Send Email</button>
     </form>
 </div>
 
