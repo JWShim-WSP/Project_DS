@@ -7,7 +7,7 @@ class PositionResource(resources.ModelResource):
     class Meta:
         model = Position
         # enumerate the fields to export
-        fields = ("id", "product", "quantity", "net_unit_price", "added_cost", "total_net_price", "total_added_price", "ex_rate_to_KRW", "added_cost_KRW", "total_net_price_KRW", "total_added_price_KRW", 'created')
+        fields = ("id", "product", "quantity", "unit_price", "added_cost", "net_price", "added_price", "ex_rate_to_KRW", "added_cost_KRW", "net_price_KRW", "added_price_KRW", 'created')
         export_order = fields
 
     # To change (dehydrate) the display from number('1 or 0') to text ('Ture or False')

@@ -66,14 +66,14 @@ def home_view(request):
                     'position_id': pos.id,
                     'product': pos.product.name,
                     'quantity': pos.quantity,
-                    'net_unit_price': pos.net_unit_price,
+                    'unit_price': pos.unit_price,
                     'added_cost': pos.added_cost,
-                    'total_net_price': pos.total_net_price,
-                    'total_added_price': pos.total_added_price,
+                    'net_price': pos.net_price,
+                    'added_price': pos.added_price,
                     'ex_rate_to_KRW': pos.ex_rate_to_KRW,
                     'added_cost_KRW': pos.added_cost_KRW,
-                    'total_net_price_KRW': pos.total_net_price_KRW,
-                    'total_added_price_KRW': pos.total_added_price_KRW,
+                    'net_price_KRW': pos.net_price_KRW,
+                    'added_price_KRW': pos.added_price_KRW,
                     'sales_id': pos.get_sales_id(), # reverse relationship to 'Sale' from 'Position'
                     }
                     positions_data.append(obj)

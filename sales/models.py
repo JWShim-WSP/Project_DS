@@ -11,26 +11,26 @@ from django.urls import reverse
 class Position(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-    net_unit_price = models.FloatField()
+    unit_price = models.FloatField()
 
     added_cost = models.FloatField()
 
-    total_net_price = models.FloatField(blank=True)
-    total_added_price = models.FloatField(blank=True)
+    net_price = models.FloatField(blank=True)
+    added_price = models.FloatField(blank=True)
 
     ex_rate_to_KRW = models.FloatField()
     added_cost_KRW = models.FloatField()
-    total_net_price_KRW = models.FloatField(blank=True)
-    total_added_price_KRW = models.FloatField(blank=True)
+    net_price_KRW = models.FloatField(blank=True)
+    added_price_KRW = models.FloatField(blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        self.total_net_price = self.net_unit_price * self.quantity
-        self.total_added_price = self.total_net_price + self.added_cost
+        self.net_price = self.unit_price * self.quantity
+        self.added_price = self.net_price + self.added_cost
 
-        self.total_net_price_KRW = self.total_net_price * self.ex_rate_to_KRW
-        self.total_added_price_KRW = (self.total_added_price * self.ex_rate_to_KRW) + self.added_cost_KRW
+        self.net_price_KRW = self.net_price * self.ex_rate_to_KRW
+        self.added_price_KRW = (self.added_price * self.ex_rate_to_KRW) + self.added_cost_KRW
         return super().save(*args, **kwargs)
 
     def get_sales_id(self):

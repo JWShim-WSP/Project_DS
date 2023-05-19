@@ -14,10 +14,10 @@ def calculate_total_price(sender, instance, action, **kwargs):
 
     if action == 'post_add' or action == 'post_remove':
         for item in instance.get_positions():
-            total_net_price += item.total_net_price
-            total_added_price += item.total_added_price
-            total_net_price_KRW += item.total_net_price_KRW
-            total_added_price_KRW += item.total_added_price_KRW
+            total_net_price += item.net_price
+            total_added_price += item.added_price
+            total_net_price_KRW += item.net_price_KRW
+            total_added_price_KRW += item.added_price_KRW
     
     instance.total_net_price = total_net_price
     instance.total_added_price = total_added_price

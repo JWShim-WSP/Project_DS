@@ -20,7 +20,7 @@ RESULT_CHOICES = (
 )
 
 SUM_CHOICES = (
-    ('total_added_price', 'total_added_price'),
+    ('added_price', 'price'),
     ('quantity', 'quantity'),
 )
 
@@ -39,4 +39,4 @@ class SaleForm(forms.ModelForm):
 class PositionForm(forms.ModelForm):
     class Meta:
         model = Position
-        fields= ["product", "quantity", "net_unit_price", "added_cost", "total_net_price", "total_added_price", "ex_rate_to_KRW", "added_cost_KRW", "total_net_price_KRW", "total_added_price_KRW"]
+        fields= ["product", "quantity", "unit_price", "added_cost", "net_price", "added_price", "ex_rate_to_KRW", "added_cost_KRW", "net_price_KRW", "added_price_KRW"]
