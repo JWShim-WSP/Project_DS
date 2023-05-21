@@ -12,10 +12,15 @@ BST Project - List of Members
 
 <h3 class="text-center"><b>BST Members</b></h3>
 
-<div class="text-end">
-    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
-    Download
-    </button>
+<div class="d-flex mb-3">
+    <div class="me-auto p-1">
+        <a class="btn btn-outline-primary" href="{% url 'myadmin:member-add' %}" role="button">Add Member</a>
+    </div>
+    <div class="p-1">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+            Download
+        </button>
+    </div>
 </div>
 
 <!-- Modal for Form Post-->
@@ -46,19 +51,19 @@ BST Project - List of Members
         <th scope="col">Last_name</th>
         <th scope="col">Email</th>
         <th scope="col">Staff</th>
-        <th scope="col">Created</th>
+        <th scope="col">Date Joined</th>
         </tr>
     </thead>
     <tbody>
         {% for object in object_list %}
-            <tr onclick="window.location='{{object.get_absolute_url}}'">
+            <tr onclick="window.location='{% url "myadmin:memberdetails" object.id %}'">
                 <th scope="row">{{ forloop.counter }}</th>
-                <td>{{ object.user.username }}</td>
-                <td>{{ object.user.first_name }}</td>
-                <td>{{ object.user.last_name }}</td>
-                <td>{{ object.user.email }}</td>
-                <td>{{ object.user.is_staff }}</td>
-                <td>{{ object.created }}</td>
+                <td>{{ object.username }}</td>
+                <td>{{ object.first_name }}</td>
+                <td>{{ object.last_name }}</td>
+                <td>{{ object.email }}</td>
+                <td>{{ object.is_staff }}</td>
+                <td>{{ object.date_joined }}</td>
             </tr>
         {% endfor %}
     </tbody>

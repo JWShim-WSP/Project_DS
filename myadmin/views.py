@@ -5,9 +5,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
+from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView, FormView
 from profiles.models import Profile
-from .forms import MemberForm
+from .forms import MemberForm, NewMemberForm
 from profiles.forms import FormatForm
 from profiles.resources import MemberResource
 from django.core.paginator import Paginator
@@ -29,7 +30,7 @@ def member_list_view(request):
         response['Content-Disposition'] = f"attachement; filename=bstmember.{format}"
         return response
     else:
-        p = Paginator(Profile.objects.order_by('user__is_staff'), 10)
+        p = Paginator(User.objects.order_by('is_staff'), 10)
         try:
             object_list = p.get_page(request.GET.get("page"))
         except:
@@ -45,21 +46,50 @@ def member_list_view(request):
 
 @staff_member_required
 def member_detail_view(request, pk):
-    profile = Profile.objects.get(pk=pk)
-    form = MemberForm(request.POST or None, request.FILES or None, instance=profile)
-    confirm = False
+    profile = User.objects.get(pk=pk)
+    form = MemberForm(request.POST or None, instance=profile)
 
-    if form.is_valid():
-        form.save()
-        confirm = True
+    if request.method == "POST":
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            return HttpResponseRedirect(reverse('myadmin:memberlist'))
 
     context = {
-        'name': profile.user.username,
         'profile': profile,
         'form': form,
-        'confirm': confirm,
+        'confirm': False,
     }
     return render(request, 'myadmin/member_detail.html', context)
+
+@staff_member_required
+def member_add_view(request):
+    form = NewMemberForm(request.POST or None)
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('myadmin:memberlist'))
+
+    context = {
+        'profile': None,
+        'form': form,
+        'confirm': False,
+    }
+    return render(request, 'myadmin/member_detail.html', context)
+
+@staff_member_required
+def member_delete_view(request, pk):
+    member = User.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        member.delete()
+        return HttpResponseRedirect(reverse('myadmin:memberlist'))
+    else:
+        context = {
+            'profile': member,
+        }
+        return render(request, 'myadmin/member_confirm_delete.html', context)
 
 # Create your CBV views here. ==> security reason to go to FBV above
 class MemberList(LoginRequiredMixin, ListView, FormView):

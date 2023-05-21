@@ -8,9 +8,9 @@ my profile
 
 {% block content %}
 
-{% if confirm %}
+{% if success_message %}
     <div class="alert alert-primary" role="alert">
-        Your profile has been updated
+        {{ success_message }}
     </div>
 {% endif %}
 
@@ -30,6 +30,10 @@ my profile
     value="Cancel"
     type="button"
     onclick="location.href='{% url "sales:home" %}'">
+    <input class="btn btn-outline-primary"
+    value="Change Password"
+    type="button"
+    onclick="location.href='{% url "profiles:password_change" %}'">
 </form>
 
 {% endblock content %}

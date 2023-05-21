@@ -4,7 +4,7 @@ from .models import Profile
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ('user', )
+        fields= ["bio", "language", "menubar", "licensed_by", "avatar"]
 
 
 # to export a file

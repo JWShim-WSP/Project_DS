@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 
+def home_view(request):
+    return redirect('sales:home')
+
 def logout_view(request):
     logout(request)
     return redirect('login')
