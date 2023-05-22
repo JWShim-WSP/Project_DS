@@ -22,8 +22,6 @@ def product_list_view(request):
     chart = None
     no_data = None
 
-    search_form = ProductSearchForm(request.GET or None)
-
     if (request.method == 'POST'):
         dataset = ProductResource().export()
         format = request.POST.get('format')
@@ -70,7 +68,7 @@ def product_list_view(request):
             products_df = products_df.to_html(classes='table text-center table-striped', justify='center')
 
         else:
-            no_data = 'No data is availablein in this date range'
+            no_data = 'No data is available in this date range'
 
         form_class = FormatForm()
         search_form = ProductSearchForm()
