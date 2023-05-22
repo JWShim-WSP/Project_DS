@@ -2,7 +2,7 @@ console.log('Hello world, this is JW.')
 
 const reportBtn = document.getElementById('report-btn')
 const img = document.getElementById('img')
-const modalBody = document.getElementById('modal-body')
+const Body = document.getElementById('modal-body')
 const reportForm = document.getElementById('report-form')
 const alertBox = document.getElementById('alert-box')
 

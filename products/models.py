@@ -10,6 +10,14 @@ PRODUCT_TYPE_CHOICES = (
     ('Etc', 'Etc'),
 )
 
+PRODUCT_CHOICES_FOR_SEARCH = (
+    ('All', 'All'),
+    ('Sensor', 'Sensor'),
+    ('Plasma Torch', 'Plasma Torch'),
+    ('Pump', 'Pump'),
+    ('Etc', 'Etc'),
+)
+
 class Product(models.Model):
     name = models.CharField(max_length=120)
     image = models.ImageField(upload_to='products', default='no_picture.png')

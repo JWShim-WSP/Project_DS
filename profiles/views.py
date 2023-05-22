@@ -30,8 +30,6 @@ def my_profile_view(request):
     }
     return render(request, 'profiles/main.html', context)
 
-
-
 class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     template_name = 'profiles/change_password.html'
     success_message = "Successfully Changed Your Password"
