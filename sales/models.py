@@ -80,9 +80,14 @@ class Sale(models.Model):
 
     def get_absolute_url(self):
         return reverse('sales:salesdetails', kwargs={'pk':self.pk})
+
+    def positions_ids(self):
+        return ', '.join([str(a.id)+': ' + a.product.name for a in self.positions.all()])
     
+    positions_ids.short_description = "Positions ID"
+
     def __str__(self):
-        return f"Sales for the amount of ${self.total_price}"
+        return f"Sales for the amount of ${self.total_added_price}"
 
 
 class CSV(models.Model):

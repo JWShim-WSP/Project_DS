@@ -4,8 +4,8 @@ from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.core.mail import EmailMessage
 from django.conf import settings
-
-# Create your views here.
+#split string with 2 delimiters
+import re 
 
 # Here, we are going to use ClassView to execute a form and send email with contents directly. Rather than using function-based form with model to save into db
 class ContactView(FormView):
@@ -17,9 +17,9 @@ class ContactView(FormView):
         if form.is_valid():
             #from_email = form.cleaned_data['your_email_Address']
             #name = form.cleaned_data['your_first_Name'] + ' ' + form.cleaned_data['your_last_Name']
-            to_emails = form.cleaned_data['to'].split(",")
-            cc_emails = form.cleaned_data['cc'].split(",")
-            bcc_emails = form.cleaned_data['bcc'].split(",")
+            to_emails = re.split(r',|;| ', form.cleaned_data['to'])
+            cc_emails = re.split(r',|;| ',form.cleaned_data['cc'])
+            bcc_emails = re.split(r',|;| ', form.cleaned_data['bcc'])
 
             subject = form.cleaned_data['subject']
 

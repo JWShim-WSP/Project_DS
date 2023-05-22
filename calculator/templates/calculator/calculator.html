@@ -11,26 +11,34 @@ Calculator
 
 {% if query %}
   <!-- Modal : This modal is not used here!!! -->
-  <div class="modal fade" id="calculatorModal" tabindex="-1">
+  <div class="modal fade" id="calculatorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Result</h5>
+          <h5 class="modal-title text-primary">Result</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="modal-body">
           {% if error %}
-          <h3 class="modal-title">Expression Error: {{ query }}</h1>
+          <h3 class="modal-title text-danger">Expression Error: {{ query }}</h1>
           {% else %}
           <h3 class="modal-title">{{ query }} = {{ answer }}</h1>
           {% endif %}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
         </div>
         </div>
     </div>
   </div>
+  <script>
+    window.onload = function () {
+        OpenBootstrapPopup();
+    };
+    function OpenBootstrapPopup() {
+        $("#calculatorModal").modal('show');
+    }
+  </script>
 {% endif %}
 
 <div class="d-flex justify-content-center text-center">
@@ -41,17 +49,7 @@ Calculator
       {% csrf_token %}
       <div class="input-group input-group-lg">
         <span class="input-group-text" id="inputGroup-sizing-lg">Expression</span>
-        {% if query %}
-          {% if error %}
-          <input type="text" name="query" id="query" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" 
-                autofocus placeholder="Error: {{ query }}">
-          {% else %}
-          <input type="text" name="query" id="query" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" 
-                autofocus placeholder="{{ query }} = {{ answer }}">
-          {% endif %}
-        {% else %}
-          <input type="text" name="query" id="query" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" autofocus>
-        {% endif %}
+        <input type="text" name="query" id="query" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" autofocus>
       </div>
       <br>
       <div class="d-grid gap-2 d-md-block">

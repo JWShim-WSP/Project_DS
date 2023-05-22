@@ -46,7 +46,7 @@ def get_chart(chart_type, data, key_by, sum_by, **kwargs):
     #plt.title(f"Sales Total: {addlabels(d[key], d['total_price'], chart_type)}")
     # if data frame is merged_df, 'price' should be the base of sum instead of 'total_price'
     d = data.groupby(key_by, as_index=False)[sum_by].agg('sum')
-    plt.title(f"Sales Total: {addlabels(d[key_by], d[sum_by], chart_type)}")
+    plt.title(f"Total: {addlabels(d[key_by], d[sum_by], chart_type)}")
 
     if chart_type == 'Bar Chart':
         #plt.bar(d[key], d['total_price'])

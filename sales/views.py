@@ -21,7 +21,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # MVT (Model, View, and Template) for Django applications
 
 @login_required
-def home_view(request):
+def sales_home_view(request):
 
     #bst_positions = Position.objects.all()
     #bst_sales = Sale.objects.all()

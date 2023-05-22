@@ -1,5 +1,5 @@
 from django.urls import path
-from myadmin.views import MemberList, MemberDetails, member_list_view, member_detail_view
+from myadmin.views import MemberList, MemberDetails, member_list_view, member_detail_view, member_add_view, member_delete_view
 
 app_name = 'myadmin'
 
@@ -10,4 +10,6 @@ urlpatterns = [
     path('', member_list_view, name='memberlist'),
     path('<int:page>', member_list_view, name='memberlist'),
     path('details/<int:pk>', member_detail_view, name='memberdetails'),
+    path("myadmin/add/", member_add_view, name="member-add"),
+    path("myadmin/<int:pk>/delete/", member_delete_view, name="member-delete"),
 ]

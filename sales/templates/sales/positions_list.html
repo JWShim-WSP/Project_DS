@@ -14,7 +14,7 @@ BST Project - Position List
 
 <div class="d-flex mb-3">
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:home' %}" role="button">Go Back</a>
+        <a class="btn btn-outline-primary" href="{% url 'products:productlist' %}" role="button">Go Back</a>
     </div>
     <div class="me-auto p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">Add Position</a>
@@ -49,7 +49,7 @@ BST Project - Position List
 <table class="table text-center table-hover table-light">
     <thead>
         <tr>
-        <th scope="col">#</th>
+        <th scope="col">Position ID</th>
         <th scope="col">Product</th>
 
         <th scope="col">Quantity</th>
@@ -70,7 +70,7 @@ BST Project - Position List
     <tbody>
         {% for object in object_list %}
             <tr onclick="window.location='{{object.get_absolute_url}}'">
-                <th scope="row">{{ forloop.counter }}</th>
+                <th scope="row">{{ object.id }}</th>
                 <td>{{ object.product.name }}</td>
 
                 <td>{{ object.quantity }}</td>

@@ -45,16 +45,16 @@ def customer_list_view(request):
 def customer_detail_view(request, pk):
     customer = Customer.objects.get(pk=pk)
     form = CustomerForm(request.POST or None, request.FILES or None, instance=customer)
-    confirm = False
 
-    if form.is_valid():
-        form.save()
-        confirm = True
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('customers:customerlist'))
 
     context = {
         'profile': customer,
         'form': form,
-        'confirm': confirm,
+        'confirm': False,
     }
     return render(request, 'customers/customer_detail.html', context)
 
@@ -65,7 +65,7 @@ def customer_add_view(request):
     if request.method == "POST":
         if form.is_valid():
             form.save()
-        return HttpResponseRedirect(reverse('customers:customerlist'))
+            return HttpResponseRedirect(reverse('customers:customerlist'))
 
     context = {
         'profile': None,

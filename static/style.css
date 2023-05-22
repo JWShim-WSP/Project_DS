@@ -29,3 +29,40 @@
     height: 30px;
     width: auto;
 }
+
+.navbar {
+    .nav-link {
+        color: blue !important;
+    }
+}
+
+.navbar {
+    .active {
+       color: white !important;
+    }
+}
+
+.nav {
+    height:100%;
+    width:160px;
+    position: fixed;
+    z-index:1;
+    top:0;
+    left:0;
+    background-color:#111;
+    overflow-x: hidden;
+    padding-top: 20px;
+    color: white !important;
+
+    .active {
+        color: black !important;
+    }
+    .a:hover{
+        color:#f1f1f1;
+    }     
+    .main{
+        margin-left:160px;
+        padding: 0px 10px;
+    }   
+}
+

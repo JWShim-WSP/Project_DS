@@ -51,8 +51,8 @@ Sales List
 <table class="table text-center table-hover table-light">
     <thead>
         <tr>
-        <th scope="col">#</th>
-        <th scope="col">Transaction id</th>
+        <th scope="col">Sales ID</th>
+        <th scope="col">Transaction ID</th>
         <th scope="col">Positions</th>
 
         <th scope="col">Total Net-Price</th>
@@ -70,9 +70,9 @@ Sales List
     <tbody>
         {% for object in object_list %}
             <tr onclick="window.location='{{object.get_absolute_url}}'">
-                <th scope="row">{{ forloop.counter }}</th>
+                <th scope="row">{{ object.id }}</th>
                 <td>{{ object.transaction_id }}</td>
-                <td>{{ object.positions }}</td>
+                <td>{{ object.positions_ids }}</td>
 
                 <td>{{ object.total_net_price }}</td>
                 <td>{{ object.total_added_price }}</td>

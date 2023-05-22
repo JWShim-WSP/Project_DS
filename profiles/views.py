@@ -5,6 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 
+from django.urls import reverse_lazy
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
@@ -26,3 +29,8 @@ def my_profile_view(request):
         'confirm': confirm,
     }
     return render(request, 'profiles/main.html', context)
+
+class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
+    template_name = 'profiles/change_password.html'
+    success_message = "Successfully Changed Your Password"
+    success_url = reverse_lazy('profiles:my')

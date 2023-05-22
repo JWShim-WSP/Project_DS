@@ -31,10 +31,34 @@ class SalesSearchForm(forms.Form):
     results_by = forms.ChoiceField(choices=RESULT_CHOICES, widget=forms.Select(attrs={'style':'width: 25%'}))
     sum_by = forms.ChoiceField(choices=SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 25%'}))
 
+class CustomPositionChoice(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, position):
+        return "%s" %position.id
+
 class SaleForm(forms.ModelForm):
     class Meta:
         model = Sale
         fields= ["transaction_id", "positions", "total_net_price", "total_added_price", "total_net_price_KRW", "total_added_price_KRW", "customer", 'salesman']
+    
+    positions = forms.ModelMultipleChoiceField(
+        queryset=Position.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
+
+# You can modify the 'Choice of positions' with different names
+#class CustomMMPosition(forms.ModelMultipleChoiceField):
+#    def label_from_instance(self, position):
+#        return "%s" % position.product.name
+#    
+#class SaleForm(forms.ModelForm):
+#    class Meta:
+#        model = Sale
+#        fields= ["transaction_id", "positions", "total_net_price", "total_added_price", "total_net_price_KRW", "total_added_price_KRW", "customer", 'salesman']
+#
+#    positions = CustomMMPosition(
+#        queryset=Position.objects.all(),
+#        widget=forms.CheckboxSelectMultiple
+#    )
 
 class PositionForm(forms.ModelForm):
     class Meta:
