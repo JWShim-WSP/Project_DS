@@ -16,8 +16,16 @@ Sales List
     <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:home' %}" role="button">Go Back</a>
     </div>
-    <div class="me-auto p-1">
+    <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">Add Sales</a>
+    </div>
+    <div class="me-auto p-1">
+        <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#salesModal">Sort By</button>
+        <!--
+        <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
+            Sort By
+        </button>
+        -->
     </div>
     <div class="p-1">
         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
@@ -47,6 +55,31 @@ Sales List
         </div>
     </div>
 </div>
+
+<!-- Modal for Search -->
+<div class="modal fade" id="salesModal" tabindex="-1" aria-labelledby="salesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="salesModalLabel">Sales sort by</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          <div id="alert-box"></div>
+          <form id="sales-form" action="" method="GET">
+            {{ search_form | crispy }}
+            <button type="submit" class="btn btn-outline-primary mt-2">Search</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% if no_data %}
+  <div class="alert alert-warning" role="alert">
+    {{ no_data }}
+  </div>
+{% endif %}
 
 <table class="table text-center table-hover table-light">
     <thead>
@@ -107,5 +140,13 @@ Sales List
         {% endif %}
     </nav>
 </div>
+
+<br>
+<br>
+{% if merged_df %}
+
+    <img src="data:image/png;base64, {{chart | safe}}" id='img'>
+
+{% endif %}
 
 {% endblock %}

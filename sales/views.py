@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Sale, Position
 from profiles.forms import FormatForm
-from .forms import SalesSearchForm, SaleForm, PositionForm
+from .forms import SalesSearchForm, SaleForm, PositionForm, CHART_CHOICES, RESULT_CHOICES, SUM_CHOICES 
 from .resources import SaleResource, PositionResource
 from reports.forms import ReportForm
 import pandas as pd
@@ -49,7 +49,11 @@ def sales_home_view(request):
 
         #qs = Sale.objects.all()
         # filter the data with lte (less than equal) and gte (greater than equal)
-        sales_qs = Sale.objects.filter(created__date__lte=date_to, created__date__gte=date_from)
+        if date_from and date_to:
+            sales_qs = Sale.objects.filter(created__date__lte=date_to, created__date__gte=date_from)
+        else:
+            sales_qs = Sale.objects.all()
+
         if len(sales_qs) > 0:
             sales_df = pd.DataFrame(sales_qs.values())
             sales_df['customer_id'] = sales_df['customer_id'].apply(get_customer_from_id)
@@ -101,7 +105,7 @@ def sales_home_view(request):
             #df_customer = df_customer.to_html(classes='table table-striped text-center', justify='center')
             #df_salesman = df_salesman.to_html(classes='table table-striped text-center', justify='center')
         else:
-            no_data = 'No data is availablein in this date range'
+            no_data = 'No data is available in this date range'
 
     context = {
         #'bst_positions': bst_positions,
@@ -137,6 +141,10 @@ class SaleDetailView(LoginRequiredMixin, DetailView):
 # path('sales/<pk>/', sale_detail_view, name='detailview')
 @staff_member_required
 def sales_list_view(request):
+    merged_df = None
+    chart = None
+    no_data = None
+
     if (request.method == 'POST'):
         dataset = SaleResource().export()
         format = request.POST.get('format')
@@ -150,17 +158,80 @@ def sales_list_view(request):
         response['Content-Disposition'] = f"attachement; filename=bstsales.{format}"
         return response
     else:
-        p = Paginator(Sale.objects.all(), 10)
+        date_from = request.GET.get('date_from')
+        date_to = request.GET.get('date_to')
+        chart_type = request.GET.get('chart_type')
+        key_by = request.GET.get('results_by')
+        sum_by = request.GET.get('sum_by')
+
+        #qs = Sale.objects.all()
+        # filter the data with lte (less than equal) and gte (greater than equal)
+        if date_from and date_to:
+            sales_qs = Sale.objects.filter(created__date__lte=date_to, created__date__gte=date_from)
+        else:
+            sales_qs = Sale.objects.all()
+
+        if chart_type == None:
+            chart_type = CHART_CHOICES[0][0]
+
+        if key_by == None:
+            key_by = RESULT_CHOICES[0][0]
+            
+        if sum_by == None:
+            sum_by = SUM_CHOICES[0][0]
+
+
+        p = Paginator(sales_qs, 10)
         try:
             object_list = p.get_page(request.GET.get("page"))
         except:
             object_list = p.get_page(1)
-        
+
+        if len(sales_qs) > 0:
+            sales_df = pd.DataFrame(sales_qs.values())
+            sales_df['customer_id'] = sales_df['customer_id'].apply(get_customer_from_id)
+            sales_df['salesman_id'] = sales_df['salesman_id'].apply(get_salesman_from_id)
+            sales_df['created'] = sales_df['created'].apply(lambda x: x.strftime('%Y-%m-%d')) # lambda argument: expression
+            sales_df['updated'] = sales_df['updated'].apply(lambda x: x.strftime('%Y-%m-%d')) # lambda argument: expression
+            sales_df.rename({'customer_id': 'customer', 'salesman_id': 'salesman', 'id': 'sales_id'}, axis=1, inplace=True)
+            #sales_df['sales_id'] = sales_df['id'] # or, you can add a new 'sales_id' column
+
+            positions_data = []
+            for sale in sales_qs:
+                for pos in sale.get_positions():
+                    obj = {
+                    'position_id': pos.id,
+                    'product': pos.product.name,
+                    'quantity': pos.quantity,
+                    'unit_price': pos.unit_price,
+                    'added_cost': pos.added_cost,
+                    'net_price': pos.net_price,
+                    'added_price': pos.added_price,
+                    'ex_rate_to_KRW': pos.ex_rate_to_KRW,
+                    'added_cost_KRW': pos.added_cost_KRW,
+                    'net_price_KRW': pos.net_price_KRW,
+                    'added_price_KRW': pos.added_price_KRW,
+                    'sales_id': pos.get_sales_id(), # reverse relationship to 'Sale' from 'Position'
+                    }
+                    positions_data.append(obj)
+
+            positions_df = pd.DataFrame(positions_data)
+            merged_df = pd.merge(sales_df, positions_df, on='sales_id')
+            chart = get_chart(chart_type, merged_df, key_by, sum_by)
+            merged_df = merged_df.to_html(classes='table text-center table-striped', justify='center')
+        else:
+            no_data = 'No data is available in this date range'     
+
+        search_form = SalesSearchForm()
         form_class = FormatForm()
-            
+
         context = {
             'object_list': object_list,
             'form': form_class,
+            'search_form': search_form,
+            'merged_df': merged_df,
+            'chart': chart,
+            'no_data': no_data,
         }
         return render(request, 'sales/sales_list.html', context)
 

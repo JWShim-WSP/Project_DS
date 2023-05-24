@@ -2,10 +2,6 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block scripts %}
-    <script src="{% static 'products/home.js' %}" defer></script>
-{% endblock scripts %}
-
 {% block title %}
 Product List
 {% endblock title %}
@@ -39,12 +35,12 @@ Product List
 </div>
 
 
-<!-- Modal -->
+<!-- Modal for Search -->
 <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="productModalLabel">Products sorted by</h1>
+          <h1 class="modal-title fs-5" id="productModalLabel">Products sort by</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="modal-body">
