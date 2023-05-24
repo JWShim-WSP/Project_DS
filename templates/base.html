@@ -35,17 +35,16 @@
   <body>
     {% if user.profile.menubar == "Side" %}
     <div class="row">
-      <div class="col-2 container mt-3 mb-3 pt-3">
+      <div class="col-1 container-sm">
     {% endif %}
 
         {% include 'navbar.html' %}
 
     {% if user.profile.menubar == "Side" %}
       </div> <!-- close <div> of "col-1" of Sidebar menu -->
-      <div class="d-flex justify-content-center">
-        <div class="col-10 container mt-3 mb-3">
+      <div class="col-10 container-sm mt-3 mb-3">
     {% else %}
-      <div class="container mt-3 mb-3">
+      <div class="container-xl mt-3 mb-3">
     {% endif %}
 
         {% block content %}
@@ -53,7 +52,6 @@
 
     {% if user.profile.menubar == "Side" %}
         </div> <!-- close <div> of "col-10"-->
-      </div> <!-- close <div> of "row justify-contnent-center"-->
     </div> <!-- close <div> of "row" of Sidebar + Content Block -->
     {% else %}
       </div> <!-- close <div> of "container"-->

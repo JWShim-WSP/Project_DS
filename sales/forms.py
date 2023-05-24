@@ -1,5 +1,6 @@
 from django import forms
 from .models import Sale, Position
+from products.models import PRODUCT_CHOICES_FOR_SEARCH
 from django.forms import ModelForm, TextInput, EmailInput, NumberInput, Textarea, DateTimeInput, DateInput, Select
 
 # The first value is for the choice value, the second value is used for displaying in the form
@@ -20,16 +21,22 @@ RESULT_CHOICES = (
 )
 
 SUM_CHOICES = (
-    ('added_price', 'price'),
+    ('added_price', 'price'), # Position' added_price should be used instead of 'total_added_price' of Sale
+    ('added_price_KRW', 'price in KRW'), # Position' added_price_KRW should be used instead of 'total_added_price_KRW' of Sale
     ('quantity', 'quantity'),
 )
 
 class SalesSearchForm(forms.Form):
     date_from = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 25%', 'autofocus':True}), required=False)
     date_to = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 25%'}), required=False)
-    chart_type = forms.ChoiceField(choices=CHART_CHOICES, widget=forms.Select(attrs={'style':'width: 25%'}))
-    results_by = forms.ChoiceField(choices=RESULT_CHOICES, widget=forms.Select(attrs={'style':'width: 25%'}))
-    sum_by = forms.ChoiceField(choices=SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 25%'}))
+    chart_type = forms.ChoiceField(choices=CHART_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
+    results_by = forms.ChoiceField(choices=RESULT_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
+    sum_by = forms.ChoiceField(choices=SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
+
+class PositionSearchForm(forms.Form):
+    chart_type = forms.ChoiceField(choices=CHART_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
+    results_by = forms.ChoiceField(choices=PRODUCT_CHOICES_FOR_SEARCH, widget=forms.Select(attrs={'style':'width: 100%'}))
+    sum_by = forms.ChoiceField(choices=SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
 
 class CustomPositionChoice(forms.ModelMultipleChoiceField):
     def label_from_instance(self, position):

@@ -14,9 +14,6 @@ Sales List
 
 <div class="d-flex mb-3">
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:home' %}" role="button">Go Back</a>
-    </div>
-    <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">Add Sales</a>
     </div>
     <div class="me-auto p-1">
@@ -145,7 +142,10 @@ Sales List
 <br>
 {% if merged_df %}
 
-    <img src="data:image/png;base64, {{chart | safe}}" id='img'>
+    <div class="text-center">
+        <!--{{ merged_df | safe }}-->
+        <img src="data:image/png;base64, {{chart | safe}}" id='img'>
+    </div>
 
 {% endif %}
 

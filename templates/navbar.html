@@ -1,9 +1,6 @@
 {% load static %}
 {% url 'sales:home' as path_to_home %}
-<!--
-{% url 'sales:sales_list' as path_to_sales %}
-{% url 'reports:from-file' as path_to_from_file %}
--->
+{% url 'sales:saleslist' as path_to_sales %}
 {% url 'reports:main' as path_to_reports %}
 {% url 'products:productlist' as path_to_products %}
 {% url 'customers:customerlist' as path_to_customers %}
@@ -12,20 +9,20 @@
 {% url 'tools:main' as path_to_tools %}
 
 {% if user.profile.menubar == "Side" %}
-<nav class="nav flex-column nav-tabs">
+<nav class="nav flex-sm-column nav-tabs">
   <div class="container-fluid">
-    <a class="navbar-brand" href=""><img src="{% static 'logo.png' %}" class="logo-sm"></a>
-    <br>
-    <br>
+    <a class="navbar-brand" href="{{path_to_home}}"><img src="{% static 'logo.png' %}" class="logo-sm"></a>
+      <ul class="navbar-nav">
+      <br>
 {% else %}
 <nav class="navbar navbar-expand-lg nav-pills">
   <div class="container-fluid">
-    <a class="navbar-brand" href=""><img src="{% static 'logo.png' %}" class="logo-sm"></a>
+    <a class="navbar-brand" href="{{path_to_home}}"><img src="{% static 'logo.png' %}" class="logo-sm"></a>
     <div class="collapse navbar-collapse" id="navbarNav">
-{% endif %}
       <ul class="navbar-nav">
+{% endif %}
         <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_home %}active{% endif %}" href="{{path_to_home}}">Sales</a>
+          <a class="nav-link {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">Sales</a>
         </li>
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_products %}active{% endif %}" href="{{path_to_products}}">Products</a>
@@ -33,14 +30,6 @@
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_customers %}active{% endif %}" href="{{path_to_customers}}">Customers</a>
         </li>
-        <!--
-        <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">Sales</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_from_file %}active{% endif %}" href="{{path_to_from_file}}">Add from file</a>
-        </li>
-        -->
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_reports %}active{% endif %}" href="{{path_to_reports}}">Reports</a>
         </li>
@@ -54,9 +43,9 @@
         </li>
       </ul>
 
-    {% if user.profile.menubar != "Side" %}
+  {% if user.profile.menubar != "Side" %}
     </div>
-    <div class="navbar-nav" id="navbarNav">
+  <div class="navbar-nav" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
           <form action="https://google.com/search" method="get">

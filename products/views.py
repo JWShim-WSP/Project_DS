@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.urls import reverse
 from .models import Product, PRODUCT_TYPE_CHOICES
-from .forms import ProductForm, ProductSearchForm, CHART_CHOICES
+from .forms import ProductForm, ProductSearchForm
+from sales.forms import CHART_CHOICES
 from .resources import ProductResource
 from profiles.forms import FormatForm
 import pandas as pd
@@ -17,8 +18,6 @@ from .forms import ProductSearchForm
 @staff_member_required
 def product_list_view(request):
     products_df = None
-    chart_type = None
-    results_by = None
     chart = None
     no_data = None
 
@@ -35,15 +34,9 @@ def product_list_view(request):
         response['Content-Disposition'] = f"attachement; filename=bstproduct.{format}"
         return response
     else:
-        try: 
-            chart_type = request.GET.get('chart_type')
-            results_by = request.GET.get('results_by')
-        except:
-            pass
+        chart_type = request.GET.get('chart_type')
+        results_by = request.GET.get('results_by')
 
-        if chart_type == None:
-            chart_type = CHART_CHOICES[0][0]
-        
         if (results_by == None or results_by == 'All'):
             products_qs = Product.objects.all()
         else:
@@ -56,12 +49,16 @@ def product_list_view(request):
             object_list = p.get_page(1)
         
         if len(products_qs) > 0:
+            if chart_type == None:
+                chart_type = CHART_CHOICES[0][0]
+
+            key_by = 'name' # the names of the products will be used for 'key'
+
+            sum_by = 'price' # no use in product df for 'sum' operation
+        
             products_df = pd.DataFrame(products_qs.values())
             products_df['created'] = products_df['created'].apply(lambda x: x.strftime('%Y-%m-%d')) # lambda argument: expression
             products_df['updated'] = products_df['updated'].apply(lambda x: x.strftime('%Y-%m-%d')) # lambda argument: expression
-
-            key_by = 'name'
-            sum_by = 'price' # no use in product df for 'sum' operation
 
             chart = get_chart(chart_type, products_df, key_by, sum_by)
 

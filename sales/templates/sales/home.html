@@ -2,73 +2,66 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block scripts %}
-    <script src="{% static 'sales/home.js' %}" defer></script>
-{% endblock scripts %}
-
 {% block title %}
-BST Project - Sales
+BST Project - Dashboard
 {% endblock title %}
 
 {% block content %}
 
-<a class="btn btn-outline-primary mt-3" href="{% url 'sales:saleslist' %}" role="button">Sales List</a>
-<br>
-<br>
+<h3 class="text-center mt-3"><b>Performance Dashboard</b></h3>
 
-<!-- No use of OffCanvas functionality, yet
-<a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-  Link with href
-</a>
-<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-  Button with data-bs-target
-</button>
--->
-
-{% if user.profile.menubar == "Side" %}
-<div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-{% else %}
-<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-{% endif %}
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-    <div>
-      Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
-    </div>
-    <div class="dropdown mt-3">
-      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-        Dropdown button
+<div class="d-flex mb-3">
+  <div class="me-auto p-1">
+      <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#dashboardModal">Sort By</button>
+      <!--
+      <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
+          Sort By
       </button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
-      </ul>
+      -->
+  </div>
+  <div class="p-1">
+      <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+          Download
+      </button>
+  </div>
+</div>
+
+<!-- Modal for Search -->
+<div class="modal fade" id="dashboardModal" tabindex="-1" aria-labelledby="dashboardModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="dashboardModalLabel">Dashboard sort by</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <div id="alert-box"></div>
+        <form id="dashboard-form" action="" method="GET">
+          {{ search_form | crispy }}
+          <button type="submit" class="btn btn-outline-primary mt-2">Search</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<!-- Modal for Form Post-->
+<div class="modal fade" id="download-modal" tabindex="-1">
+  <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Add Report</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modal-body">
-          <div id="alert-box"></div>
-          <form id="report-form" autocomplete="off">
-            {% csrf_token %}
-            {{ report_form | crispy }}
-            <button type="submit" class="btn btn-outline-primary mt-2">save</button>
-          </form>
-        </div>
+          <div class="modal-header">
+              <h5 class="modal-title">Download Sales</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form action="" method="POST">
+                  {% csrf_token %}
+                  {{ form | crispy }}
+                  <button type="submit" class="btn btn-outline-primary">Save</button>
+              </form>
+          </div>
       </div>
-    </div>
+  </div>
 </div>
 
 {% if no_data %}
@@ -77,55 +70,14 @@ BST Project - Sales
   </div>
 {% endif %}
 
-<form action="" method="POST">
-    {% csrf_token %}
-    {{ search_form | crispy }}
-    <button type="submit" class="btn btn-outline-primary mt-3">Search</button>
-</form>
 <br>
 
 {% if merged_df %}
-<!--
-    sales df
-    {{ sales_df | safe }}
-    <br>
 
-    positions df
-    {{ positions_df | safe }}
-    <br>
--->
-
-    merged df
-    {{ merged_df | safe }}
-    <br>
-
-<!--
-    grouped by transaction_id df
-    {{ df_transaction | safe }}
-    <br>
-
-    grouped by position_id df
-    {{ df_position | safe }}
-    <br>
-
-    grouped by created
-    {{ df_created | safe }}
-    <br>
-
-    grouped by customer
-    {{ df_customer | safe }}
-    <br>
-
-    grouped by salesman
-    {{ df_salesman | safe }}
--->
-
-    <br>
-    <img src="data:image/png;base64, {{chart | safe}}" id='img'>
+<div class="text-center">
+  <img src="data:image/png;base64, {{chart | safe}}" id='img'>
+</div>
 
 {% endif %}
-
-<br>
-<button type="button" class="btn btn-outline-primary not-visible" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">add report</button>
 
 {% endblock content %}

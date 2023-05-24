@@ -1,15 +1,16 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Sale, Position
+from products.models import PRODUCT_CHOICES_FOR_SEARCH
 from profiles.forms import FormatForm
-from .forms import SalesSearchForm, SaleForm, PositionForm, CHART_CHOICES, RESULT_CHOICES, SUM_CHOICES 
+from .forms import SalesSearchForm, SaleForm, PositionForm, PositionSearchForm, CHART_CHOICES, RESULT_CHOICES, SUM_CHOICES 
 from .resources import SaleResource, PositionResource
 from reports.forms import ReportForm
 import pandas as pd
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from .utils import get_customer_from_id, get_salesman_from_id, get_chart
+from .utils import get_customer_from_id, get_salesman_from_id, get_product_from_id, get_chart
 
 
 from django.contrib.auth.decorators import login_required
@@ -22,30 +23,33 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 @login_required
 def sales_home_view(request):
-
-    #bst_positions = Position.objects.all()
-    #bst_sales = Sale.objects.all()
-
     sales_df = None
     positions_df = None
     merged_df = None
-    #df_transaction = None
-    #df_position = None
-    #df_created = None
-    #df_customer = None
-    #df_salesman = None
+    YoYchart = None
+    MoMchart = None
+    Monthchart = None
     chart = None
     no_data = None
 
-    search_form = SalesSearchForm(request.POST or None)
-    report_form = ReportForm()
-
-    if request.method == 'POST':
-        date_from = request.POST.get('date_from')
-        date_to = request.POST.get('date_to')
-        chart_type = request.POST.get('chart_type')
-        key_by = request.POST.get('results_by')
-        sum_by = request.POST.get('sum_by')
+    if (request.method == 'POST'):
+        dataset = SaleResource().export()
+        format = request.POST.get('format')
+        if format == 'xls':
+            dataset_format = dataset.xls
+        elif format == 'csv':
+            dataset_format = dataset.csv
+        else:
+            dataset_format = dataset.json
+        response = HttpResponse(dataset_format, content_type=f"text/{format}")
+        response['Content-Disposition'] = f"attachement; filename=bstsales.{format}"
+        return response
+    else:
+        date_from = request.GET.get('date_from')
+        date_to = request.GET.get('date_to')
+        chart_type = request.GET.get('chart_type')
+        key_by = request.GET.get('results_by')
+        sum_by = request.GET.get('sum_by')
 
         #qs = Sale.objects.all()
         # filter the data with lte (less than equal) and gte (greater than equal)
@@ -55,6 +59,15 @@ def sales_home_view(request):
             sales_qs = Sale.objects.all()
 
         if len(sales_qs) > 0:
+            if chart_type == None:
+                chart_type = CHART_CHOICES[0][0]
+
+            if key_by == None:
+                key_by = RESULT_CHOICES[0][0]
+                
+            if sum_by == None:
+                sum_by = SUM_CHOICES[0][0]
+
             sales_df = pd.DataFrame(sales_qs.values())
             sales_df['customer_id'] = sales_df['customer_id'].apply(get_customer_from_id)
             sales_df['salesman_id'] = sales_df['salesman_id'].apply(get_salesman_from_id)
@@ -82,44 +95,20 @@ def sales_home_view(request):
                     }
                     positions_data.append(obj)
 
+            search_form = SalesSearchForm(request.POST or None)
+            form_class = FormatForm()
+
             positions_df = pd.DataFrame(positions_data)
             merged_df = pd.merge(sales_df, positions_df, on='sales_id')
-
-            # sum by the choice of 'price' or 'quantity' to show in graph
-            #df_transaction = merged_df.groupby('transaction_id', as_index=False)[sum_by].agg('sum') # aggregate
-            #df_position = merged_df.groupby('position_id', as_index=False)[sum_by].agg('sum') # aggregate
-            #df_created = merged_df.groupby('created', as_index=False)[sum_by].agg('sum') # aggregate
-            #df_customer = merged_df.groupby('customer', as_index=False)[sum_by].agg('sum') # aggregate
-            #df_salesman = merged_df.groupby('salesman', as_index=False)[sum_by].agg('sum') # aggregate
-
-            #chart = get_chart(chart_type, sales_df, results_by)
             chart = get_chart(chart_type, merged_df, key_by, sum_by)
-
-            #sales_df = sales_df.to_html(classes='table table-striped text-center', justify='center')
-            #positions_df = positions_df.to_html(classes='table table-striped text-center', justify='center')
             merged_df = merged_df.to_html(classes='table text-center table-striped', justify='center')
-
-            #df_transaction = df_transaction.to_html(classes='table table-striped text-center', justify='center')
-            #df_position = df_position.to_html(classes='table table-striped text-center', justify='center')
-            #df_created = df_created.to_html(classes='table table-striped text-center', justify='center')
-            #df_customer = df_customer.to_html(classes='table table-striped text-center', justify='center')
-            #df_salesman = df_salesman.to_html(classes='table table-striped text-center', justify='center')
         else:
             no_data = 'No data is available in this date range'
 
     context = {
-        #'bst_positions': bst_positions,
-        #'bst_sales': bst_sales,
         'search_form': search_form,
-        'report_form': report_form,
-        #'sales_df': sales_df,
-        #'positions_df': positions_df,
+        'form': form_class,
         'merged_df': merged_df,
-        #'df_transaction': df_transaction,
-        #'df_position': df_position,
-        #'df_created': df_created,
-        #'df_customer': df_customer,
-        #'df_salesman': df_salesman,
         'chart': chart,
         'no_data': no_data,
     }
@@ -171,16 +160,6 @@ def sales_list_view(request):
         else:
             sales_qs = Sale.objects.all()
 
-        if chart_type == None:
-            chart_type = CHART_CHOICES[0][0]
-
-        if key_by == None:
-            key_by = RESULT_CHOICES[0][0]
-            
-        if sum_by == None:
-            sum_by = SUM_CHOICES[0][0]
-
-
         p = Paginator(sales_qs, 10)
         try:
             object_list = p.get_page(request.GET.get("page"))
@@ -188,6 +167,15 @@ def sales_list_view(request):
             object_list = p.get_page(1)
 
         if len(sales_qs) > 0:
+            if chart_type == None:
+                chart_type = CHART_CHOICES[0][0]
+
+            if key_by == None:
+                key_by = RESULT_CHOICES[0][0]
+                
+            if sum_by == None:
+                sum_by = SUM_CHOICES[0][0]
+
             sales_df = pd.DataFrame(sales_qs.values())
             sales_df['customer_id'] = sales_df['customer_id'].apply(get_customer_from_id)
             sales_df['salesman_id'] = sales_df['salesman_id'].apply(get_salesman_from_id)
@@ -286,6 +274,10 @@ def sales_delete_view(request, pk):
 
 @staff_member_required
 def positions_list_view(request):
+    positions_df = None
+    chart = None
+    no_data = None
+    
     if (request.method == 'POST'):
         dataset = PositionResource().export()
         format = request.POST.get('format')
@@ -299,17 +291,54 @@ def positions_list_view(request):
         response['Content-Disposition'] = f"attachement; filename=bstposition.{format}"
         return response
     else:
-        p = Paginator(Position.objects.all(), 10)
+        chart_type = request.GET.get('chart_type')
+        results_by = request.GET.get('results_by')
+        sum_by = request.GET.get('sum_by')
+
+        #qs = Sale.objects.all()
+        # filter the data with lte (less than equal) and gte (greater than equal)
+        if chart_type == None:
+            chart_type = CHART_CHOICES[0][0]
+        
+        if (results_by == None or results_by == 'All'):
+            positions_qs = Position.objects.all()
+        else:
+            positions_qs = Position.objects.filter(product__product_type=results_by)
+
+        p = Paginator(positions_qs, 10)
         try:
             object_list = p.get_page(request.GET.get("page"))
         except:
             object_list = p.get_page(1)
-        
+
+        if len(positions_qs) > 0:
+            if chart_type == None:
+                chart_type = CHART_CHOICES[0][0]
+
+            key_by = 'product' # use the name of products for 'key'
+
+            if sum_by == None:
+                sum_by = SUM_CHOICES[0][0]
+            
+            positions_df = pd.DataFrame(positions_qs.values())
+            positions_df['product_id'] = positions_df['product_id'].apply(get_product_from_id)
+            positions_df['created'] = positions_df['created'].apply(lambda x: x.strftime('%Y-%m-%d')) # lambda argument: expression
+            positions_df.rename({'product_id': 'product'}, axis=1, inplace=True)
+            chart = get_chart(chart_type, positions_df, key_by, sum_by)
+            positions_df = positions_df.to_html(classes='table text-center table-striped', justify='center')
+        else:
+            no_data = 'No data is available in this date range'     
+
+        search_form = PositionSearchForm()
         form_class = FormatForm()
             
         context = {
             'object_list': object_list,
             'form': form_class,
+            'search_form': search_form,
+            'positions_df': positions_df,
+            'chart': chart,
+            'no_data': no_data,
         }
         return render(request, 'sales/positions_list.html', context)
 
