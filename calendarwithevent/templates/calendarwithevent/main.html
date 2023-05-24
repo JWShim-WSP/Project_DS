@@ -169,7 +169,12 @@ Calendar with Event
 
     </div>
 
+{% if user.profile.menubar == "Side" %}
+    <div class="col-5">
+{% else %}
     <div class="col-6">
+{% endif %}
+
         <h5 class="text-primary"><b>Events in {{ month }}</b></h5>
         <table class="table table-hover table-light">
             <thead>

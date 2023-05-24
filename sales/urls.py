@@ -32,11 +32,11 @@ urlpatterns = [
     #path('sales/', SaleListView.as_view(), name='list'),
     #path('sales/<pk>/', SaleDetailView.as_view(), name='detail'),
     # go for FBV this time!
+    path('sales', sales_list_view, name='saleslist'),
     path('positions/', positions_list_view, name='positionlist'),
     path('position/<int:pk>/', position_detail_view, name='positiondetails'),
     path("position/add/", position_add_view, name="position-add"),
     path("position/<int:pk>/delete/", position_delete_view, name="position-delete"),
-    path('saleslist', sales_list_view, name='saleslist'),
     path('<int:pk>/', sales_detail_view, name='salesdetails'),
     path("add/", sales_add_view, name="sales-add"),
     path("<int:pk>/delete/", sales_delete_view, name="sales-delete"),
