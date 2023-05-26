@@ -8,76 +8,47 @@ BST Project - Dashboard
 
 {% block content %}
 
-<h3 class="text-center mt-3"><b>Performance Dashboard</b></h3>
+{% if user.profile.language == "Korean" %}
+{% else %}
+{% endif %}
 
-<div class="d-flex mb-3">
-  <div class="me-auto p-1">
-      <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#dashboardModal">Sort By</button>
-      <!--
-      <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
-          Sort By
-      </button>
-      -->
-  </div>
-  <div class="p-1">
-      <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
-          Download
-      </button>
-  </div>
-</div>
+{% if user.profile.language == "Korean" %}
+<h3 class="text-center mt-3"><b>년간 매출 실적</b></h3>
+{% else %}
+<h3 class="text-center mt-3"><b>YoY Performance</b></h3>
+{% endif %}
 
-<!-- Modal for Search -->
-<div class="modal fade" id="dashboardModal" tabindex="-1" aria-labelledby="dashboardModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="dashboardModalLabel">Dashboard sort by</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" id="modal-body">
-        <div id="alert-box"></div>
-        <form id="dashboard-form" action="" method="GET">
-          {{ search_form | crispy }}
-          <button type="submit" class="btn btn-outline-primary mt-2">Search</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal for Form Post-->
-<div class="modal fade" id="download-modal" tabindex="-1">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title">Download Sales</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <form action="" method="POST">
-                  {% csrf_token %}
-                  {{ form | crispy }}
-                  <button type="submit" class="btn btn-outline-primary">Save</button>
-              </form>
-          </div>
-      </div>
-  </div>
-</div>
-
-{% if no_data %}
+{% if no_data1 %}
   <div class="alert alert-warning" role="alert">
     {{ no_data }}
   </div>
-{% endif %}
 
-<br>
+{% else %}
 
-{% if merged_df %}
-
-<div class="text-center">
-  <img src="data:image/png;base64, {{chart | safe}}" id='img'>
-</div>
+  <div class="text-center">
+    <img src="data:image/png;base64, {{chart1 | safe}}" id='img'>
+  </div>
 
 {% endif %}
+
+{% if user.profile.language == "Korean" %}
+<h3 class="text-center mt-3"><b>{{ current_year }} 매출 실적</b></h3>
+{% else %}
+<h3 class="text-center mt-3"><b>{{ current_year }} Revenue</b></h3>
+{% endif %}
+
+{% if no_data2 %}
+  <div class="alert alert-warning" role="alert">
+    {{ no_data }}
+  </div>
+
+{% else %}
+
+  <div class="text-center">
+    <img src="data:image/png;base64, {{chart2 | safe}}" id='img'>
+  </div>
+
+{% endif %}
+
 
 {% endblock content %}

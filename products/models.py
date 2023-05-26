@@ -30,5 +30,8 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('products:productdetails', kwargs={'pk':self.pk})
 
+    class Meta:
+        ordering = ('-created', )
+
     def __str__(self):
         return f"{self.name}-{self.product_type}"

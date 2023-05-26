@@ -26,7 +26,7 @@ def customer_list_view(request):
         response['Content-Disposition'] = f"attachement; filename=bstcustomer.{format}"
         return response
     else:
-        p = Paginator(Customer.objects.all(), 10)
+        p = Paginator(Customer.objects.all().order_by('name'), 10)
         try:
             object_list = p.get_page(request.GET.get("page"))
         except:

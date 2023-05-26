@@ -46,6 +46,9 @@ class Position(models.Model):
         sale_obj = self.sale_set.first()
         return sale_obj.customer.name
 
+    class Meta:
+        ordering = ('-created', )
+
     def __str__(self):
         return f"id: {self.id}, product: {self.product.name}, quantity: {self.quantity}"
 
@@ -85,6 +88,9 @@ class Sale(models.Model):
         return ', '.join([str(a.id)+': ' + a.product.name for a in self.positions.all()])
     
     positions_ids.short_description = "Positions ID"
+
+    class Meta:
+        ordering = ('-created', )
 
     def __str__(self):
         return f"Sales for the amount of ${self.total_added_price}"
