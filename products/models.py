@@ -15,7 +15,7 @@ PRODUCT_CHOICES_FOR_SEARCH = (
     ('Sensor', 'Sensor'),
     ('Plasma Torch', 'Plasma Torch'),
     ('Pump', 'Pump'),
-    ('Presssure', 'Pressure'),
+    ('Pressure', 'Pressure'),
     ('Etc', 'Etc'),
 )
 
@@ -37,4 +37,4 @@ class Product(models.Model):
         ordering = ('-created', )
 
     def __str__(self):
-        return f"{self.name}-{self.product_type}"
+        return f"id: {self.id}, {self.name}-{self.product_type}"

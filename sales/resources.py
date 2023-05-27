@@ -29,11 +29,12 @@ class SaleResource(resources.ModelResource):
     #customer = Field()
     #salesman = Field()
 
-    positions = fields.Field(
-        column_name='positions',
-        attribute='positions',
-        widget= ManyToManyWidget(Position, field='product', separator='|')
-    )
+    # if you give 'product' for 'position' in exporting, then you cannot import again with 'id'
+    #positions = fields.Field(
+    #    column_name='positions',
+    #    attribute='positions',
+    #    widget= ManyToManyWidget(Position, field='product', separator='|')
+    #)
 
     customer = fields.Field(
         column_name='customer',

@@ -7,10 +7,10 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 # The first value is for the choice value, the second value is used for displaying in the form
 CHART_CHOICES = (
-    ('Bar Chart', 'Bar Chart'),
     ('Horizontal Bar Chart', 'Horizontal Bar Chart'),
     ('Pie Chart', 'Pie Chart'),
     ('Line Chart', 'Line Chart'),
+    ('Bar Chart', 'Bar Chart'),
 )
 
 RESULT_CHOICES = (
