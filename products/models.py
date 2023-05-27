@@ -24,9 +24,9 @@ class Product(models.Model):
     name = models.CharField(max_length=120)
     image = models.ImageField(upload_to='products', default='no_picture.png')
     price = models.FloatField(help_text='in US dollars $')
-    # you cannot import the old data with 'auto_now_add=True'
+    # you need to make 'created' as selectable to import a new data from a file
+    created = models.DateTimeField()
     #created = models.DateTimeField(auto_now_add=True)
-    created = models.DateTimeField(blank=True)
     updated = models.DateTimeField(auto_now=True)
     remark = models.TextField(max_length=1024, blank=True)
     product_type = models.CharField(max_length=50, choices=PRODUCT_TYPE_CHOICES)
