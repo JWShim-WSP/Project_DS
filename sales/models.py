@@ -23,7 +23,9 @@ class Position(models.Model):
     net_price_KRW = models.FloatField(blank=True)
     added_price_KRW = models.FloatField(blank=True)
 
-    created = models.DateTimeField(auto_now_add=True)
+    # need to open for date selection for importing a new data from a file
+    created = models.DateTimeField()
+    #created = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
         self.net_price = self.unit_price * self.quantity
@@ -65,7 +67,10 @@ class Sale(models.Model):
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     salesman = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
+
+    # need to open the selectin of date for importing a new date from a file
+    created = models.DateTimeField()
+    #created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
