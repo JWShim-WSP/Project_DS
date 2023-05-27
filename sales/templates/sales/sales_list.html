@@ -10,28 +10,53 @@ Sales List
 {% load static %}
 <link rel="stylesheet" href="{% static 'pagination.css' %}">
 
+{% if user.profile.language == "Korean" %}
+<h3 class="text-center mt-3"><b>판매 리스트</b></h3>
+{% else %}
 <h3 class="text-center mt-3"><b>Sales List</b></h3>
+{% endif %}
 
 <div class="d-flex mb-3">
+    {% if user.profile.language == "Korean" %}
+    <div class="p-1">
+        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">판매 추가</a>
+        </div>
+        <div class="me-auto p-1">
+            <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#salesModal">보기 분류</button>
+            <!--
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
+                Sort By
+            </button>
+            -->
+        </div>
+        <div class="p-1">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+                파일에 저장
+            </button>
+        </div>
+        {% else %}
     <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">Add Sales</a>
-    </div>
-    <div class="me-auto p-1">
-        <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#salesModal">Sort By</button>
-        <!--
-        <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
-            Sort By
-        </button>
-        -->
-    </div>
-    <div class="p-1">
-        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
-            Download
-        </button>
-    </div>
+        </div>
+        <div class="me-auto p-1">
+            <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#salesModal">Sort By</button>
+            <!--
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
+                Sort By
+            </button>
+            -->
+        </div>
+        <div class="p-1">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+                Download
+            </button>
+        </div>
+        {% endif %}
+    <!-- do not upload directly, rather use Django Admin import_export functionality until it is required
     <div class="p-1">
         <a class="btn btn-outline-danger" href="{% url 'reports:from-file' %}" role="button">Upload from File</a>
     </div>
+    -->
 </div>
     
 <!-- Modal for Form Post-->
@@ -57,17 +82,31 @@ Sales List
 <div class="modal fade" id="salesModal" tabindex="-1" aria-labelledby="salesModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
+        {% if user.profile.language == "Korean" %}
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="salesModalLabel">Sales sort by</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h1 class="modal-title fs-5" id="salesModalLabel">보기 분류</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modal-body">
+            <div id="alert-box"></div>
+            <form id="sales-form" action="" method="GET">
+              {{ search_form | crispy }}
+              <button type="submit" class="btn btn-outline-primary mt-2">분류 시작</button>
+            </form>
         </div>
-        <div class="modal-body" id="modal-body">
-          <div id="alert-box"></div>
-          <form id="sales-form" action="" method="GET">
-            {{ search_form | crispy }}
-            <button type="submit" class="btn btn-outline-primary mt-2">Search</button>
-          </form>
+        {% else %}
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="salesModalLabel">Sales sort by</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modal-body">
+            <div id="alert-box"></div>
+            <form id="sales-form" action="" method="GET">
+              {{ search_form | crispy }}
+              <button type="submit" class="btn btn-outline-primary mt-2">Search</button>
+            </form>
         </div>
+        {% endif %}
       </div>
     </div>
 </div>
@@ -79,10 +118,49 @@ Sales List
 {% endif %}
 
 <table class="table text-center table-hover table-light">
+    {% if user.profile.language == "Korean" %}
     <thead>
         <tr>
-        <th scope="col">Sales ID</th>
-        <th scope="col">Transaction ID</th>
+        <th scope="col">판매 id</th>
+        <th scope="col">판매 고유 번호</th>
+        <th scope="col">판매 단위 출고</th>
+
+        <th scope="col">수입원가</th>
+        <th scope="col">판매가격</th>
+
+        <th scope="col">원가-원화</th>
+        <th scope="col">판매가격-원화</th>
+
+        <th scope="col">고객</th>
+        <th scope="col">판매원</th>
+        <th scope="col">판매 일시</th>
+        <th scope="col">변경 일시</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for object in object_list %}
+            <tr onclick="window.location='{{object.get_absolute_url}}'">
+                <th scope="row">{{ object.id }}</th>
+                <td>{{ object.transaction_id }}</td>
+                <td>{{ object.positions_ids }}</td>
+
+                <td>{{ object.total_net_price }}</td>
+                <td>{{ object.total_added_price }}</td>
+                <td>{{ object.total_net_price_KRW }}</td>
+                <td>{{ object.total_added_price_KRW }}</td>
+
+                <td>{{ object.customer }}</td>
+                <td>{{ object.salesman }}</td>
+                <td>{{ object.created }}</td>
+                <td>{{ object.updated }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    {% else %}
+    <thead>
+        <tr>
+        <th scope="col">Sales id</th>
+        <th scope="col">Transaction id</th>
         <th scope="col">Positions</th>
 
         <th scope="col">Total Net-Price</th>
@@ -116,8 +194,10 @@ Sales List
             </tr>
         {% endfor %}
     </tbody>
+    {% endif %}
 </table>
 
+<!--
 <div class="text-center">
     <nav class="pagination">
         {% if object_list.has_previous %}
@@ -137,6 +217,7 @@ Sales List
         {% endif %}
     </nav>
 </div>
+-->
 
 <br>
 <br>

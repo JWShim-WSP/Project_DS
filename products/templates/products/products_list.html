@@ -10,28 +10,54 @@ Product List
 {% load static %}
 <link rel="stylesheet" href="{% static 'pagination.css' %}">
 
+{% if user.profile.language == "Korean" %}
+<h3 class="text-center mt-3"><b>품목 리스트</b></h3>
+{% else %}
 <h3 class="text-center mt-3"><b>Product List</b></h3>
+{% endif %}
 
 <div class="d-flex mb-3">
+  {% if user.profile.language == "Korean" %}
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'products:product-add' %}" role="button">Add Product</a>
+      <a class="btn btn-outline-primary" href="{% url 'products:product-add' %}" role="button">품목 추가</a>
     </div>
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:positionlist' %}" role="button">Position List</a>
+      <a class="btn btn-outline-primary" href="{% url 'sales:positionlist' %}" role="button">출고 단위 지정</a>
     </div>
     <div class="me-auto p-1">
-        <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#productModal">Sort By</button>
-        <!--
-        <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
-            Sort By
-        </button>
-        -->
+      <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#productModal">보기 분류</button>
+      <!--
+      <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
+      Sort By
+      </button>
+      -->
     </div>
     <div class="p-1">
-        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
-            Download
-        </button>
+      <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+      파일에 내려 받기
+    </button>
     </div>
+{% else %}
+  <div class="p-1">
+    <a class="btn btn-outline-primary" href="{% url 'products:product-add' %}" role="button">Add Product</a>
+</div>
+<div class="p-1">
+    <a class="btn btn-outline-primary" href="{% url 'sales:positionlist' %}" role="button">Position List</a>
+</div>
+<div class="me-auto p-1">
+    <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#productModal">Sort By</button>
+    <!--
+    <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
+        Sort By
+    </button>
+    -->
+</div>
+<div class="p-1">
+    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+        Download
+    </button>
+</div>
+{% endif %}
 </div>
 
 
@@ -39,6 +65,19 @@ Product List
 <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
+        {% if user.profile.language == "Korean" %}
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="productModalLabel">보기 분류</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          <div id="alert-box"></div>
+          <form id="product-form" action="" method="GET">
+            {{ search_form | crispy }}
+            <button type="submit" class="btn btn-outline-primary mt-2">분류 시작</button>
+          </form>
+        </div>
+        {% else %}
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="productModalLabel">Products sort by</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -50,6 +89,7 @@ Product List
             <button type="submit" class="btn btn-outline-primary mt-2">Search</button>
           </form>
         </div>
+        {% endif %}
       </div>
     </div>
 </div>
@@ -108,8 +148,19 @@ Product List
 
 <table class="table text-center table-hover table-light">
     <thead>
+      {% if user.profile.language == "Korean" %}
         <tr>
-        <th scope="col">#</th>
+        <th scope="col">id</th>
+        <th scope="col">품목 이름</th>
+        <th scope="col">단위 가격</th>
+        <th scope="col">생성 일시</th>
+        <th scope="col">수정 일시</th>
+        <th scope="col">품목 그룹</th>
+        <th scope="col">참고</th>
+        </tr>
+      {% else %}
+        <tr>
+        <th scope="col">id</th>
         <th scope="col">Name</th>
         <th scope="col">Price</th>
         <th scope="col">Created</th>
@@ -117,11 +168,12 @@ Product List
         <th scope="col">Product Group</th>
         <th scope="col">Remark</th>
         </tr>
+      {% endif %}
     </thead>
     <tbody>
         {% for object in object_list %}
             <tr onclick="window.location='{{ object.get_absolute_url }}'">
-                <th scope="row">{{ forloop.counter }}</th>
+                <th scope="row">{{ object.id }}</th>
                 <td>{{ object.name }}</td>
                 <td>{{ object.price }}</td>
                 <td>{{ object.created }}</td>
@@ -133,6 +185,7 @@ Product List
     </tbody>
 </table>
 
+<!-- Pagination is not helpful for data list
 <div class="text-center">
     <nav class="pagination">
         {% if object_list.has_previous %}
@@ -152,6 +205,7 @@ Product List
         {% endif %}
     </nav>
 </div>
+-->
 
 <br>
 <br>

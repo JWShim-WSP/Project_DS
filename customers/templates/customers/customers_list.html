@@ -10,9 +10,23 @@ Customer List
 {% load static %}
 <link rel="stylesheet" href="{% static 'pagination.css' %}">
 
+{% if user.profile.language == "Korean" %}
+<h3 class="text-center"><b>고객 리스트</b></h3>
+{% else %}
 <h3 class="text-center"><b>Customer List</b></h3>
+{% endif %}
 
 <div class="d-flex mb-3">
+    {% if user.profile.language == "Korean" %}
+    <div class="me-auto p-1">
+        <a class="btn btn-outline-primary" href="{% url 'customers:customer-add' %}" role="button">고객 추가</a>
+    </div>
+    <div class="p-1">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+            파일에 저장
+        </button>
+    </div>
+    {% else %}
     <div class="me-auto p-1">
         <a class="btn btn-outline-primary" href="{% url 'customers:customer-add' %}" role="button">Add Customer</a>
     </div>
@@ -21,6 +35,7 @@ Customer List
             Download
         </button>
     </div>
+    {% endif %}
 </div>
 
 <!-- Modal for Form Post-->
@@ -43,9 +58,33 @@ Customer List
 </div>
 
 <table class="table text-center table-hover table-light">
+    {% if user.profile.language == "Korean" %}
     <thead>
         <tr>
-            <th scope="col">#</th>
+            <th scope="col">id</th>
+            <th scope="col">이름</th>
+            <th scope="col">이메일</th>
+            <th scope="col">전화번호</th>
+            <th scope="col">생성 일시</th>
+            <th scope="col">참고</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for object in object_list %}
+            <tr onclick="window.location='{{object.get_absolute_url}}'">
+                <th scope="row">{{ object.id }}</th>
+                <td>{{ object.name }}</td>
+                <td>{{ object.email }}</td>
+                <td>{{ object.phone_number }}</td>
+                <td>{{ object.created }}</td>
+                <td>{{ object.remark }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    {% else %}
+    <thead>
+        <tr>
+            <th scope="col">id</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Phone</th>
@@ -56,7 +95,7 @@ Customer List
     <tbody>
         {% for object in object_list %}
             <tr onclick="window.location='{{object.get_absolute_url}}'">
-                <th scope="row">{{ forloop.counter }}</th>
+                <th scope="row">{{ object.id }}</th>
                 <td>{{ object.name }}</td>
                 <td>{{ object.email }}</td>
                 <td>{{ object.phone_number }}</td>
@@ -65,8 +104,10 @@ Customer List
             </tr>
         {% endfor %}
     </tbody>
+    {% endif %}
 </table>
 
+<!--
 <div class="text-center">
     <nav class="pagination">
         {% if object_list.has_previous %}
@@ -86,5 +127,6 @@ Customer List
         {% endif %}
     </nav>
 </div>
+-->
 
 {% endblock content %}
