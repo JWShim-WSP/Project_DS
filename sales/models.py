@@ -10,20 +10,21 @@ from django.urls import reverse
 
 class Position(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
-    unit_price = models.FloatField()
+    quantity = models.PositiveIntegerField(blank=True)
+    unit_price = models.FloatField(blank=True)
 
-    added_cost = models.FloatField()
+    added_cost = models.FloatField(blank=True)
 
     net_price = models.FloatField(blank=True)
     added_price = models.FloatField(blank=True)
 
-    ex_rate_to_KRW = models.FloatField()
-    added_cost_KRW = models.FloatField()
+    ex_rate_to_KRW = models.FloatField(blank=True)
+    added_cost_KRW = models.FloatField(blank=True)
     net_price_KRW = models.FloatField(blank=True)
     added_price_KRW = models.FloatField(blank=True)
 
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(blank=True)
+    #created = models.DateTimeField(auto_add_now=True)
 
     def save(self, *args, **kwargs):
         self.net_price = self.unit_price * self.quantity
@@ -46,6 +47,9 @@ class Position(models.Model):
         sale_obj = self.sale_set.first()
         return sale_obj.customer.name
 
+    class Meta:
+        ordering = ('-created', )
+
     def __str__(self):
         return f"id: {self.id}, product: {self.product.name}, quantity: {self.quantity}"
 
@@ -62,7 +66,8 @@ class Sale(models.Model):
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     salesman = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(blank=True)
+    #created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
@@ -85,6 +90,9 @@ class Sale(models.Model):
         return ', '.join([str(a.id)+': ' + a.product.name for a in self.positions.all()])
     
     positions_ids.short_description = "Positions ID"
+
+    class Meta:
+        ordering = ('-created', )
 
     def __str__(self):
         return f"Sales for the amount of ${self.total_added_price}"

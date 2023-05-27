@@ -21,6 +21,28 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
 {% endif %}
+      {% if user.profile.language == "Korean" %}
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">판매</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_products %}active{% endif %}" href="{{path_to_products}}">제품</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_customers %}active{% endif %}" href="{{path_to_customers}}">고객</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_reports %}active{% endif %}" href="{{path_to_reports}}">보고서</a>
+        </li>
+        {% if request.user.is_staff %}
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_myadmin %}active{% endif %}" href="{{path_to_myadmin}}">관리자</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_tools %}active{% endif %}" href="{{path_to_tools}}">도구함</a>
+        </li>
+        {% else %}
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">Sales</a>
         </li>
@@ -41,11 +63,12 @@
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_tools %}active{% endif %}" href="{{path_to_tools}}">Tools</a>
         </li>
+      {% endif %}
       </ul>
 
   {% if user.profile.menubar != "Side" %}
     </div>
-  <div class="navbar-nav" id="navbarNav">
+    <div class="navbar-nav" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
           <form action="https://google.com/search" method="get">
@@ -63,22 +86,27 @@
         </li>
       </ul>
     </div>
-    {% endif %}
+  {% endif %}
 
-    {% if request.user.is_authenticated %}
-      <div class="nav-item dropdown">
-        <div class="nav-link dropdown-toggle" style="color:white" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+  {% if request.user.is_authenticated %}
+    <div class="nav-item dropdown">
+      <div class="nav-link dropdown-toggle" style="color:white" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     {% if user.profile.menubar == "Side" %}
           <img src="{{request.user.profile.avatar.url}}" class="avatar-sm"><br><span style="color:white">{{request.user}}</span>
     {% else %}
           <img src="{{request.user.profile.avatar.url}}" class="avatar-sm">&nbsp;{{request.user}}
     {% endif %}
-        </div>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <li><a class="dropdown-item {% if request.path == path_to_my_profile%}active{% endif %}" href="{{path_to_my_profile}}">Profile</a></li>
-          <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-        </ul>
       </div>
-    {% endif %}
+      <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        {% if user.profile.language == "Korean" %}
+        <li><a class="dropdown-item {% if request.path == path_to_my_profile%}active{% endif %}" href="{{path_to_my_profile}}">프로파일</a></li>
+        <li><a class="dropdown-item" href="{% url 'logout' %}">로그아웃</a></li>
+        {% else %}
+        <li><a class="dropdown-item {% if request.path == path_to_my_profile%}active{% endif %}" href="{{path_to_my_profile}}">Profile</a></li>
+        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  {% endif %}
   </div>
 </nav>

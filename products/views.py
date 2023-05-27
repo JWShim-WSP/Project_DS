@@ -17,9 +17,6 @@ from .forms import ProductSearchForm
 # Create your views here.
 @staff_member_required
 def product_list_view(request):
-    products_df = None
-    chart = None
-    no_data = None
 
     if (request.method == 'POST'):
         dataset = ProductResource().export()
@@ -34,6 +31,10 @@ def product_list_view(request):
         response['Content-Disposition'] = f"attachement; filename=bstproduct.{format}"
         return response
     else:
+        products_df = None
+        chart = None
+        no_data = None
+
         chart_type = request.GET.get('chart_type')
         results_by = request.GET.get('results_by')
 

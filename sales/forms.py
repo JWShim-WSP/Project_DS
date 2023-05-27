@@ -2,6 +2,8 @@ from django import forms
 from .models import Sale, Position
 from products.models import PRODUCT_CHOICES_FOR_SEARCH
 from django.forms import ModelForm, TextInput, EmailInput, NumberInput, Textarea, DateTimeInput, DateInput, Select
+import datetime
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # The first value is for the choice value, the second value is used for displaying in the form
 CHART_CHOICES = (
@@ -15,9 +17,11 @@ RESULT_CHOICES = (
     ('transaction_id', 'Transaction'),
     ('product', 'Product'),
     ('position_id', 'Position'),
-    ('created', 'Sales date'),
     ('customer', 'Customer'),
     ('salesman', 'Salesman'),
+    ('created', 'Sales date'),
+    ('year', 'Yearly'),
+    ('year_month', 'Year Monthly'),
 )
 
 SUM_CHOICES = (
@@ -26,14 +30,52 @@ SUM_CHOICES = (
     ('quantity', 'quantity'),
 )
 
+MONTH_SELECT = [
+    (0, ""),
+    (1, 'January'),
+    (2, 'February'),
+    (3, 'March'),
+    (4, 'April'),
+    (5, 'May'),
+    (6, 'June'),
+    (7, 'July'),
+    (8, 'August'),
+    (9, 'September'),
+    (10, 'October'),
+    (11, 'November'),
+    (12, 'December'),
+]
+
+def current_year():
+    return datetime.date.today().year
+
+def current_month():
+    return datetime.date.today().month
+
+def year_choices():
+    year_list = [(r,r) for r in range(2010, datetime.date.today().year+1)]
+    year_list.insert(0, (0, ""))
+    return year_list
+
+
 class SalesSearchForm(forms.Form):
-    date_from = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 25%', 'autofocus':True}), required=False)
-    date_to = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 25%'}), required=False)
+    date_from = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 50%', 'autofocus':True}), required=False)
+    date_to = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 50%'}), required=False)
+    year_from = forms.TypedChoiceField(coerce=int, choices=year_choices, initial=current_year, required=False)
+    year_to = forms.TypedChoiceField(coerce=int, choices=year_choices, initial=0, required=False)
+    month_from = forms.TypedChoiceField(coerce=int, choices=MONTH_SELECT, initial=current_month, required=False)
+    month_to = forms.TypedChoiceField(coerce=int, choices=MONTH_SELECT, initial=0, required=False)
     chart_type = forms.ChoiceField(choices=CHART_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
     results_by = forms.ChoiceField(choices=RESULT_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
     sum_by = forms.ChoiceField(choices=SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
 
 class PositionSearchForm(forms.Form):
+    date_from = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 50%', 'autofocus':True}), required=False)
+    date_to = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 50%'}), required=False)
+    year_from = forms.TypedChoiceField(coerce=int, choices=year_choices, initial=current_year, required=False)
+    year_to = forms.TypedChoiceField(coerce=int, choices=year_choices, initial=0, required=False)
+    month_from = forms.TypedChoiceField(coerce=int, choices=MONTH_SELECT, initial=current_month, required=False)
+    month_to = forms.TypedChoiceField(coerce=int, choices=MONTH_SELECT, initial=0, required=False)
     chart_type = forms.ChoiceField(choices=CHART_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
     results_by = forms.ChoiceField(choices=PRODUCT_CHOICES_FOR_SEARCH, widget=forms.Select(attrs={'style':'width: 100%'}))
     sum_by = forms.ChoiceField(choices=SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
