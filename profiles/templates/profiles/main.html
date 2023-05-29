@@ -9,14 +9,12 @@ my profile
 {% block content %}
 
 {% if success_message %}
-    <div class="alert alert-primary" role="alert">
-        {{ success_message }}
-    </div>
+<div class="alert alert-primary" role="alert">
+    {{ success_message }}
+</div>
 {% endif %}
 
-<div class="text-center">
-    <img src="{{ profile.avatar.url }}" alt="my-profile" class="avatar-big">
-</div>
+<img src="{{ profile.avatar.url }}" alt="my-profile" class="avatar-big">
 
 <br>
 

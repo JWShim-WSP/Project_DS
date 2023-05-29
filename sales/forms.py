@@ -85,9 +85,16 @@ class CustomPositionChoice(forms.ModelMultipleChoiceField):
         return "%s" %position.id
 
 class SaleForm(forms.ModelForm):
+    transaction_id = forms.CharField(widget= forms.TextInput(attrs={'placeholder':'automatically filled'}), required=False)
+    total_net_price = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
+    total_added_price = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
+    total_net_price_KRW = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
+    total_added_price_KRW = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
+    created = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 50%'}))
+
     class Meta:
         model = Sale
-        fields= ["transaction_id", "positions", "total_net_price", "total_added_price", "total_net_price_KRW", "total_added_price_KRW", "customer", 'salesman']
+        fields= ["positions", "customer", 'salesman', "transaction_id", "created", "total_net_price", "total_added_price", "total_net_price_KRW", "total_added_price_KRW"]
     
     positions = forms.ModelMultipleChoiceField(
         queryset=Position.objects.all(),
@@ -110,6 +117,12 @@ class SaleForm(forms.ModelForm):
 #    )
 
 class PositionForm(forms.ModelForm):
+    net_price = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
+    added_price = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
+    net_price_KRW = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
+    added_price_KRW = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
+    created = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 50%'}))
+
     class Meta:
         model = Position
-        fields= ["product", "quantity", "unit_price", "added_cost", "net_price", "added_price", "ex_rate_to_KRW", "added_cost_KRW", "net_price_KRW", "added_price_KRW"]
+        fields= ["product", "quantity", "unit_price", "added_cost", "ex_rate_to_KRW", "added_cost_KRW", "created", "net_price", "added_price", "net_price_KRW", "added_price_KRW", "created"]
