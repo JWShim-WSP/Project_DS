@@ -10,16 +10,16 @@ from django.urls import reverse
 
 class Position(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
-    unit_price = models.FloatField()
+    quantity = models.PositiveIntegerField(blank=True)
+    unit_price = models.FloatField(blank=True)
 
-    added_cost = models.FloatField()
+    added_cost = models.FloatField(blank=True)
 
     net_price = models.FloatField(blank=True)
     added_price = models.FloatField(blank=True)
 
-    ex_rate_to_KRW = models.FloatField()
-    added_cost_KRW = models.FloatField()
+    ex_rate_to_KRW = models.FloatField(blank=True)
+    added_cost_KRW = models.FloatField(blank=True)
     net_price_KRW = models.FloatField(blank=True)
     added_price_KRW = models.FloatField(blank=True)
 

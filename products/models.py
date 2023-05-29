@@ -7,6 +7,7 @@ PRODUCT_TYPE_CHOICES = (
     ('Sensor', 'Sensor'),
     ('Plasma Torch', 'Plasma Torch'),
     ('Pump', 'Pump'),
+    ('Pressure', 'Pressure'),
     ('Etc', 'Etc'),
 )
 

@@ -53,12 +53,7 @@ Calculator
   </script>
 {% endif %}
 
-{% if user.profile.menubar == "Side" %}
 <div class="text-center">
-{% else %}
-<div class="d-flex justify-content-center text-center">
-  <div class="col-8">
-{% endif %}
 
   {% if user.profile.language == "Korean" %}
   <h3 class="text-primary"><b>계산기</b></h3>
@@ -66,90 +61,87 @@ Calculator
   <h3 class="text-primary"><b>Djangoon's Calculator</b></h3>
   {% endif %}
   <br>
-    <form action="{% url 'calculator:submitquery' %}" method="get">
-      {% csrf_token %}
-      <div class="input-group input-group-lg">
-        {% if user.profile.language == "Korean" %}
-        <span class="input-group-text" id="inputGroup-sizing-lg">계산식</span>
-        {% else %}
-        <span class="input-group-text" id="inputGroup-sizing-lg">Expression</span>
-        {% endif %}
-        <input type="text" name="query" id="query" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" autofocus>
-      </div>
-      <br>
-      <div class="d-grid gap-2 d-md-block">
-        {% if user.profile.language == "Korean" %}
-        <button type="submit" class="buttons btn btn-outline-primary"><b>제출</b></button>
-        &nbsp
-        <button type="reset" class="buttons btn btn-outline-danger"><b>지우기</b></button>
-        {% else %}
-        <button type="submit" class="buttons btn btn-outline-primary"><b>Submit</b></button>
-        &nbsp
-        <button type="reset" class="buttons btn btn-outline-danger"><b>Reset</b></button>
-        {% endif %}
-      </div>
-    </form>
+  <form action="{% url 'calculator:submitquery' %}" method="get">
+    {% csrf_token %}
+    <div class="input-group input-group-lg">
+      {% if user.profile.language == "Korean" %}
+      <span class="input-group-text" id="inputGroup-sizing-lg">계산식</span>
+      {% else %}
+      <span class="input-group-text" id="inputGroup-sizing-lg">Expression</span>
+      {% endif %}
+      <input type="text" name="query" id="query" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" autofocus>
+    </div>
     <br>
-    <br>
-    <hr>
-    {% if user.profile.language == "Korean" %}
-    <h3><b>계산식 사용법</b></h3>
-    {% else %}
-    <h3><b>Instructions</b></h3>
-    {% endif %}
-    <table class="table table-hover table-light">
-      <thead>
-        <tr>
-          <th>Operators</th>
-          <th>Functions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>+</td>
-          <td>Addition</td>
-        </tr>
-        <tr>
-          <td>-</td>
-          <td>Subtraction</td>
-        </tr>
-        <tr>
-          <td>*</td>
-          <td>Multiplication</td>
-        </tr>
-        <tr>
-          <td>/</td>
-          <td>Division</td>
-        </tr>
-        <tr>
-          <td>//</td>
-          <td>Floor Division</td>
-        </tr>
-        <tr>
-          <td>**</td>
-          <td>Exponential</td>
-        </tr>
-        <tr>
-          <td>%</td>
-          <td>Modulus</td>
-        </tr>
-        <tr>
-          <td>0b, 0o, 0x</td>
-          <td>Binary, Octal, Hex into Decimal</td>
-        </tr>
-        <tr>
-          <td>bin(), oct(), hex()</td>
-          <td>Convert into Binary, Octal, Hex</td>
-        </tr>
-        <tr>
-          <td><<, >>, &, ^, |</td>
-          <td>Bitwise Shift left & right, AND, XOR, OR</td>
-        </tr>
-      </tbody>
-    </table>
-  {% if user.profile.menubar != "Side" %}
-  </div>
+    <div class="d-grid gap-2 d-md-block">
+      {% if user.profile.language == "Korean" %}
+      <button type="submit" class="buttons btn btn-outline-primary"><b>제출</b></button>
+      &nbsp
+      <button type="reset" class="buttons btn btn-outline-danger"><b>지우기</b></button>
+      {% else %}
+      <button type="submit" class="buttons btn btn-outline-primary"><b>Submit</b></button>
+      &nbsp
+      <button type="reset" class="buttons btn btn-outline-danger"><b>Reset</b></button>
+      {% endif %}
+    </div>
+  </form>
+  <br>
+  <br>
+  <hr>
+  {% if user.profile.language == "Korean" %}
+  <h3><b>계산식 사용법</b></h3>
+  {% else %}
+  <h3><b>Instructions</b></h3>
   {% endif %}
+  <table class="table table-hover table-light">
+    <thead>
+      <tr>
+        <th>Operators</th>
+        <th>Functions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>+</td>
+        <td>Addition</td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Subtraction</td>
+      </tr>
+      <tr>
+        <td>*</td>
+        <td>Multiplication</td>
+      </tr>
+      <tr>
+        <td>/</td>
+        <td>Division</td>
+      </tr>
+      <tr>
+        <td>//</td>
+        <td>Floor Division</td>
+      </tr>
+      <tr>
+        <td>**</td>
+        <td>Exponential</td>
+      </tr>
+      <tr>
+        <td>%</td>
+        <td>Modulus</td>
+      </tr>
+      <tr>
+        <td>0b, 0o, 0x</td>
+        <td>Binary, Octal, Hex into Decimal</td>
+      </tr>
+      <tr>
+        <td>bin(), oct(), hex()</td>
+        <td>Convert into Binary, Octal, Hex</td>
+      </tr>
+      <tr>
+        <td><<, >>, &, ^, |</td>
+        <td>Bitwise Shift left & right, AND, XOR, OR</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <!-- End Content -->

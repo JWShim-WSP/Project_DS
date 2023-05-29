@@ -9,16 +9,15 @@
 {% url 'tools:main' as path_to_tools %}
 
 {% if user.profile.menubar == "Side" %}
-<nav class="nav flex-sm-column nav-tabs">
+<nav class="navbar nav-tabs">
   <div class="container-fluid">
     <a class="navbar-brand" href="{{path_to_home}}"><img src="{% static 'logo.png' %}" class="logo-sm"></a>
       <ul class="navbar-nav">
       <br>
 {% else %}
-<nav class="navbar navbar-expand-lg nav-pills">
+<nav class="navbar navbar-expand-sm nav-pills">
   <div class="container-fluid">
     <a class="navbar-brand" href="{{path_to_home}}"><img src="{% static 'logo.png' %}" class="logo-sm"></a>
-    <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
 {% endif %}
       {% if user.profile.language == "Korean" %}
@@ -85,7 +84,6 @@
           <a href="https://www.youtube.com/" class="nav-link {% if request.path == 'https://www.youtube.com/' %}active{% endif %}">YouTube</a>
         </li>
       </ul>
-    </div>
   {% endif %}
 
   {% if request.user.is_authenticated %}
