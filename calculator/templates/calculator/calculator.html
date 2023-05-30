@@ -61,7 +61,7 @@ Calculator
   <h3 class="text-primary"><b>Djangoon's Calculator</b></h3>
   {% endif %}
   <br>
-  <form action="{% url 'calculator:submitquery' %}" method="get">
+  <form action="{% url 'calculator:submitquery' %}" method="post">
     {% csrf_token %}
     <div class="input-group input-group-lg">
       {% if user.profile.language == "Korean" %}

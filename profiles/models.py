@@ -11,8 +11,7 @@ LANGUAGE_CHOICE = (
 
 MENU_CHOICE = (
     ('Top', 'Top'),
-    ('Side', 'Side'),
-    ('Bottom', 'Bottom'),
+    ('Button', 'Button'),
 )
 
 def default_datetime_for_my_class():

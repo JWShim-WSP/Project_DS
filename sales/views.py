@@ -35,7 +35,7 @@ def sales_home_view(request):
         key_by = 'year'
         sum_by = 'total_added_price_KRW'
         sales_df = pd.DataFrame(sales_qs.values())
-        sales_df['year'] = sales_df['updated'].apply(lambda x: x.strftime('%Y')) # lambda argument: expression
+        sales_df['year'] = sales_df['created'].apply(lambda x: x.strftime('%Y')) # lambda argument: expression
         chart1 = get_chart(chart_type, sales_df, key_by, sum_by)
     else:
         no_data1 = 'No data is available in this date range'
@@ -50,7 +50,7 @@ def sales_home_view(request):
         key_by = 'year_month'
         sum_by = 'total_added_price_KRW'
         sales_df = pd.DataFrame(sales_qs.values())
-        sales_df['year_month'] = sales_df['updated'].apply(lambda x: x.strftime('%Y-%m')) # lambda argument: expression
+        sales_df['year_month'] = sales_df['created'].apply(lambda x: x.strftime('%Y-%m')) # lambda argument: expression
         chart2 = get_chart(chart_type, sales_df, key_by, sum_by)
     else:
         no_data2 = 'No data is available in this date range'
@@ -165,11 +165,13 @@ def sales_list_view(request):
             else:# you choose no period (All years and All months)
                 sales_qs = Sale.objects.all()
 
-        p = Paginator(sales_qs, 10)
-        try:
-            object_list = p.get_page(request.GET.get("page"))
-        except:
-            object_list = p.get_page(1)
+        # no pagination for sales list
+        #p = Paginator(sales_qs, 10)
+        #try:
+        #    object_list = p.get_page(request.GET.get("page"))
+        #except:
+        #    object_list = p.get_page(1)
+        object_list = sales_qs
 
         if len(sales_qs) > 0:
             if chart_type == None:

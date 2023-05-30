@@ -8,18 +8,20 @@
 {% url 'myadmin:memberlist' as path_to_myadmin %}
 {% url 'tools:main' as path_to_tools %}
 
-{% if user.profile.menubar == "Side" %}
-<nav class="nav flex-sm-column nav-tabs">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{{path_to_home}}"><img src="{% static 'logo.png' %}" class="logo-sm"></a>
-      <ul class="navbar-nav">
+{% if user.profile.menubar == "Button" %}
+<nav class="navbar nav-pills navbar-light bg-light">
 {% else %}
-<nav class="navbar navbar-expand-sm nav-pills">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{{path_to_home}}"><img src="{% static 'logo.png' %}" class="logo-sm"></a>
-      <ul class="navbar-nav">
+<nav class="navbar navbar-expand-lg nav-pills navbar-light bg-light">
 {% endif %}
-      {% if user.profile.language == "Korean" %}
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="{{path_to_home}}"><img src="{% static 'logo.png' %}" class="logo-sm"></a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    {% if user.profile.language == "Korean" %}
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">판매</a>
         </li>
@@ -40,7 +42,7 @@
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_tools %}active{% endif %}" href="{{path_to_tools}}">도구함</a>
         </li>
-        {% else %}
+    {% else %}
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">Sales</a>
         </li>
@@ -61,49 +63,44 @@
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_tools %}active{% endif %}" href="{{path_to_tools}}">Tools</a>
         </li>
-      {% endif %}
-      </ul>
-
-  {% if user.profile.menubar != "Side" %}
-    </div>
-    <div class="navbar-nav" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <form action="https://google.com/search" method="get">
-            <div class="input-group">
-              <input type="search" class="form-control" placeholder="type in..." aria-label="Recipient's username" aria-describedby="button-addon2" name="query">
-              <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Google Search</button>
-            </div>
-          </form>
-        </li>
-        <li class="nav-item">
-          <a href="https://getbootstrap.com/" class="nav-link {% if request.path == 'https://getbootstrap.com/' %}active{% endif %}">Bootstrap</a>
-        </li>
-        <li class="nav-item">
-          <a href="https://www.youtube.com/" class="nav-link {% if request.path == 'https://www.youtube.com/' %}active{% endif %}">YouTube</a>
-        </li>
-      </ul>
-  {% endif %}
-
-  {% if request.user.is_authenticated %}
-    <div class="nav-item dropdown">
-      <div class="nav-link dropdown-toggle" style="color:white" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    {% if user.profile.menubar == "Side" %}
-          <img src="{{request.user.profile.avatar.url}}" class="avatar-sm"><br><span style="color:white">{{request.user}}</span>
-    {% else %}
-          <img src="{{request.user.profile.avatar.url}}" class="avatar-sm">&nbsp;{{request.user}}
     {% endif %}
-      </div>
-      <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-        {% if user.profile.language == "Korean" %}
-        <li><a class="dropdown-item {% if request.path == path_to_my_profile%}active{% endif %}" href="{{path_to_my_profile}}">프로파일</a></li>
-        <li><a class="dropdown-item" href="{% url 'logout' %}">로그아웃</a></li>
-        {% else %}
-        <li><a class="dropdown-item {% if request.path == path_to_my_profile%}active{% endif %}" href="{{path_to_my_profile}}">Profile</a></li>
-        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-        {% endif %}
       </ul>
+
+      <div class="navbar-nav" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <form action="https://google.com/search" method="get">
+              <div class="input-group">
+                <input type="search" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2" name="query">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Google Search</button>
+              </div>
+            </form>
+          </li>
+          <li class="nav-item">
+            <a href="https://getbootstrap.com/" class="nav-link {% if request.path == 'https://getbootstrap.com/' %}active{% endif %}">Bootstrap</a>
+          </li>
+          <li class="nav-item">
+            <a href="https://www.youtube.com/" class="nav-link {% if request.path == 'https://www.youtube.com/' %}active{% endif %}">YouTube</a>
+          </li>
+        </ul>
+      </div>
+
+      {% if request.user.is_authenticated %}
+      <div class="nav-item dropdown">
+        <div class="nav-link dropdown-toggle" style="color:white" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="{{request.user.profile.avatar.url}}" class="avatar-sm">&nbsp;{{request.user}}
+        </div>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          {% if user.profile.language == "Korean" %}
+          <li><a class="dropdown-item {% if request.path == path_to_my_profile%}active{% endif %}" href="{{path_to_my_profile}}">프로파일</a></li>
+          <li><a class="dropdown-item" href="{% url 'logout' %}">로그아웃</a></li>
+          {% else %}
+          <li><a class="dropdown-item {% if request.path == path_to_my_profile%}active{% endif %}" href="{{path_to_my_profile}}">Profile</a></li>
+          <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+          {% endif %}
+        </ul>
+      </div>
+      {% endif %}
     </div>
-  {% endif %}
   </div>
 </nav>
