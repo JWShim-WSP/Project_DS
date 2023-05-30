@@ -33,29 +33,14 @@
     <title>BST Project Manager v1.0 | {% block title %}{% endblock title %}</title>
   </head>
   <body>
-    {% if user.profile.menubar == "Side" %}
-    <div class="row">
-      <div class="col-1 container-sm">
-    {% endif %}
-
-        {% include 'navbar.html' %}
-
-    {% if user.profile.menubar == "Side" %}
-      </div> <!-- close <div> of "col-1" of Sidebar menu -->
-      <div class="col-11 container-sm ps-4 mt-3 mb-3 pe-4">
-    {% else %}
+    
+      {% include 'navbar.html' %}
       <div class="container-sm ps-4 mt-3 mb-3 pe-4">
-    {% endif %}
 
         {% block content %}
         {% endblock content %}
 
-    {% if user.profile.menubar == "Side" %}
-        </div> <!-- close <div> of "col-10"-->
-    </div> <!-- close <div> of "row" of Sidebar + Content Block -->
-    {% else %}
-      </div> <!-- close <div> of "container"-->
-    {% endif %}
+      </div>
 
     <!-- Bootstrap js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
