@@ -11,8 +11,6 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from .utils import get_customer_from_id, get_salesman_from_id, get_product_from_id, get_chart
-
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -35,7 +33,7 @@ def sales_home_view(request):
         key_by = 'year'
         sum_by = 'total_added_price_KRW'
         sales_df = pd.DataFrame(sales_qs.values())
-        sales_df['year'] = sales_df['updated'].apply(lambda x: x.strftime('%Y')) # lambda argument: expression
+        sales_df['year'] = sales_df['created'].apply(lambda x: x.strftime('%Y')) # lambda argument: expression
         chart1 = get_chart(chart_type, sales_df, key_by, sum_by)
     else:
         no_data1 = 'No data is available in this date range'
@@ -50,7 +48,7 @@ def sales_home_view(request):
         key_by = 'year_month'
         sum_by = 'total_added_price_KRW'
         sales_df = pd.DataFrame(sales_qs.values())
-        sales_df['year_month'] = sales_df['updated'].apply(lambda x: x.strftime('%Y-%m')) # lambda argument: expression
+        sales_df['year_month'] = sales_df['created'].apply(lambda x: x.strftime('%Y-%m')) # lambda argument: expression
         chart2 = get_chart(chart_type, sales_df, key_by, sum_by)
     else:
         no_data2 = 'No data is available in this date range'
@@ -165,11 +163,13 @@ def sales_list_view(request):
             else:# you choose no period (All years and All months)
                 sales_qs = Sale.objects.all()
 
-        p = Paginator(sales_qs, 10)
-        try:
-            object_list = p.get_page(request.GET.get("page"))
-        except:
-            object_list = p.get_page(1)
+        # no pagination needed for sales list
+        #p = Paginator(sales_qs, 10)
+        #try:
+        #    object_list = p.get_page(request.GET.get("page"))
+        #except:
+        #    object_list = p.get_page(1)
+        object_list = sales_qs
 
         if len(sales_qs) > 0:
             if chart_type == None:
@@ -190,7 +190,8 @@ def sales_list_view(request):
             sales_df['updated'] = sales_df['updated'].apply(lambda x: x.strftime('%Y-%m-%d')) # lambda argument: expression
             sales_df.rename({'customer_id': 'customer', 'salesman_id': 'salesman', 'id': 'sales_id'}, axis=1, inplace=True)
             #sales_df['sales_id'] = sales_df['id'] # or, you can add a new 'sales_id' column
-
+            
+            # Warning! You cannot have multiple sales on the same positions. Sales should be one on one with Position
             positions_data = []
             for sale in sales_qs:
                 for pos in sale.get_positions():
@@ -375,11 +376,13 @@ def positions_list_view(request):
         if (results_by != None and results_by != 'All'):
             positions_qs = positions_qs.filter(product__product_type=results_by)
 
-        p = Paginator(positions_qs, 10)
-        try:
-            object_list = p.get_page(request.GET.get("page"))
-        except:
-            object_list = p.get_page(1)
+        # no pagination for positions needed
+        #p = Paginator(positions_qs, 10)
+        #try:
+        #    object_list = p.get_page(request.GET.get("page"))
+        #except:
+        #    object_list = p.get_page(1)
+        object_list = positions_qs
 
         if len(positions_qs) > 0:
             if chart_type == None:
