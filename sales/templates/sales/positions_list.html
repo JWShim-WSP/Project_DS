@@ -120,6 +120,15 @@ BST Project - Position List
   </div>
 {% endif %}
 
+{% if positions_df %}
+
+    <div class="card mb-3 text-center">
+    <!-- {{ positions_df | safe }} -->
+    <img src="data:image/png;base64, {{chart | safe}}" id='img'>
+    </div>
+
+{% endif %}
+
 <table class="table text-center table-hover table-light">
     {% if user.profile.language == "Korean" %}
     <thead>
@@ -235,14 +244,5 @@ BST Project - Position List
     </nav>
 </div>
 -->
-
-{% if positions_df %}
-
-    <div class="text-center">
-    <!-- {{ positions_df | safe }} -->
-    <img src="data:image/png;base64, {{chart | safe}}" id='img'>
-    </div>
-
-{% endif %}
 
 {% endblock %}

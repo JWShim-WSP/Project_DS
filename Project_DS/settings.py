@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'products',
     'customers',
     'myadmin',
+    'bulletin',
 
     # favorite tools
     'tools',
@@ -66,6 +67,9 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     # Excel import and export
     'import_export',
+    # Django-hitcount app to count the hits for project's db (Bulletin Post)
+    'hitcount',
+    'user_visit',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
@@ -78,6 +82,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'user_visit.middleware.UserVisitMiddleware',
 ]
 
 ROOT_URLCONF = 'Project_DS.urls'

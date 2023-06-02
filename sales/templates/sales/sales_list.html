@@ -117,6 +117,17 @@ Sales List
   </div>
 {% endif %}
 
+{% if merged_df %}
+
+    <div class="card mb-3 text-center">
+    <!--{{ merged_df | safe }}-->
+        <img src="data:image/png;base64, {{chart | safe}}" id='img'>
+    </div>
+
+{% endif %}
+<br>
+<br>
+
 <table class="table text-center table-hover table-light">
     {% if user.profile.language == "Korean" %}
     <thead>
@@ -218,16 +229,5 @@ Sales List
     </nav>
 </div>
 -->
-
-<br>
-<br>
-{% if merged_df %}
-
-    <div class="text-center">
-        <!--{{ merged_df | safe }}-->
-        <img src="data:image/png;base64, {{chart | safe}}" id='img'>
-    </div>
-
-{% endif %}
 
 {% endblock %}

@@ -91,16 +91,13 @@ class EventUpdate(UpdateView):
     form_class = EventForm
     template_name = 'calendarwithevent/event_form.html'
 
-
     def get_context_data(self, **kwargs):
         context = super(EventUpdate, self).get_context_data(**kwargs)
         context["title"] = "Edit event"
 
         event = context['object'] 
-        context['event_id'] = event.id
         theEvent = Event.objects.get(pk=event.id)
         event_form = EventForm(instance=theEvent)
-
         context['form'] = event_form 
         return context
 

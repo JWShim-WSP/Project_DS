@@ -60,7 +60,6 @@ Product List
 {% endif %}
 </div>
 
-
 <!-- Modal for Search -->
 <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -146,6 +145,16 @@ Product List
     </div>
 </div>
 
+{% if products_df %}
+
+<div class="card mb-3 text-center">
+  <img src="data:image/png;base64, {{chart | safe}}" id='img'>
+</div>
+
+{% endif %}
+<br>
+<br>
+
 <table class="table text-center table-hover table-light">
     <thead>
       {% if user.profile.language == "Korean" %}
@@ -206,15 +215,5 @@ Product List
     </nav>
 </div>
 -->
-
-<br>
-<br>
-{% if products_df %}
-
-<div class="text-center">
-  <img src="data:image/png;base64, {{chart | safe}}" id='img'>
-</div>
-
-{% endif %}
 
 {% endblock content %}
