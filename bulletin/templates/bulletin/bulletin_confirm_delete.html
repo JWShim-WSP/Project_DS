@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Post Delete Confirmation
+{% endblock %}
+
+{% block content %}
+
+<div class="text-center">
+
+    {% if user.profile.language == "Korean" %}
+    <h2 class="text-primary"><b>게시글 삭제</b></h2>
+    <br>
+    <h3>이 게시글을 삭제 하시겠습니까? <b>{{ object.title }}</b>?</h3>
+    <br>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input class="btn btn-outline-primary"
+            value="네, 삭제하세요"
+            type="submit">
+
+        <input class="btn btn-outline-primary"
+            value="취소"
+            type="button"
+            onclick="location.href='{% url "bulletin:bstBulletin" %}'">
+    </form>
+    {% else %}
+    <h2 class="text-primary"><b>Delete Post</b></h2>
+    <br>
+    <h3>Are you sure you want to delete the post <b>{{ object.title }}</b>?</h3>
+    <br>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input class="btn btn-outline-primary"
+            value="Yes, Delete"
+            type="submit">
+
+        <input class="btn btn-outline-primary"
+            value="Cancel"
+            type="button"
+            onclick="location.href='{% url "bulletin:bstBulletin" %}'">
+    </form>
+    {% endif %}
+</div>
+
+{% endblock %}

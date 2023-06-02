@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    detail of Bulletin
+{% endblock title %}
+
+{% block content %}
+
+<!-- Here you start to edit the body of Bulletin -->
+
+<img src="{{ post.poster.avatar.url }}" alt="my-profile" class="avatar-md">
+
+<br>
+
+{% if user.profile.language == "Korean" %}
+<p><b>작성자:</b> {{post.poster.user.username}}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<b>작성일:</b>{{ post.update_Date }}</p>
+<h5 class="text-primary"><b>제목: <span class="text-black">{{ post.title }}</span></b></h5>
+<br>
+<h5 class="text-primary"><b>내용:</b></h5>
+{% else %}
+<p><b>Author:</b> {{post.poster.user.username}}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<b>Post Date:</b> {{ post.update_Date }}</p>
+<h5 class="text-primary"><b>Title: <span class="text-black">{{ post.title }}</span></b></h5>
+<br>
+<h5 class="text-primary"><b>Content:</b></h5>
+{% endif %}
+
+<div class="card mb-3">
+    <p>{{ post.content }}</p>
+</div>
+
+{% if user.profile.language == "Korean" %}
+    <div class="d-grid gap-2 d-md-flex justify-content-left">
+        <input class="btn btn-outline-primary"
+        value="돌아가기"
+        type="button"
+        onclick="location.href='{% url "bulletin:bstBulletin"  %}'">
+        {% if post.poster.user == request.user %}
+            <input class="btn btn-outline-primary"
+            value="변경"
+            type="button"
+            onclick="location.href='{% url "bulletin:post-update" post.id %}'">
+            <input class="btn btn-outline-primary"
+            value="삭제"
+            type="button"
+            onclick="location.href='{% url "bulletin:post-delete" post.id %}'">
+        {% else %}
+            <input class="btn btn-outline-primary"
+            value="댓글"
+            type="button"
+            onclick="location.href='{% url "bulletin:bstBulletin" %}'">
+        {% endif %}
+    </div>
+    <br>
+    <br>
+    <h5 class="text-primary">[인기 게시물]</h5>
+    {% for p in popular_posts %}
+        <a class="text-black" href="{{ p.get_absolute_url }}">{{p.title}}<br></a>    
+    {% endfor %}
+{% else %}
+    <div class="d-grid gap-2 d-md-flex justify-content-left">
+    <input class="btn btn-outline-primary"
+        value="Go Back"
+        type="button"
+        onclick="location.href='{% url "bulletin:bstBulletin"  %}'">
+        {% if post.poster.user == request.user %}
+            <input class="btn btn-outline-primary"
+            value="Modify"
+            type="button"
+            onclick="location.href='{% url "bulletin:post-update" post.id %}'">
+            <input class="btn btn-outline-primary"
+            value="Delete this post"
+            type="button"
+            onclick="location.href='{% url "bulletin:post-delete" post.id %}'">
+        {% else %}
+            <input class="btn btn-outline-primary"
+            value="Comment"
+            type="button"
+            onclick="location.href='{% url "bulletin:bstBulletin" %}'">
+        {% endif %}        
+    </div>
+    <br>
+    <br>
+    <h5 class="text-primary">[Popular Posts]</h5>
+    {% for p in popular_posts %}
+        <a class="text-black" href="{{ p.get_absolute_url }}">{{p.title}}<br></a>
+    {% endfor %}
+{% endif %}        
+
+<!-- End Content -->
+
+{% endblock %}
