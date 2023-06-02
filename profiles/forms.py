@@ -2,6 +2,8 @@ from django import forms
 from .models import Profile
 
 class ProfileForm(forms.ModelForm):
+    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 7, 'cols': '100%'}))
+
     class Meta:
         model = Profile
         fields= ["bio", "language", "menubar", "licensed_by", "avatar"]

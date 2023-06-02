@@ -19,6 +19,12 @@
     border-radius: 50%;
 }
 
+.avatar-md {
+    height: 120px;
+    width: 120px;
+    border-radius: 50%;
+}
+
 .avatar-sm {
     height: 40px;
     width: 40px;

@@ -58,38 +58,23 @@ Customer List
 </div>
 
 <table class="table text-center table-hover table-light">
-    {% if user.profile.language == "Korean" %}
     <thead>
         <tr>
+        {% if user.profile.language == "Korean" %}
             <th scope="col">id</th>
             <th scope="col">이름</th>
             <th scope="col">이메일</th>
             <th scope="col">전화번호</th>
             <th scope="col">생성 일시</th>
             <th scope="col">참고</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for object in object_list %}
-            <tr onclick="window.location='{{object.get_absolute_url}}'">
-                <th scope="row">{{ object.id }}</th>
-                <td>{{ object.name }}</td>
-                <td>{{ object.email }}</td>
-                <td>{{ object.phone_number }}</td>
-                <td>{{ object.created }}</td>
-                <td>{{ object.remark }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-    {% else %}
-    <thead>
-        <tr>
+        {% else %}
             <th scope="col">id</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Phone</th>
             <th scope="col">Created</th>
             <th scope="col">Remark</th>
+        {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -104,7 +89,6 @@ Customer List
             </tr>
         {% endfor %}
     </tbody>
-    {% endif %}
 </table>
 
 <!--
