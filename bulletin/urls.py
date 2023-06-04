@@ -37,10 +37,10 @@ urlpatterns = [
     # CBV
     path('', views.bstBulletin.as_view(), name='bstBulletin'),
     path('<int:page>', views.bstBulletin.as_view(), name='bstBulletin'),
-    path('post/<slug:slug>', views.BulletinDetailView.as_view(), name='bstBulletinContent'),
+    path('post/<slug>/', views.BulletinDetailView.as_view(), name='bstBulletinContent'),
     path('post/<int:pk>/update', views.BulletinUpdate.as_view(), name='post-update'),
-    path("post/add/", views.BulletinCreatePost.as_view(), name="post-add"),
-    path("post/<int:pk>/delete/", views.BulletinDelete.as_view(), name="post-delete"),
-    path('post/like/<slug:slug>', views.BulletinLike, name="post-like"),
+    path("post/add", views.BulletinCreatePost.as_view(), name="post-add"),
+    path("post/<int:pk>/delete", views.BulletinDelete.as_view(), name="post-delete"),
+    path('post/like/<slug>', views.BulletinLike, name="post-like"),
     #path('contents/<pk>', views.BulletinDetailView.as_view(), name='bstBulletinContent'),
 ]
