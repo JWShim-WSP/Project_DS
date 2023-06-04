@@ -16,7 +16,7 @@ class Bulletin(models.Model):
     update_Date = models.DateField(auto_now=True)
     slug = models.SlugField(unique=True, max_length=100, blank=True)
     content = models.TextField(max_length=4096)
-    likers = models.ManyToManyField(Profile, blank=True , related_name='post_likers')
+    likers = models.ManyToManyField(Profile, blank=True, related_name='post_likers')
 
     # Let's count the clicks (Hits) of visitors
     hit_count_generic = GenericRelation(HitCount, object_id_field='object_pk', related_query_name='hit_count_generic_relation')
