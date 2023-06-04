@@ -41,5 +41,6 @@ urlpatterns = [
     path('post/<int:pk>/update', views.BulletinUpdate.as_view(), name='post-update'),
     path("post/add/", views.BulletinCreatePost.as_view(), name="post-add"),
     path("post/<int:pk>/delete/", views.BulletinDelete.as_view(), name="post-delete"),
+    path('post/like/<slug:slug>', views.BulletinLike, name="post-like"),
     #path('contents/<pk>', views.BulletinDetailView.as_view(), name='bstBulletinContent'),
 ]

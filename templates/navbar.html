@@ -36,7 +36,7 @@
           <a class="nav-link {% if request.path == path_to_reports %}active{% endif %}" href="{{path_to_reports}}">보고서</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_bulletin %}active{% endif %}" href="{{path_to_bulletin}}">게시판</a>
+          <a class="nav-link {% if request.path == path_to_bulletin %}active{% endif %}" href="{{path_to_bulletin}}">커뮤너티</a>
         </li>
         {% if request.user.is_staff %}
         <li class="nav-item">
@@ -60,7 +60,7 @@
           <a class="nav-link {% if request.path == path_to_reports %}active{% endif %}" href="{{path_to_reports}}">Reports</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_bulletin %}active{% endif %}" href="{{path_to_bulletin}}">Bulletin</a>
+          <a class="nav-link {% if request.path == path_to_bulletin %}active{% endif %}" href="{{path_to_bulletin}}">Community</a>
         </li>
         {% if request.user.is_staff %}
         <li class="nav-item">
