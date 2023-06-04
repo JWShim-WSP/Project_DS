@@ -12,7 +12,7 @@ Bulletin
 <link rel="stylesheet" href="{% static 'pagination.css' %}">
 
 {% if user.profile.language == "Korean" %}
-<h3 class="text-center"><b>게시판</b></h3>
+<h3 class="text-center"><b>알림글</b></h3>
 {% else %}
 <h3 class="text-center"><b>Bulletin</b></h3>
 {% endif %}
@@ -20,7 +20,7 @@ Bulletin
 <div class="d-flex mb-3">
     {% if user.profile.language == "Korean" %}
     <div class="me-auto p-1">
-        <a class="btn btn-outline-primary" href="{% url 'bulletin:post-add' %}" role="button">작성</a>
+        <a class="btn btn-outline-primary" href="{% url 'bulletin:post-add' %}" role="button">글쓰기</a>
     </div>
     {% else %}
     <div class="ms-auto p-1">
@@ -33,13 +33,13 @@ Bulletin
     <thead>
         <tr>
         {% if user.profile.language == "Korean" %}
-            <th scope="col">No.</th>
-            <th scope="col">제목</th>
+            <th scope="col"></th>
             <th scope="col">게시자</th>
+            <th scope="col">제목</th>
             <th scope="col">게시일</th>
             <th scope="col">조회수</th>
         {% else %}
-            <th scope="col">No.</th>
+            <th scope="col"></th>
             <th scope="col">Title</th>
             <th scope="col">Author</th>
             <th scope="col">Date</th>
@@ -50,9 +50,9 @@ Bulletin
     <tbody>
         {% for object in posts %}
             <tr onclick="window.location='{{object.get_absolute_url}}'">
-                <th scope="row">{{ object.id }}</th>
-                <td>{{ object.title }}</td>
+                <th scope="row"><img src="{{object.poster.avatar.url }}" alt="my-profile" class="avatar-tnail"></th>
                 <td>{{ object.poster.user.username }}</td>
+                <td>{{ object.title }}</td>
                 <td>{{ object.update_Date }}</td>
                 <td>{% get_hit_count for object %}</td>
             </tr>
