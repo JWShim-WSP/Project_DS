@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 class PostForm(forms.ModelForm):
     class Meta:
         model = Bulletin
-        fields= ['title', 'content']
+        fields= ['title', 'content', 'image']
 
 class CommentForm(forms.ModelForm):
     class Meta:
@@ -16,6 +16,7 @@ class CommentForm(forms.ModelForm):
         labels = {
             'content': _(''),
         }
+
         widgets = {
             'content' : forms.TextInput(),
         }

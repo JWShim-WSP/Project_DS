@@ -90,7 +90,6 @@ class SaleForm(forms.ModelForm):
     total_added_price = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
     total_net_price_KRW = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
     total_added_price_KRW = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
-    created = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 50%'}))
 
     class Meta:
         model = Sale
@@ -121,8 +120,7 @@ class PositionForm(forms.ModelForm):
     added_price = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
     net_price_KRW = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
     added_price_KRW = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
-    created = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 50%'}))
 
     class Meta:
         model = Position
-        fields= ["product", "quantity", "unit_price", "added_cost", "ex_rate_to_KRW", "added_cost_KRW", "created", "net_price", "added_price", "net_price_KRW", "added_price_KRW", "created"]
+        fields= ["product", "quantity", "unit_price", "added_cost", "ex_rate_to_KRW", "added_cost_KRW", "net_price", "added_price", "net_price_KRW", "added_price_KRW"]

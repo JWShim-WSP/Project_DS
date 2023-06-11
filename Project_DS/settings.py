@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     # BST-Project apps
     'sales',
@@ -70,7 +71,13 @@ INSTALLED_APPS = [
     # Django-hitcount app to count the hits for project's db (Bulletin Post)
     'hitcount',
     'user_visit',
+    # Django all-auth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
+
+SITE_ID = 1
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
@@ -98,9 +105,17 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
+                'profiles.context_processors.profile_pic',
+                'profiles.context_processors.invitations_received_no',
             ],
         },
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 WSGI_APPLICATION = 'Project_DS.wsgi.application'
@@ -145,15 +160,25 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
-# AUTH
-LOGIN_URL = '/login/'
+#LOGIN_URL = '/accounts/login'
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/bulletin'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_UNIQUE = True
+#ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# you should take a look and invest some time for this, Social Network project in Django (PART 18) by Pyplane
+#if DEBUG:
+#    EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
     BASE_DIR / 'sales' / 'static',
@@ -161,6 +186,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'excurrency' / 'static',
     BASE_DIR / 'emailsend' / 'static',
 ]
+STATIC_ROOT = BASE_DIR / 'productionfiles'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'

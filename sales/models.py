@@ -24,7 +24,7 @@ class Position(models.Model):
     added_price_KRW = models.FloatField(blank=True)
 
     # need to open for date selection for importing a new data from a file
-    created = models.DateTimeField()
+    created = models.DateTimeField(default=timezone.now)
     #created = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
@@ -69,15 +69,13 @@ class Sale(models.Model):
     salesman = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     # need to open the selectin of date for importing a new date from a file
-    created = models.DateTimeField()
+    created = models.DateTimeField(default=timezone.now)
     #created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         if self.transaction_id == "":
             self.transaction_id = generate_code()
-        if self.created is None:
-            self.created = timezone.now()
         #if self.total_price is None: /* Signal from m2m 'post_add' or 'post_remove' will make the total_price
         #    self.total_price = self.position.price
         return super().save(*args, **kwargs)

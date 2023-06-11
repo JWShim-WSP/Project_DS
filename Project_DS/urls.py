@@ -27,7 +27,7 @@ urlpatterns = [
     path('products/', include('products.urls', namespace='products')),
     path('customers/', include('customers.urls', namespace='customers')),
     path('reports/', include('reports.urls', namespace='reports')),
-    path('my_profile/', include('profiles.urls', namespace='profiles')),
+    path('profiles/', include('profiles.urls', namespace='profiles')),
     path('myadmin/', include('myadmin.urls', namespace='myadmin')),
     path('tools/', include('tools.urls', namespace='tools')),
     path('calculator/', include('calculator.urls', namespace='calculator')),
@@ -37,6 +37,7 @@ urlpatterns = [
     path('todolist/', include('todolist.urls', namespace='todolist')),
     path('emailsend/', include('emailsend.urls', namespace='emailsend')),
     path('admin/', admin.site.urls),
+    #path('accounts/', include('allauth.urls')),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
 ]

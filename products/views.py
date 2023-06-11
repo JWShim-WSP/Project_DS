@@ -43,11 +43,13 @@ def product_list_view(request):
         else:
             products_qs = Product.objects.filter(product_type=results_by)
 
-        p = Paginator(products_qs, 10)
-        try:
-            object_list = p.get_page(request.GET.get("page"))
-        except:
-            object_list = p.get_page(1)
+        # No pagination for product list
+        #p = Paginator(products_qs, 10)
+        #try:
+        #    object_list = p.get_page(request.GET.get("page"))
+        #except:
+        #    object_list = p.get_page(1)
+        object_list = products_qs
         
         if len(products_qs) > 0:
             if chart_type == None:

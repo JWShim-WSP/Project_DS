@@ -220,11 +220,13 @@ def sales_list_view(request):
 
         search_form = SalesSearchForm()
         form_class = FormatForm()
+        report_form = ReportForm()
 
         context = {
             'object_list': object_list,
             'form': form_class,
             'search_form': search_form,
+            'report_form': report_form,
             'merged_df': merged_df,
             'chart': chart,
             'no_data': no_data,

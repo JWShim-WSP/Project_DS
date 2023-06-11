@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Profile detail
+{% endblock title %}
+
+{% block content %}
+
+{% if is_empty %}
+<h5>No invitations received for you...</h5>
+{% endif %}
+
+<div class="card mb-3">
+    <div class="row">
+        <div class="col-3">
+            <img src="{{object.avatar.url}}" alt="my-profile" class="avatar-md">
+            <h1>{{object.user}}</h1>
+            <li>
+                <span class="badge rounded-pill bg-primary">{{ object.get_posts_no }}</span>
+                Posts
+            </li>
+            <li>
+                <span class="badge rounded-pill bg-primary">{{ object.get_likes_received_no }}</span>
+                Likes received
+            </li>
+            <li>
+                <span class="badge rounded-pill bg-primary">{{ object.get_likes_given_no }}</span>
+                Likes given
+            </li>
+            <li>
+                <span class="badge rounded-pill bg-primary">{{ object.get_friends_no }}</span>
+                Friends
+            </li>
+            <br>
+            {% if object.user not in rel_receiver and object.user not in rel_sender %}
+            <form action="{% url 'profiles:send-invite' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="profile_pk" value="{{object.pk}}">
+                <button type="submit" class="btn btn-primary mb-1 w-big"><i class=""></i>Send invite</button>
+            </form>
+            <br>
+            {% endif %}
+
+            {% if request.user in object.friends.all %}
+                <form action="{% url 'profiles:remove-friend' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="profile_pk" value="{{object.pk}}">
+                        <button type="submit" class="btn btn-danger w-big mb-1"><i class="ui minus button"></i>Remove from friends</button>
+                </form>
+            {% else %}
+                {% if object.user in rel_receiver %}
+                    <button class="btn btn-info w-big mb-1" disabled><i class="user icon"></i>Waiting for approval</button>
+                {% endif %}
+
+                {% if object.user in rel_sender %}
+                    <button class="btn btn-success w-big mb-1" disabled><i class="user icon"></i>Waiting your approval</button>
+                {% endif %}
+            {% endif %}
+
+        </div>
+        <div class="col">
+            {% if len_posts %}
+                {% for post in posts %}
+                <div class="card mb-3">
+                    {{ post.content }}
+                </div>
+                {% endfor %}
+            {% else %}
+                <h1>No posts of this user...</h1>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

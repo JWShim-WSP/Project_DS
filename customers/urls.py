@@ -33,7 +33,7 @@ urlpatterns = [
     # go for FBV this time!
     path('', customer_list_view, name='customerlist'),
     path('<int:page>', customer_list_view, name='customerlist'),
-    path('customers/<int:pk>/', customer_detail_view, name='customerdetails'),
-    path("customers/add/", customer_add_view, name="customer-add"),
-    path("customers/<int:pk>/delete/", customer_delete_view, name="customer-delete"),
+    path('<int:pk>/', customer_detail_view, name='customerdetails'),
+    path("add/", customer_add_view, name="customer-add"),
+    path("<int:pk>/delete/", customer_delete_view, name="customer-delete"),
 ]

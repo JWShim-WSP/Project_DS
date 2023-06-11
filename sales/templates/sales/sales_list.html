@@ -2,9 +2,13 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block scripts %}
+<script src="{% static 'sales/home.js' %}" defer></script>
+{% endblock scripts %}
+
 {% block title %}
 Sales List
-{% endblock %}
+{% endblock title %}
 
 {% block content %}
 {% load static %}
@@ -21,13 +25,16 @@ Sales List
     <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">판매 추가</a>
         </div>
-        <div class="me-auto p-1">
+        <div class="p-1">
             <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#salesModal">보기 분류</button>
             <!--
             <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
                 Sort By
             </button>
             -->
+        </div>
+        <div class="me-auto p-1">
+            <button type="button" class="btn btn-outline-primary not-visible" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">리포트</button>
         </div>
         <div class="p-1">
             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
@@ -38,13 +45,16 @@ Sales List
     <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">Add Sales</a>
         </div>
-        <div class="me-auto p-1">
+        <div class="p-1">
             <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#salesModal">Sort By</button>
             <!--
             <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
                 Sort By
             </button>
             -->
+        </div>
+        <div class="me-auto p-1">
+            <button type="button" class="btn btn-outline-primary not-visible" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">Report</button>
         </div>
         <div class="p-1">
             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
@@ -58,7 +68,27 @@ Sales List
     </div>
     -->
 </div>
-    
+
+<!-- Modal for Report-->
+<div class="modal fade" id="reportModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Report</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="alert-box"></div>
+            <div class="modal-body" id="modal-body">
+                <form id="report-form">
+                    {% csrf_token %}
+                    {{ report_form | crispy }}
+                    <button type="submit" class="btn btn-outline-primary">save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal for Form Post-->
 <div class="modal fade" id="download-modal" tabindex="-1">
     <div class="modal-dialog">
@@ -87,7 +117,7 @@ Sales List
             <h1 class="modal-title fs-5" id="salesModalLabel">보기 분류</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body" id="modal-body">
+          <div class="modal-body">
             <div id="alert-box"></div>
             <form id="sales-form" action="" method="GET">
               {{ search_form | crispy }}
@@ -99,7 +129,7 @@ Sales List
             <h1 class="modal-title fs-5" id="salesModalLabel">Sales sort by</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body" id="modal-body">
+          <div class="modal-body">
             <div id="alert-box"></div>
             <form id="sales-form" action="" method="GET">
               {{ search_form | crispy }}
@@ -230,4 +260,4 @@ Sales List
 </div>
 -->
 
-{% endblock %}
+{% endblock content %}

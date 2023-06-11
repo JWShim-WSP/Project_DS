@@ -12,7 +12,7 @@ Bulletin
 <link rel="stylesheet" href="{% static 'pagination.css' %}">
 
 {% if user.profile.language == "Korean" %}
-<h3 class="text-center"><b>알림글</b></h3>
+<h3 class="text-center"><b>게시판</b></h3>
 {% else %}
 <h3 class="text-center"><b>Bulletin</b></h3>
 {% endif %}
@@ -23,7 +23,7 @@ Bulletin
         <a class="btn btn-outline-primary" href="{% url 'bulletin:post-add' %}" role="button">글쓰기</a>
     </div>
     {% else %}
-    <div class="ms-auto p-1">
+    <div class="me-auto p-1">
         <a class="btn btn-outline-primary" href="{% url 'bulletin:post-add' %}" role="button">Post</a>
     </div>
     {% endif %}
@@ -40,8 +40,8 @@ Bulletin
             <th scope="col">조회수</th>
         {% else %}
             <th scope="col"></th>
-            <th scope="col">Title</th>
             <th scope="col">Author</th>
+            <th scope="col">Title</th>
             <th scope="col">Date</th>
             <th scope="col">Hits</th>
         {% endif %}
