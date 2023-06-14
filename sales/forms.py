@@ -24,11 +24,18 @@ RESULT_CHOICES = (
     ('year_month', 'Year Monthly'),
 )
 
-SUM_CHOICES = (
-    ('added_price', 'price'), # Position' added_price should be used instead of 'total_added_price' of Sale
-    ('added_price_KRW', 'price in KRW'), # Position' added_price_KRW should be used instead of 'total_added_price_KRW' of Sale
-    ('quantity', 'quantity'),
+SALES_SUM_CHOICES = (
+    ('total_net_price', 'Sales Price'), # Position' added_price_KRW should be used instead of 'total_added_price_KRW' of Sale
+    ('final_profit', 'Net Profit'), # Position' added_price should be used instead of 'total_added_price' of Sale
+    ('net_profit', 'Sales Profit'),
 )
+
+POSITION_SUM_CHOICES = (
+    ('net_price', 'Sales Price'), # Position' added_price_KRW should be used instead of 'total_added_price_KRW' of Sale
+    ('margin_percentage', 'Margin Percentage'), # Position' added_price should be used instead of 'total_added_price' of Sale
+    ('quantity', 'Quantity'),
+)
+
 
 MONTH_SELECT = [
     (0, ""),
@@ -67,7 +74,7 @@ class SalesSearchForm(forms.Form):
     month_to = forms.TypedChoiceField(coerce=int, choices=MONTH_SELECT, initial=0, required=False)
     chart_type = forms.ChoiceField(choices=CHART_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
     results_by = forms.ChoiceField(choices=RESULT_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
-    sum_by = forms.ChoiceField(choices=SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
+    sum_by = forms.ChoiceField(choices=SALES_SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
 
 class PositionSearchForm(forms.Form):
     date_from = forms.DateField(widget=forms.DateInput(attrs={'type':'date', 'style':'width: 50%', 'autofocus':True}), required=False)
@@ -78,25 +85,19 @@ class PositionSearchForm(forms.Form):
     month_to = forms.TypedChoiceField(coerce=int, choices=MONTH_SELECT, initial=0, required=False)
     chart_type = forms.ChoiceField(choices=CHART_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
     results_by = forms.ChoiceField(choices=PRODUCT_CHOICES_FOR_SEARCH, widget=forms.Select(attrs={'style':'width: 100%'}))
-    sum_by = forms.ChoiceField(choices=SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
+    sum_by = forms.ChoiceField(choices=POSITION_SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
 
 class CustomPositionChoice(forms.ModelMultipleChoiceField):
     def label_from_instance(self, position):
         return "%s" %position.id
 
 class SaleForm(forms.ModelForm):
-    transaction_id = forms.CharField(widget= forms.TextInput(attrs={'placeholder':'automatically filled'}), required=False)
-    total_net_price = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
-    total_added_price = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
-    total_net_price_KRW = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
-    total_added_price_KRW = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
-
     class Meta:
         model = Sale
-        fields= ["positions", "customer", 'salesman', "transaction_id", "created", "total_net_price", "total_added_price", "total_net_price_KRW", "total_added_price_KRW"]
+        fields= ['positions', "tax_cost", "vat_cost", 'delivery_cost', 'extra_cost', 'customer', 'salesman']
     
     positions = forms.ModelMultipleChoiceField(
-        queryset=Position.objects.all(),
+        queryset=Position.objects.filter(inventory_status="Yes", position_sold=False),
         widget=forms.CheckboxSelectMultiple
     )
 
@@ -116,11 +117,6 @@ class SaleForm(forms.ModelForm):
 #    )
 
 class PositionForm(forms.ModelForm):
-    net_price = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
-    added_price = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
-    net_price_KRW = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
-    added_price_KRW = forms.FloatField(widget= forms.NumberInput(attrs={'placeholder':'automatically filled'}), required=False)
-
     class Meta:
         model = Position
-        fields= ["product", "quantity", "unit_price", "added_cost", "ex_rate_to_KRW", "added_cost_KRW", "net_price", "added_price", "net_price_KRW", "added_price_KRW"]
+        fields= ["product", "unit_price", "quantity"]

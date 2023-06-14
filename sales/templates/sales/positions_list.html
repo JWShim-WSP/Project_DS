@@ -20,10 +20,10 @@ BST Project - Position List
 <div class="d-flex mb-3">
     {% if user.profile.language == "Korean" %}
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'products:productlist' %}" role="button">돌아가기</a>
+        <a class="btn btn-outline-primary" href="{% url 'sales:saleslist' %}" role="button">돌아가기</a>
     </div>
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">출고단위 추가</a>
+        <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">판매단위추가</a>
     </div>
     <div class="me-auto p-1">
         <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#positionsModal">보기 분류</button>
@@ -40,7 +40,7 @@ BST Project - Position List
     </div>
     {% else %}
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'products:productlist' %}" role="button">Go Back</a>
+        <a class="btn btn-outline-primary" href="{% url 'sales:saleslist' %}" role="button">Go Back</a>
     </div>
     <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">Add Position</a>
@@ -130,72 +130,48 @@ BST Project - Position List
 {% endif %}
 
 <table class="table text-center table-hover table-light">
-    {% if user.profile.language == "Korean" %}
     <thead>
+    {% if user.profile.language == "Korean" %}
         <tr>
-        <th scope="col">출고단위 id</th>
+        <th scope="col">판매단위 ID</th>
         <th scope="col">품목</th>
 
+        <th scope="col">단위가격</th>
         <th scope="col">수량</th>
-        <th scope="col">단위 가격</th>
-        <th scope="col">단위 추가비용</th>
+        <th scope="col">출고가격</th>
 
-        <th scope="col">출고단위 원가</th>
-        <th scope="col">출고단위 가격</th>
+        <th scope="col">출고가능</th>
+        <th scope="col">판매완료</th>
+        <th scope="col">출고이익</th>
+        <th scope="col">마진율</th>
 
-        <th scope="col">원화 환율</th>
-        <th scope="col">국내 추가비용</th>
-        <th scope="col">출고원가-원화</th>
-        <th scope="col">출고가격-원화</th>
-
-        <th scope="col">품목 그룹</th>
-        <th scope="col">생성 일자</th>
+        <th scope="col">재고현황</th>
+        <th scope="col">단위원가</th>
+        <th scope="col">제품그룹</th>
+        <th scope="col">생성일자</th>
+        <th scope="col">변경일자</th>
         </tr>
-    </thead>
-    <tbody>
-        {% for object in object_list %}
-            <tr onclick="window.location='{{object.get_absolute_url}}'">
-                <th scope="row">{{ object.id }}</th>
-                <td>{{ object.product.name }}</td>
-
-                <td>{{ object.quantity }}</td>
-                <td>{{ object.unit_price }}</td>
-                <td>{{ object.added_cost }}</td>
-
-                <td>{{ object.net_price }}</td>
-                <td>{{ object.added_price }}</td>
-
-                <td>{{ object.ex_rate_to_KRW }}</td>
-                <td>{{ object.added_cost_KRW }}</td>
-                <td>{{ object.net_price_KRW }}</td>
-                <td>{{ object.added_price_KRW }}</td>
-
-                <td>{{ object.product.product_type }}</td>
-                <td>{{ object.created }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
     {% else %}
-    <thead>
         <tr>
-        <th scope="col">Position id</th>
+        <th scope="col">Position ID</th>
         <th scope="col">Product</th>
 
-        <th scope="col">Quantity</th>
         <th scope="col">Unit Price</th>
-        <th scope="col">Added Cost</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Total Price</th>
 
-        <th scope="col">Net-Price</th>
-        <th scope="col">Added Price</th>
+        <th scope="col">Inventory Status</th>
+        <th scope="col">Sold out</th>
+        <th scope="col">Delivery Profit</th>
+        <th scope="col">Margin Percentage</th>
 
-        <th scope="col">Exchange Rate to KRW</th>
-        <th scope="col">Added Cost-KRW</th>
-        <th scope="col">Net-Price-KRW</th>
-        <th scope="col">Added Price-KRW</th>
-
+        <th scope="col">Inventory</th>
+        <th scope="col">Purchase Unit Price</th>
         <th scope="col">Product Group</th>
         <th scope="col">Created</th>
+        <th scope="col">Updated</th>
         </tr>
+    {% endif %}
     </thead>
     <tbody>
         {% for object in object_list %}
@@ -203,24 +179,23 @@ BST Project - Position List
                 <th scope="row">{{ object.id }}</th>
                 <td>{{ object.product.name }}</td>
 
-                <td>{{ object.quantity }}</td>
                 <td>{{ object.unit_price }}</td>
-                <td>{{ object.added_cost }}</td>
-
+                <td>{{ object.quantity }}</td>
                 <td>{{ object.net_price }}</td>
-                <td>{{ object.added_price }}</td>
 
-                <td>{{ object.ex_rate_to_KRW }}</td>
-                <td>{{ object.added_cost_KRW }}</td>
-                <td>{{ object.net_price_KRW }}</td>
-                <td>{{ object.added_price_KRW }}</td>
+                <td>{{ object.inventory_status }}</td>
+                <td>{{ object.position_sold }}</td>
+                <td>{{ object.net_profit }}</td>
+                <td>{{ object.margin_percentage }}</td>
 
+                <td>{{ object.product.inventory }}</td>
+                <td>{{ object.product.average_unit_price_KRW }}</td>
                 <td>{{ object.product.product_type }}</td>
                 <td>{{ object.created }}</td>
+                <td>{{ object.updated }}</td>
             </tr>
         {% endfor %}
     </tbody>
-    {% endif %}
 </table>
 
 <!--

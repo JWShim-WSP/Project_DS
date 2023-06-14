@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+BST Project - Position List
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'pagination.css' %}">
+
+
+{% if user.profile.language == "Korean" %}
+<h3 class="text-center"><b>단위구매 리스트</b></h3>
+{% else %}
+<h3 class="text-center"><b>Purchase Position List</b></h3>
+{% endif %}
+
+<div class="d-flex mb-3">
+    {% if user.profile.language == "Korean" %}
+    <div class="p-1">
+        <a class="btn btn-outline-primary" href="{% url 'products:productlist' %}" role="button">돌아가기</a>
+    </div>
+    <div class="p-1">
+        <a class="btn btn-outline-primary" href="{% url 'products:position-add' %}" role="button">단위구매 추가</a>
+    </div>
+    <div class="me-auto p-1">
+        <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#positionsModal">보기 분류</button>
+        <!--
+        <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
+            Sort By
+        </button>
+        -->
+    </div>
+    <div class="p-1">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+            파일에 저장
+        </button>
+    </div>
+    {% else %}
+    <div class="p-1">
+        <a class="btn btn-outline-primary" href="{% url 'products:productlist' %}" role="button">Go Back</a>
+    </div>
+    <div class="p-1">
+        <a class="btn btn-outline-primary" href="{% url 'products:position-add' %}" role="button">Add Purchase Position</a>
+    </div>
+    <div class="me-auto p-1">
+        <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#positionsModal">Sort By</button>
+        <!--
+        <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
+            Sort By
+        </button>
+        -->
+    </div>
+    <div class="p-1">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+            Download
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+
+<!-- Modal for Form Post-->
+<div class="modal fade" id="download-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Download Purchase Positions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <button type="submit" class="btn btn-outline-primary">save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Search -->
+<div class="modal fade" id="positionsModal" tabindex="-1" aria-labelledby="positionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        {% if user.profile.language == "Korean" %}
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="positionsModalLabel">단위구매 분류</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modal-body">
+            <div id="alert-box"></div>
+            <form id="positions-form" action="" method="GET">
+              {{ search_form | crispy }}
+              <button type="submit" class="btn btn-outline-primary mt-2">분류 시작</button>
+            </form>
+        </div>
+        {% else %}
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="positionsModalLabel">Purchase Positions sort by</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modal-body">
+            <div id="alert-box"></div>
+            <form id="positions-form" action="" method="GET">
+              {{ search_form | crispy }}
+              <button type="submit" class="btn btn-outline-primary mt-2">Search</button>
+            </form>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+</div>
+
+{% if no_data %}
+  <div class="alert alert-warning" role="alert">
+    {{ no_data }}
+  </div>
+{% endif %}
+
+{% if positions_df %}
+
+    <div class="card mb-3 text-center">
+    <!-- {{ positions_df | safe }} -->
+    <img src="data:image/png;base64, {{chart | safe}}" id='img'>
+    </div>
+
+{% endif %}
+
+<table class="table text-center table-hover table-light">
+    {% if user.profile.language == "Korean" %}
+    <thead>
+        <tr>
+        <th scope="col">단위구매 ID</th>
+        <th scope="col">품목</th>
+
+        <th scope="col">단품가격</th>
+        <th scope="col">통화</th>
+        <th scope="col">단위수량</th>
+        <th scope="col">단위추가비용</th>
+
+        <th scope="col">단위원가</th>
+        <th scope="col">단위총가격</th>
+
+        <th scope="col">원화환율</th>
+        <th scope="col">통관세비용</th>
+        <th scope="col">운송비용</th>
+        <th scope="col">은행비용</th>
+        <th scope="col">택배비용</th>
+        <th scope="col">단위원가-원화</th>
+        <th scope="col">단위총가격-원화</th>
+
+        <th scope="col">입고현황</th>
+        <th scope="col">품목그룹</th>
+        <th scope="col">생성일시</th>
+        </tr>
+    </thead>
+    {% else %}
+    <thead>
+        <tr>
+        <th scope="col">Position id</th>
+        <th scope="col">Product</th>
+
+        <th scope="col">Unit Price</th>
+        <th scope="col">Currency</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Added Cost</th>
+
+        <th scope="col">Net-Price</th>
+        <th scope="col">Added Price</th>
+
+        <th scope="col">Exchange Rate to KRW</th>
+        <th scope="col">CustomTax Cost-KRW</th>
+        <th scope="col">Transport Cost-KRW</th>
+        <th scope="col">Bank Cost-KRW</th>
+        <th scope="col">Delivery Cost-KRW</th>
+        <th scope="col">Net-Price-KRW</th>
+        <th scope="col">Total Price-KRW</th>
+
+        <th scope="col">Status</th>
+        <th scope="col">Product Group</th>
+        <th scope="col">Created</th>
+        </tr>
+    </thead>
+    {% endif %}
+    <tbody>
+        {% for object in object_list %}
+            <tr onclick="window.location='{{object.get_absolute_url}}'">
+                <th scope="row">{{ object.id }}</th>
+                <td>{{ object.product.name }}</td>
+
+                <td>{{ object.unit_price }}</td>
+                <td>{{ object.product.currency }}</td>
+                <td>{{ object.quantity }}</td>
+                <td>{{ object.added_cost }}</td>
+
+                <td>{{ object.net_price }}</td>
+                <td>{{ object.added_price }}</td>
+
+                <td>{{ object.ex_rate_to_KRW }}</td>
+                <td>{{ object.custom_tax_KRW }}</td>
+                <td>{{ object.transport_cost_KRW }}</td>
+                <td>{{ object.bank_cost_KRW }}</td>
+                <td>{{ object.delivery_cost_KRW }}</td>
+                <td>{{ object.net_price_KRW }}</td>
+                <td>{{ object.added_price_KRW }}</td>
+
+                <td>{{ object.status }}</td>
+                <td>{{ object.product.product_type }}</td>
+                <td>{{ object.created }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!--
+<div class="text-center">
+    <nav class="pagination">
+        {% if object_list.has_previous %}
+            {% if object_list.previous_page_number != 1 %}
+                <a href="?page=1">&laquo;</a>
+            {% endif %}
+            <a href="?page={{object_list.previous_page_number}}"><</a>
+        {% endif %}
+
+        <a class="active">Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}</a>
+
+        {% if object_list.has_next %}
+            <a href="?page={{object_list.next_page_number}}">></a>
+            {% if object_list.next_page_number != object_list.paginator.num_pages %}
+                <a href="?page={{object_list.paginator.num_pages}}">&raquo;</a>
+            {% endif %}
+        {% endif %}
+    </nav>
+</div>
+-->
+
+{% endblock %}

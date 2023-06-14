@@ -40,5 +40,4 @@ urlpatterns = [
     path('<int:pk>/', sales_detail_view, name='salesdetails'),
     path("add/", sales_add_view, name="sales-add"),
     path("<int:pk>/delete/", sales_delete_view, name="sales-delete"),
-
 ]

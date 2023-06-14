@@ -7,32 +7,30 @@ from .utils import generate_code
 from django.urls import reverse
 
 # Create your models here.
-
 class Position(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(blank=True)
     unit_price = models.FloatField(blank=True)
-
-    added_cost = models.FloatField(blank=True)
-
+    quantity = models.PositiveIntegerField(blank=True)
     net_price = models.FloatField(blank=True)
-    added_price = models.FloatField(blank=True)
 
-    ex_rate_to_KRW = models.FloatField(blank=True)
-    added_cost_KRW = models.FloatField(blank=True)
-    net_price_KRW = models.FloatField(blank=True)
-    added_price_KRW = models.FloatField(blank=True)
+    inventory_status = models.CharField(max_length=30, null=True) # 'Yes' or 'No' will be set in 'save' of Position
+    net_profit = models.FloatField(blank=True, null=True)
+    margin_percentage = models.FloatField(blank=True, null=True)
+    position_sold = models.BooleanField(default=False, null=True)
 
     # need to open for date selection for importing a new data from a file
     created = models.DateTimeField(default=timezone.now)
     #created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         self.net_price = self.unit_price * self.quantity
-        self.added_price = self.net_price + self.added_cost
-
-        self.net_price_KRW = self.net_price * self.ex_rate_to_KRW
-        self.added_price_KRW = (self.added_price * self.ex_rate_to_KRW) + self.added_cost_KRW
+        if self.product.inventory >= self.quantity: # short of inventory
+            self.net_profit = (self.unit_price - self.product.average_unit_price_KRW) * self.quantity
+            self.margin_percentage = (self.unit_price / self.product.average_unit_price_KRW) * 100
+            self.inventory_status = "Yes"
+        else:
+            self.inventory_status = "No"
         return super().save(*args, **kwargs)
 
     def get_sales_id(self):
@@ -61,9 +59,14 @@ class Sale(models.Model):
     #position = models.ForeignKey(Position, on_delete=models.CASCADE)
     # This will be automatically calculated through the signal of changes of positions in signals.py
     total_net_price = models.FloatField(blank=True, null=True)
-    total_added_price = models.FloatField(blank=True, null=True)
-    total_net_price_KRW = models.FloatField(blank=True, null=True)
-    total_added_price_KRW = models.FloatField(blank=True, null=True)
+    total_net_profit = models.FloatField(blank=True, null=True)
+    
+    tax_cost = models.FloatField(default=0, blank=True, null=True)
+    vat_cost = models.FloatField(default=0, blank=True, null=True)
+    delivery_cost = models.FloatField(default=0, blank=True, null=True)
+    extra_cost = models.FloatField(default=0, blank=True, null=True)
+
+    final_profit = models.FloatField(blank=True, null=True)
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     salesman = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -96,7 +99,7 @@ class Sale(models.Model):
         ordering = ('-created', )
 
     def __str__(self):
-        return f"Sales for the amount of ${self.total_added_price}"
+        return f"Sales for the amount of ${self.total_net_price}"
 
 
 class CSV(models.Model):

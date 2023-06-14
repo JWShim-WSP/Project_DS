@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView
 from .models import Sale, Position
 from products.models import PRODUCT_CHOICES_FOR_SEARCH
 from profiles.forms import FormatForm
-from .forms import SalesSearchForm, SaleForm, PositionForm, PositionSearchForm, current_year, CHART_CHOICES, RESULT_CHOICES, SUM_CHOICES 
+from .forms import SalesSearchForm, SaleForm, PositionForm, PositionSearchForm, current_year, CHART_CHOICES, RESULT_CHOICES, POSITION_SUM_CHOICES, SALES_SUM_CHOICES
 from .resources import SaleResource, PositionResource
 from reports.forms import ReportForm
 import pandas as pd
@@ -22,21 +22,49 @@ import calendar
 @login_required
 def sales_home_view(request):
 
-    chart1 = chart2 = None
+    chart1 = chart2 = chart3 = None
     no_data1 = None
     no_data2 = None
+    no_data3 = None
+    no_data4 = None
 
-    # Make YoY chart for total sales revenue
+    # Make YoY chart for final_profit
     sales_qs = Sale.objects.all()
     if len(sales_qs) > 0:
         chart_type = 'Bar Chart'
         key_by = 'year'
-        sum_by = 'total_added_price_KRW'
+        sum_by = 'final_profit'
         sales_df = pd.DataFrame(sales_qs.values())
         sales_df['year'] = sales_df['created'].apply(lambda x: x.strftime('%Y')) # lambda argument: expression
         chart1 = get_chart(chart_type, sales_df, key_by, sum_by)
     else:
         no_data1 = 'No data is available in this date range'
+
+    year_from = year_to = current_year()
+    date_from = str(year_from) + '-' + str(1) + '-' + str(1)
+    date_to = str(year_to) + '-' + str(12) + '-' + str(31)
+    sales_qs = Sale.objects.filter(created__date__lte=date_to, created__date__gte=date_from)
+    if len(sales_qs) > 0:
+        chart_type = 'Bar Chart'
+        key_by = 'year_month'
+        sum_by = 'final_profit'
+        sales_df = pd.DataFrame(sales_qs.values())
+        sales_df['year_month'] = sales_df['created'].apply(lambda x: x.strftime('%Y-%m')) # lambda argument: expression
+        chart2 = get_chart(chart_type, sales_df, key_by, sum_by)
+    else:
+        no_data2 = 'No data is available in this date range'
+
+    sales_qs = Sale.objects.all()
+    # Make YoY chart for total sales revenue
+    if len(sales_qs) > 0:
+        chart_type = 'Bar Chart'
+        key_by = 'year'
+        sum_by = 'total_net_price'
+        sales_df = pd.DataFrame(sales_qs.values())
+        sales_df['year'] = sales_df['created'].apply(lambda x: x.strftime('%Y')) # lambda argument: expression
+        chart3 = get_chart(chart_type, sales_df, key_by, sum_by)
+    else:
+        no_data3 = 'No data is available in this date range'
 
     # Make Monthly chart for this year sales revenue
     year_from = year_to = current_year()
@@ -46,19 +74,23 @@ def sales_home_view(request):
     if len(sales_qs) > 0:
         chart_type = 'Bar Chart'
         key_by = 'year_month'
-        sum_by = 'total_added_price_KRW'
+        sum_by = 'total_net_price'
         sales_df = pd.DataFrame(sales_qs.values())
         sales_df['year_month'] = sales_df['created'].apply(lambda x: x.strftime('%Y-%m')) # lambda argument: expression
-        chart2 = get_chart(chart_type, sales_df, key_by, sum_by)
+        chart4 = get_chart(chart_type, sales_df, key_by, sum_by)
     else:
-        no_data2 = 'No data is available in this date range'
+        no_data4 = 'No data is available in this date range'
 
     context = {
         'current_year': current_year,
         'chart1': chart1,
         'chart2': chart2,
+        'chart3': chart3,
+        'chart4': chart4,
         'no_data1': no_data1,
         'no_data2': no_data2,
+        'no_data3': no_data3,
+        'no_data4': no_data4,
     }
     return render(request, 'sales/home.html', context)
 
@@ -179,7 +211,7 @@ def sales_list_view(request):
                 key_by = RESULT_CHOICES[0][0]
                 
             if sum_by == None:
-                sum_by = SUM_CHOICES[0][0]
+                sum_by = SALES_SUM_CHOICES[0][0]
 
             sales_df = pd.DataFrame(sales_qs.values())
             sales_df['customer_id'] = sales_df['customer_id'].apply(get_customer_from_id)
@@ -198,15 +230,12 @@ def sales_list_view(request):
                     obj = {
                     'position_id': pos.id,
                     'product': pos.product.name,
-                    'quantity': pos.quantity,
                     'unit_price': pos.unit_price,
-                    'added_cost': pos.added_cost,
+                    'quantity': pos.quantity,
                     'net_price': pos.net_price,
-                    'added_price': pos.added_price,
-                    'ex_rate_to_KRW': pos.ex_rate_to_KRW,
-                    'added_cost_KRW': pos.added_cost_KRW,
-                    'net_price_KRW': pos.net_price_KRW,
-                    'added_price_KRW': pos.added_price_KRW,
+                    'inventory_status': pos.inventory_status,
+                    'net_profit': pos.net_profit,
+                    'margin_percentage': pos.margin_percentage,
                     'sales_id': pos.get_sales_id(), # reverse relationship to 'Sale' from 'Position'
                     }
                     positions_data.append(obj)
@@ -393,7 +422,7 @@ def positions_list_view(request):
             key_by = 'product' # use the name of products for 'key'
 
             if sum_by == None:
-                sum_by = SUM_CHOICES[0][0]
+                sum_by = POSITION_SUM_CHOICES[0][0]
             
             positions_df = pd.DataFrame(positions_qs.values())
             positions_df['product_id'] = positions_df['product_id'].apply(get_product_from_id)

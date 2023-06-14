@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-%s=9+)0+xd0_ruyyd_40x(xdyyrem8t=m6iv_%i4f8ext9e9ps
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [HOST_IP_ADDRESS, 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [HOST_IP_ADDRESS, 'JView-Lab', 'localhost', '127.0.0.1']
 #ALLOWED_HOSTS = ['*']
 
 # Application definition
