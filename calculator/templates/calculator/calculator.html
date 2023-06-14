@@ -6,11 +6,19 @@
 Calculator
 {% endblock %}
 
+{% block scripts %}
+  {% if query %}
+    <script>
+      $(document).ready(function () {
+        $("#calculatorModal").modal('show');
+      });
+    </script>
+  {% endif %}
+{% endblock scripts%}
+
 {% block content %}
 {% load static %}
-
 {% if query %}
-  <!-- Modal : This modal is not used here!!! -->
   <div class="modal fade" id="calculatorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -43,18 +51,9 @@ Calculator
         </div>
     </div>
   </div>
-  <script>
-    window.onload = function () {
-        OpenBootstrapPopup();
-    };
-    function OpenBootstrapPopup() {
-        $("#calculatorModal").modal('show');
-    }
-  </script>
 {% endif %}
 
 <div class="text-center">
-
   {% if user.profile.language == "Korean" %}
   <h3 class="text-primary"><b>계산기</b></h3>
   {% else %}
@@ -109,7 +108,7 @@ Calculator
         <td>Subtraction</td>
       </tr>
       <tr>
-        <td>*</td>
+        <td>*, x</td>
         <td>Multiplication</td>
       </tr>
       <tr>

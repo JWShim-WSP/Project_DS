@@ -4,10 +4,16 @@
 {% url 'reports:main' as path_to_reports %}
 {% url 'products:productlist' as path_to_products %}
 {% url 'customers:customerlist' as path_to_customers %}
-{% url 'profiles:my' as path_to_my_profile %}
+{% url 'customers:supplierlist' as path_to_suppliers %}
 {% url 'bulletin:bstBulletin' as path_to_bulletin %}
 {% url 'myadmin:memberlist' as path_to_myadmin %}
 {% url 'tools:main' as path_to_tools %}
+{% url 'profiles:my' as path_to_my_profile %}
+{% url 'profiles:my-friends-view' as path_to_my_friends %}
+{% url 'profiles:my-invites-view' as path_to_my_invites %}
+{% url 'profiles:invite-profiles-view' as path_to_invites %}
+{% url 'profiles:all-profiles-view' as path_to_all_profiles %}
+
 
 {% if user.profile.menubar == "Button" %}
 <nav class="navbar nav-pills navbar-light bg-light">
@@ -19,7 +25,6 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <a class="navbar-brand" href="{{path_to_home}}"><img src="{% static 'logo.png' %}" class="logo-sm"></a>
-
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
     {% if user.profile.language == "Korean" %}
@@ -27,10 +32,13 @@
           <a class="nav-link {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">판매</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_products %}active{% endif %}" href="{{path_to_products}}">품목</a>
+          <a class="nav-link {% if request.path == path_to_products %}active{% endif %}" href="{{path_to_products}}">제품</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_customers %}active{% endif %}" href="{{path_to_customers}}">고객</a>
+          <a class="nav-link {% if request.path == path_to_customers %}active{% endif %}" href="{{path_to_customers}}">고객사</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_suppliers %}active{% endif %}" href="{{path_to_suppliers}}">공급사</a>
         </li>
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_reports %}active{% endif %}" href="{{path_to_reports}}">보고서</a>
@@ -38,15 +46,23 @@
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_bulletin %}active{% endif %}" href="{{path_to_bulletin}}">커뮤너티</a>
         </li>
-        {% if request.user.is_staff %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_myadmin %}active{% endif %}" href="{{path_to_myadmin}}">관리자</a>
-        </li>
-        {% endif %}
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_tools %}active{% endif %}" href="{{path_to_tools}}">도구함</a>
         </li>
-    {% else %}
+        {% if request.user.is_authenticated %}
+        <div class="nav-item dropdown">
+          <div class="nav-link dropdown-toggle" style="color:white" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            친구관리
+          </div>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item {% if request.path == path_to_my_friends%}active{% endif %}" href="{{path_to_my_friends}}">친구 보기</a></li>
+            <li><a class="dropdown-item {% if request.path == path_to_my_invites%}active{% endif %}" href="{{path_to_my_invites}}">친구 수락&nbsp;<span class="badge bg-secondary">{{invites_num}}</span></a></li>
+            <li><a class="dropdown-item {% if request.path == path_to_invites%}active{% endif %}" href="{{path_to_invites}}">친구 신청</a></li>
+            <li><a class="dropdown-item {% if request.path == path_to_all_profiles%}active{% endif %}" href="{{path_to_all_profiles}}">친구 찾기</a></li>
+          </ul>
+        </div>
+        {% endif %}
+      {% else %}
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">Sales</a>
         </li>
@@ -57,19 +73,30 @@
           <a class="nav-link {% if request.path == path_to_customers %}active{% endif %}" href="{{path_to_customers}}">Customers</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_suppliers %}active{% endif %}" href="{{path_to_suppliers}}">Suppliers</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_reports %}active{% endif %}" href="{{path_to_reports}}">Reports</a>
         </li>
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_bulletin %}active{% endif %}" href="{{path_to_bulletin}}">Community</a>
         </li>
-        {% if request.user.is_staff %}
-        <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_myadmin %}active{% endif %}" href="{{path_to_myadmin}}">Admin</a>
-        </li>
-        {% endif %}
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_tools %}active{% endif %}" href="{{path_to_tools}}">Tools</a>
         </li>
+        {% if request.user.is_authenticated %}
+        <div class="nav-item dropdown">
+          <div class="nav-link dropdown-toggle" style="color:white" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Friends
+          </div>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item {% if request.path == path_to_my_friends%}active{% endif %}" href="{{path_to_my_friends}}">Friends</a></li>
+            <li><a class="dropdown-item {% if request.path == path_to_my_invites%}active{% endif %}" href="{{path_to_my_invites}}">Received Invites&nbsp;<span class="badge bg-secondary">{{invites_num}}</span></a></li>
+            <li><a class="dropdown-item {% if request.path == path_to_invites%}active{% endif %}" href="{{path_to_invites}}">Send Invites</a></li>
+            <li><a class="dropdown-item {% if request.path == path_to_all_profiles%}active{% endif %}" href="{{path_to_all_profiles}}">Find friends</a></li>
+          </ul>
+        </div>
+      {% endif %}
     {% endif %}
       </ul>
 
@@ -83,26 +110,34 @@
               </div>
             </form>
           </li>
-          <li class="nav-item">
-            <a href="https://getbootstrap.com/" class="nav-link {% if request.path == 'https://getbootstrap.com/' %}active{% endif %}">Bootstrap</a>
-          </li>
-          <li class="nav-item">
-            <a href="https://www.youtube.com/" class="nav-link {% if request.path == 'https://www.youtube.com/' %}active{% endif %}">YouTube</a>
-          </li>
         </ul>
       </div>
+
+      {% if request.user.is_staff %}
+        <ul class="navbar-nav mb-2 mb-lg-0">
+            {% if user.profile.language == "Korean" %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == path_to_myadmin %}active{% endif %}" href="{{path_to_myadmin}}">관리자</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == path_to_myadmin %}active{% endif %}" href="{{path_to_myadmin}}">Admin</a>
+          </li>
+          {% endif %}
+        </ul>
+      {% endif %}
 
       {% if request.user.is_authenticated %}
       <div class="nav-item dropdown">
         <div class="nav-link dropdown-toggle" style="color:white" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="{{request.user.profile.avatar.url}}" class="avatar-sm">&nbsp;{{request.user}}
+          <img src="{{picture.url}}" class="avatar-sm">&nbsp;{{request.user}}
         </div>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           {% if user.profile.language == "Korean" %}
           <li><a class="dropdown-item {% if request.path == path_to_my_profile%}active{% endif %}" href="{{path_to_my_profile}}">프로파일</a></li>
           <li><a class="dropdown-item" href="{% url 'logout' %}">로그아웃</a></li>
           {% else %}
-          <li><a class="dropdown-item {% if request.path == path_to_my_profile%}active{% endif %}" href="{{path_to_my_profile}}">Profile</a></li>
+          <li><a class="dropdown-item {% if request.path == path_to_my_profile%}active{% endif %}" href="{{path_to_my_profile}}">My Profile</a></li>
           <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
           {% endif %}
         </ul>

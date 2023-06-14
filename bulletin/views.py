@@ -11,7 +11,7 @@ from profiles.models import Profile
 from hitcount.views import HitCountDetailView
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
-
+from django.contrib import messages
 
 # Create your views here.
 
@@ -64,19 +64,14 @@ class BulletinDetailView(LoginRequiredMixin, HitCountDetailView):
                 except:
                     parent=None
 
-            new_comment = Comment(content=content , author = self.request.user.profile , CommentPost=self.get_object() , parent=parent)
-            new_comment.save()
-            return redirect(self.request.path_info)
+                new_comment = Comment(content=content , author = self.request.user.profile , CommentPost=self.get_object() , parent=parent)
+                new_comment.save()
+        return redirect(self.request.path_info)
 
 
 class BulletinCreatePost(CreateView):
     form_class = PostForm
     template_name = 'bulletin/post_form.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(BulletinCreatePost, self).get_context_data(**kwargs)
-        context["profile"] = self.request.user.profile
-        return context
 
     def form_valid(self, form):
         newPost=form.save(commit=False)
@@ -87,21 +82,18 @@ class BulletinCreatePost(CreateView):
     def get_success_url(self):
         return reverse("bulletin:bstBulletin")
 
-
 class BulletinUpdate(UpdateView):
     model = Bulletin
-    context_object_name = 'post'
     form_class = PostForm
     template_name = 'bulletin/post_form.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(BulletinUpdate, self).get_context_data(**kwargs)
-        post = context['post'] 
-        thePost = Bulletin.objects.get(pk=post.id)
-        post_form = PostForm(instance=thePost)
-        context['form'] = post_form 
-        context.update({'profile': Profile.objects.get(user=self.request.user)})
-        return context
+    def form_valid(self, form):
+        profile = Profile.objects.get(user=self.request.user)
+        if form.instance.poster == profile:
+            return super().form_valid(form)
+        else:
+            form.add_error(None, "You cannot update other poster's post!")
+            return super().form_invalid(form)
 
     def get_success_url(self):
         return reverse("bulletin:bstBulletin")
@@ -111,6 +103,13 @@ class BulletinDelete(DeleteView):
     # You have to use reverse_lazy() instead of reverse(),
     # as the urls are not loaded when the file is imported.
     success_url = reverse_lazy("bulletin:bstBulletin")
+
+    def get_object(self, *args, **kwargs):
+        slug = self.kwargs.get('slug')
+        obj = Bulletin.objects.get(slug=slug)
+        if not obj.poster.user == self.request.user:
+            messages.warning(self.request, "You cannot delete other poster's post!")
+        return obj
 
 def BulletinLike(request, slug):
     post = get_object_or_404(Bulletin, id=request.POST.get('post_id'))

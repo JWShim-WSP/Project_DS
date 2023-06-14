@@ -6,7 +6,7 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields= ["bio", "language", "menubar", "licensed_by", "avatar"]
+        fields= ["first_name", "last_name", "bio", "email", "language", "menubar", "licensed_by", "avatar"]
 
 
 # to export a file

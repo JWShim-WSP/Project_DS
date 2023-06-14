@@ -4,10 +4,41 @@
     Post Delete Confirmation
 {% endblock %}
 
+{% block scripts %}
+    {% if messages %}
+    <script>
+        $(document).ready(function () {
+            $("#bulletinModal").modal('show');
+        });
+    </script>
+    {% endif %}
+{% endblock scripts%}
+
 {% block content %}
-
+{% load static %}
 <div class="text-center">
-
+{% if messages %}
+    <div class="modal fade" id="bulletinModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">Message to You!!!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    {% for message in messages %}
+                        {% if 'warning' in message.tags %}
+                            {{ message }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="location.href='{% url "bulletin:bstBulletin"  %}'" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
     {% if user.profile.language == "Korean" %}
     <h2 class="text-primary"><b>게시글 삭제</b></h2>
     <br>
@@ -43,6 +74,6 @@
             onclick="location.href='{% url "bulletin:bstBulletin" %}'">
     </form>
     {% endif %}
+{% endif %}
 </div>
-
 {% endblock %}

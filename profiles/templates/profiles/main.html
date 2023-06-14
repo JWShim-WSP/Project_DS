@@ -18,6 +18,31 @@ my profile
 
 <br>
 
+<div class="card mb-3">
+    {% if number_of_posts %}
+    <h5>You have posted {{ number_of_posts }} article(s) in Bulletin! </h5>
+    <ul>
+        <li>Like(s):    {{number_of_likers}}</li>
+        <li>Comment(s): {{number_of_comments}}</li>
+        <li>Reply(s):   {{number_of_replies}}</li>
+    </ul>
+    {% else %}
+    <h5>You have 0 post in Bulletin, already!</h5>
+    {% endif %}
+    <br>
+
+    {% if number_of_friends %}
+    <h5>You have {{ number_of_friends }} friend(s)! </h5>
+    <ul>
+        {% for friend in friends_list %}
+        <li><img src="{{ friend.profile.avatar.url }}" alt="my-profile" class="avatar-tnail">  {{ friend.username }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <h5>You have 0 friend, already!</h5>
+    {% endif %}
+</div>
+
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form | crispy }}

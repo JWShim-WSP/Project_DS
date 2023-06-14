@@ -6,8 +6,45 @@
     detail of Bulletin
 {% endblock title %}
 
-{% block content %}
+{% block scripts %}
+{% if user.profile.language == "Korean" %}
+<script>
+    $(document).ready(function() {
+        let display = true
+        $(".cmt_btn").click(function() {
+            if (display === false) {
+                $(this).next(".comment-box").show("slow");
+                $(".cmt_btn").text("댓글 숨기기");                
+                display = true
+            } else {
+                $(this).next(".comment-box").hide("slow");
+                $(".cmt_btn").text("댓글 보이기");                
+                display = false
+            }
+        });
+    });
+</script>
+{% else %}
+<script>
+    $(document).ready(function() {
+        let display = true
+        $(".cmt_btn").click(function() {
+            if (display === false) {
+                $(this).next(".comment-box").show("slow");
+                $(".cmt_btn").text("Hide Comments");                
+                display = true
+            } else {
+                $(this).next(".comment-box").hide("slow");
+                $(".cmt_btn").text("Show Comments");                
+                display = false
+            }
+        });
+    });
+</script>
+{% endif %}
+{% endblock scripts%}
 
+{% block content %}
 <!-- Here you start to edit the body of Bulletin -->
 
 <!-- Modal for Form Post-->
@@ -97,10 +134,12 @@
     </form>
     <br>
     <hr>
+    <button class="cmt_btn btn btn-primary">댓글 숨기기</button>
+    <div class="comment-box">
     {% for comment in comments %}
         {% if comment.is_parent %}
             <p class="text-primary"><img src="{{ comment.author.avatar.url }}" alt="my-profile" class="avatar-tnail">
-                {{ comment.author }}: {{ comment.content }}</p> 
+                {{ comment.author.user.username }}: {{ comment.content }}</p> 
             <form action="" method="POST" id="main_form" class="comment_form">
                 <div>
                     &nbsp; &nbsp; &nbsp;<img src="{{ user.profile.avatar.url }}" alt="my-profile" class="avatar-tnail">
@@ -111,10 +150,11 @@
         {% endif %} 
         {% for reply in comment.children %}
             <p class="text-success">&nbsp; &nbsp; &nbsp;<img src="{{ reply.author.avatar.url }}" alt="my-profile" class="avatar-tnail">
-                {{ reply.author }}: {{ reply.content }}</p>
+                {{ reply.author.user.username }}: {{ reply.content }}</p>
         {% endfor %}
         <br>
     {% endfor %}
+    </div>
     <div class="d-grid gap-2 d-md-flex justify-content-left">
         <input class="btn btn-outline-primary"
         value="돌아가기"
@@ -148,10 +188,12 @@
     </form>
     <br>
     <hr>
+    <button class="cmt_btn btn btn-primary">Hide Comments</button>
+    <div class="comment-box">
     {% for comment in comments %}
         {% if comment.is_parent %}
             <p class="text-primary"><img src="{{ comment.author.avatar.url }}" alt="my-profile" class="avatar-tnail">
-                {{ comment.author }}: {{ comment.content }}</p> 
+                {{ comment.author.user.username }}: {{ comment.content }}</p> 
             <form action="" method="POST" id="main_form" class="comment_form">
                 <div>
                     &nbsp; &nbsp; &nbsp;<img src="{{ user.profile.avatar.url }}" alt="my-profile" class="avatar-tnail">
@@ -162,10 +204,11 @@
         {% endif %} 
         {% for reply in comment.children %}
             <p class="text-success">&nbsp; &nbsp; &nbsp;<img src="{{ reply.author.avatar.url }}" alt="my-profile" class="avatar-tnail">
-                {{ reply.author }}: {{ reply.content }}</p>
+                {{ reply.author.user.username }}: {{ reply.content }}</p>
         {% endfor %}
         <br>
     {% endfor %}
+    </div>
     <div class="d-grid gap-2 d-md-flex justify-content-left">
         <input class="btn btn-outline-primary"
         value="Go Back"
@@ -175,11 +218,11 @@
             <input class="btn btn-outline-primary"
             value="Modify"
             type="button"
-            onclick="location.href='{% url "bulletin:post-update" post.id %}'">
+            onclick="location.href='{% url "bulletin:post-update" post.slug %}'">
             <input class="btn btn-outline-primary"
             value="Delete this post"
             type="button"
-            onclick="location.href='{% url "bulletin:post-delete" post.id %}'">
+            onclick="location.href='{% url "bulletin:post-delete" post.slug %}'">
         {% endif %}        
     </div>
     <br>
@@ -190,5 +233,4 @@
     {% endfor %}
 {% endif %}        
 <!-- End Content -->
-
-{% endblock %}
+{% endblock content %}

@@ -79,10 +79,11 @@ def csv_upload_view(request):
     return HttpResponse()
 
 @login_required
-def create_report_view(request):
+def create_report_view(request): # this comes from 'home.js' of Sales for Report saving
     form = ReportForm(request.POST or None)
     #if request.is_ajax(): this is deprecated since Django 3.1
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        # these information come with 'POST' and it is saved already in the form from the first instruction above (ReporForm)
         #name = request.POST.get('name')
         #remarks = request.POST.get('remarks')
 

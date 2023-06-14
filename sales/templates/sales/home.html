@@ -9,46 +9,67 @@ BST Project - Dashboard
 {% block content %}
 
 {% if user.profile.language == "Korean" %}
+<h3 class="text-center mt-3"><b>YoY 순익</b></h3>
 {% else %}
-{% endif %}
-
-{% if user.profile.language == "Korean" %}
-<h3 class="text-center mt-3"><b>년간 매출 실적</b></h3>
-{% else %}
-<h3 class="text-center mt-3"><b>YoY Performance</b></h3>
+<h3 class="text-center mt-3"><b>YoY Profit</b></h3>
 {% endif %}
 
 {% if no_data1 %}
   <div class="alert alert-warning" role="alert">
     {{ no_data }}
   </div>
-
 {% else %}
-
 <div class="card mb-3 text-center">
   <img src="data:image/png;base64, {{chart1 | safe}}" id='img'>
 </div>
-
 {% endif %}
 
 {% if user.profile.language == "Korean" %}
-<h3 class="text-center mt-3"><b>{{ current_year }} 매출 실적</b></h3>
+<h3 class="text-center mt-3"><b>{{ current_year }} 순익</b></h3>
 {% else %}
-<h3 class="text-center mt-3"><b>{{ current_year }} Revenue</b></h3>
+<h3 class="text-center mt-3"><b>{{ current_year }} Profit</b></h3>
 {% endif %}
 
 {% if no_data2 %}
   <div class="alert alert-warning" role="alert">
     {{ no_data }}
   </div>
-
 {% else %}
-
   <div class="card mb-3 text-center">
     <img src="data:image/png;base64, {{chart2 | safe}}" id='img'>
   </div>
-
 {% endif %}
 
+{% if user.profile.language == "Korean" %}
+<h3 class="text-center mt-3"><b>YoY 매출</b></h3>
+{% else %}
+<h3 class="text-center mt-3"><b>YoY Revenue</b></h3>
+{% endif %}
+
+{% if no_data3 %}
+  <div class="alert alert-warning" role="alert">
+    {{ no_data }}
+  </div>
+{% else %}
+<div class="card mb-3 text-center">
+  <img src="data:image/png;base64, {{chart3 | safe}}" id='img'>
+</div>
+{% endif %}
+
+{% if user.profile.language == "Korean" %}
+<h3 class="text-center mt-3"><b>{{ current_year }} 매출</b></h3>
+{% else %}
+<h3 class="text-center mt-3"><b>{{ current_year }} Revenue</b></h3>
+{% endif %}
+
+{% if no_data4 %}
+  <div class="alert alert-warning" role="alert">
+    {{ no_data }}
+  </div>
+{% else %}
+  <div class="card mb-3 text-center">
+    <img src="data:image/png;base64, {{chart4 | safe}}" id='img'>
+  </div>
+{% endif %}
 
 {% endblock content %}

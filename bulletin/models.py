@@ -5,17 +5,19 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from profiles.models import Profile
 from django.utils.text import slugify
+from django.core.validators import FileExtensionValidator
 
 # Create your models here.
 # Let's go for Class Based View for Click Count
 
 class Bulletin(models.Model):
-    poster = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    poster = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=256, unique=True)
+    content = models.TextField(max_length=4096)
+    image = models.ImageField(upload_to='posts', validators=[FileExtensionValidator(['png', 'jpg', 'jpeg'])], blank=True)
     post_Date = models.DateField(auto_now_add=True)
     update_Date = models.DateField(auto_now=True)
     slug = models.SlugField(unique=True, max_length=100, blank=True)
-    content = models.TextField(max_length=4096)
     likers = models.ManyToManyField(Profile, blank=True, related_name='post_likers')
 
     # Let's count the clicks (Hits) of visitors
@@ -38,16 +40,23 @@ class Bulletin(models.Model):
         return self.likers.all()
 
     def number_of_likers(self):
-        return self.likers.count()
+        return self.likers.all().count()
+    
+    def number_of_comments(self):
+        return self.comment_set.all().count()
     
     def current_hit_count(self):
         return self.hit_count.hits
+    
+    class Meta:
+        ordering = ['-post_Date']
 
 class Comment(models.Model):
     CommentPost = models.ForeignKey(Bulletin , on_delete=models.CASCADE)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    content = models.TextField()
+    content = models.TextField(max_length=1024)
     post_Date = models.DateTimeField(auto_now_add=True)
+    update_Date = models.DateField(auto_now=True)
     parent = models.ForeignKey('self' , null=True , blank=True , on_delete=models.CASCADE , related_name='replies')
 
     class Meta:

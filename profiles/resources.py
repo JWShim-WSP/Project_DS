@@ -6,11 +6,10 @@ from import_export.widgets import ForeignKeyWidget, ManyToManyWidget
 
 class MemberResource(resources.ModelResource):
     staff = Field()
-
     class Meta:
         model = User
         # enumerate the fields to export
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'staff', 'created')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'staff', 'date_joined')
         export_order = fields
 
     # To change (dehydrate) the display from number('1 or 0') to text ('Ture or False')
@@ -21,7 +20,6 @@ class MemberResource(resources.ModelResource):
             return "No"
 
 class ProfileResource(resources.ModelResource):
-
     product = fields.Field(
         column_name='user',
         attribute='user',

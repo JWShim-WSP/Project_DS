@@ -61,14 +61,14 @@ Customer List
     <thead>
         <tr>
         {% if user.profile.language == "Korean" %}
-            <th scope="col">id</th>
+            <th scope="col">고객 ID</th>
             <th scope="col">이름</th>
             <th scope="col">이메일</th>
             <th scope="col">전화번호</th>
-            <th scope="col">생성 일시</th>
+            <th scope="col">등록 일시</th>
             <th scope="col">참고</th>
         {% else %}
-            <th scope="col">id</th>
+            <th scope="col">Customer ID</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Phone</th>
@@ -91,7 +91,6 @@ Customer List
     </tbody>
 </table>
 
-<!--
 <div class="text-center">
     <nav class="pagination">
         {% if object_list.has_previous %}
@@ -111,6 +110,5 @@ Customer List
         {% endif %}
     </nav>
 </div>
--->
 
 {% endblock content %}
