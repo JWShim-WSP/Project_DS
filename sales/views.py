@@ -22,7 +22,7 @@ import calendar
 @login_required
 def sales_home_view(request):
 
-    chart1 = chart2 = chart3 = None
+    chart1 = chart2 = chart3 = chart4 = None
     no_data1 = None
     no_data2 = None
     no_data3 = None
