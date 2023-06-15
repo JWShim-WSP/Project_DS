@@ -22,7 +22,7 @@ def calculate_total_price(sender, instance, action, **kwargs):
     instance.final_profit = total_net_profit - total_sales_cost
     instance.save()
 
-    qs = instance.positions # position_sold status update
+    qs = instance.positions.all() # position_sold status update
     for position in qs:
         position.position_sold = True
         position.save()
