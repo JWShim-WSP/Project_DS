@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Sale, Position
-from products.models import PRODUCT_CHOICES_FOR_SEARCH
+from products.models import PRODUCT_CHOICES_FOR_SEARCH, Purchase
 from profiles.forms import FormatForm
-from .forms import SalesSearchForm, SaleForm, PositionForm, PositionSearchForm, current_year, CHART_CHOICES, RESULT_CHOICES, POSITION_SUM_CHOICES, SALES_SUM_CHOICES
+from .forms import SalesSearchForm, ExecutedSaleForm, SaleForm, PositionForm, PositionSearchForm, current_year, CHART_CHOICES, RESULT_CHOICES, POSITION_SUM_CHOICES, SALES_SUM_CHOICES
 from .resources import SaleResource, PositionResource
 from reports.forms import ReportForm
 import pandas as pd
@@ -27,6 +27,9 @@ def sales_home_view(request):
     no_data2 = None
     no_data3 = None
     no_data4 = None
+
+    sales_positions_qs = Position.objects.order_by('inventory_status')
+    purchase_positions_qs = Purchase.objects.order_by('status')
 
     # Make YoY chart for final_profit
     sales_qs = Sale.objects.all()
@@ -82,6 +85,8 @@ def sales_home_view(request):
         no_data4 = 'No data is available in this date range'
 
     context = {
+        'object_list_sales': sales_positions_qs,
+        'object_list_purchase': purchase_positions_qs,
         'current_year': current_year,
         'chart1': chart1,
         'chart2': chart2,
@@ -266,7 +271,7 @@ def sales_list_view(request):
 @staff_member_required
 def sales_detail_view(request, pk):
     sales = Sale.objects.get(pk=pk)
-    form = SaleForm(request.POST or None, instance=sales)
+    form = ExecutedSaleForm(request.POST or None, instance=sales)
     confirm = False
 
     if request.method == "POST":
@@ -278,6 +283,7 @@ def sales_detail_view(request, pk):
         'profile': sales,
         'form': form,
         'confirm': confirm,
+        'position_avail': True
     }
     return render(request, 'sales/sales_detail.html', context)
 
@@ -285,15 +291,21 @@ def sales_detail_view(request, pk):
 def sales_add_view(request):
     form = SaleForm(request.POST or None)
 
-    if request.method == "POST":
-        if form.is_valid():
-            form.save()
-        return HttpResponseRedirect(reverse('sales:saleslist'))
+    qs = Position.objects.filter(inventory_status="Yes", position_sold=False)
+    if qs:
+        position_avail = True
+        if request.method == "POST":
+            if form.is_valid():
+                form.save()
+            return HttpResponseRedirect(reverse('sales:saleslist'))
+    else:
+        position_avail = False
 
     context = {
         'profile': None,
         'form': form,
         'confirm': False,
+        'position_avail': position_avail
     }
     return render(request, 'sales/sales_detail.html', context)
 

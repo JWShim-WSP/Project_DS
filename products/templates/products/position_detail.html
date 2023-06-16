@@ -31,7 +31,7 @@
     value="Cancel"
     type="button"
     onclick="location.href='{% url "products:positionlist" %}'">
-    {% if profile.id %}
+    {% if profile.id and profile.status != "Stocked" %}
         <input class="btn btn-outline-primary"
         value="Delete"
         type="button"

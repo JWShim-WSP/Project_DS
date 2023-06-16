@@ -2,6 +2,7 @@
 {% url 'sales:home' as path_to_home %}
 {% url 'sales:saleslist' as path_to_sales %}
 {% url 'reports:main' as path_to_reports %}
+{% url 'products:positionlist' as path_to_purchase %}
 {% url 'products:productlist' as path_to_products %}
 {% url 'customers:customerlist' as path_to_customers %}
 {% url 'customers:supplierlist' as path_to_suppliers %}
@@ -30,6 +31,9 @@
     {% if user.profile.language == "Korean" %}
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">판매</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_purchase %}active{% endif %}" href="{{path_to_purchase}}">구매</a>
         </li>
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_products %}active{% endif %}" href="{{path_to_products}}">제품</a>
@@ -67,7 +71,10 @@
           <a class="nav-link {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">Sales</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_products %}active{% endif %}" href="{{path_to_products}}">Products</a>
+          <a class="nav-link {% if request.path == path_to_purchase %}active{% endif %}" href="{{path_to_purchase}}">Purchase</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_products %}active{% endif %}" href="{{path_to_products}}">Product</a>
         </li>
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_customers %}active{% endif %}" href="{{path_to_customers}}">Customers</a>

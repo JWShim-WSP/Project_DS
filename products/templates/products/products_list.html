@@ -2,6 +2,10 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block scripts %}
+<script src="{% static 'table_numbers.js' %}" defer></script>
+{% endblock scripts %}
+
 {% block title %}
 Product List
 {% endblock title %}
@@ -21,9 +25,6 @@ Product List
     <div class="p-1">
       <a class="btn btn-outline-primary" href="{% url 'products:product-add' %}" role="button">제품추가</a>
     </div>
-    <div class="p-1">
-      <a class="btn btn-outline-primary" href="{% url 'products:positionlist' %}" role="button">단위구매</a>
-    </div>
     <div class="me-auto p-1">
       <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#productModal">보기 분류</button>
       <!--
@@ -40,9 +41,6 @@ Product List
   {% else %}
     <div class="p-1">
       <a class="btn btn-outline-primary" href="{% url 'products:product-add' %}" role="button">Add Product</a>
-    </div>
-    <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'products:positionlist' %}" role="button">Purchase Position</a>
     </div>
     <div class="me-auto p-1">
         <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#productModal">Sort By</button>
@@ -163,12 +161,12 @@ Product List
         <th scope="col">이름</th>
         <th scope="col">기준가격</th>
         <th scope="col">거래통화</th>
-        <th scope="col" class="text-danger"><b>재고</b></th>
+        <th scope="col" class="text-danger"><b>재고수량</b></th>
         <th scope="col">평균원환율</th>
         <th scope="col" class="text-success">평균구매단가(KRW)</th>
-        <th scope="col" class="text-primary">총입고수량</th>
+        <th scope="col" class="text-info">총입고수량</th>
         <th scope="col">총구매원가(KRW)</th>
-        <th scope="col" class="text-info"><b>총입고원가(KRW)</b></th>
+        <th scope="col" class="text-primary"><b>총입고원가(KRW)</b></th>
         <th scope="col">MOQ</th>
         <th scope="col">가격기준물량</th>
         <th scope="col">분류</th>
@@ -187,9 +185,9 @@ Product List
         <th scope="col" class="text-danger"><b>Inventory</b></th>
         <th scope="col">Avg. Exchange Rate</th>
         <th scope="col" class="text-success">Avg. Unit Price(KRW)</th>
-        <th scope="col" class="text-primary">Total Quantity</th>
+        <th scope="col" class="text-info">Total Quantity</th>
         <th scope="col">Total Net Price(KRW)</th>
-        <th scope="col" class="text-info"><b>Total Cost(KRW)</b></th>
+        <th scope="col" class="text-primary"><b>Total Cost(KRW)</b></th>
         <th scope="col">MOQ</th>
         <th scope="col">Quantity Base</th>
         <th scope="col">Product Group</th>
@@ -206,14 +204,14 @@ Product List
         <tr onclick="window.location='{{ object.get_absolute_url }}'">
             <th scope="row">{{ object.id }}</th>
             <td>{{ object.name }}</td>
-            <td>{{ object.price }}</td>
-            <td>{{ object.currency }}</td>
-            <td class="text-danger"><b>{{ object.inventory }}</b></td>
-            <td>{{ object.average_ex_rate_to_KRW }}</td>
-            <td class="text-success">{{ object.average_unit_price_KRW }}</td>
-            <td class="text-primary">{{ object.total_quantity }}</td>
-            <td>{{ object.total_net_price_KRW }}</td>
-            <td class="text-info"><b>{{ object.total_added_price_KRW }}</b></td>
+            <td class="float_rounded">{{ object.price }}</td>
+            <td class="float_rounded">{{ object.currency }}</td>
+            <td class="integer_comma text-danger fw-bold">{{ object.inventory }}</td>
+            <td class="float_rounded">{{ object.average_ex_rate_to_KRW }}</td>
+            <td class="text-success float_rounded">{{ object.average_unit_price_KRW }}</td>
+            <td class="integer_comma text-info fw-bold">{{ object.total_quantity }}</td>
+            <td class="float_rounded">{{ object.total_net_price_KRW }}</td>
+            <td class="text-primary float_rounded fw-bold">{{ object.total_added_price_KRW }}</td>
             <td>{{ object.moq }}</td>
             <td>{{ object.price_quantity_base }}</td>
             <td>{{ object.product_type }}</td>

@@ -2,11 +2,148 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block scripts %}
+<script src="{% static 'table_numbers.js' %}" defer></script>
+{% endblock scripts %}
+
 {% block title %}
 BST Project - Dashboard
 {% endblock title %}
 
 {% block content %}
+
+<div class="col">
+  {% if user.profile.language == "Korean" %}
+  <h3 class="text-center mt-3"><b>[출고 현황]</b></h3>
+  {% else %}
+  <h3 class="text-center mt-3"><b>[Sales Position Status]</b></h3>
+  {% endif %}
+  
+  <table class="table text-center table-hover table-light">
+    <thead>
+    {% if user.profile.language == "Korean" %}
+      <tr>
+      <th scope="col">단위판매 ID</th>
+      <th scope="col">품목</th>
+
+      <th scope="col">단위가격(KRW)</th>
+      <th scope="col" class="text-primary fw-bold">단위수량</th>
+      <th scope="col">출고가격(KRW)</th>
+
+      <th scope="col" class="text-danger fw-bold">출고가능</th>
+      <th scope="col" class="text-success fw-bold">판매완료</th>
+
+      <th scope="col" class="text-danger fw-bold">재고현황</th>
+      <th scope="col">단위원가(KRW)</th>
+      <th scope="col">입력일시</th>
+      </tr>
+    {% else %}
+      <tr>
+      <th scope="col">Position ID</th>
+      <th scope="col">Product</th>
+
+      <th scope="col">Unit Price(KRW)</th>
+      <th scope="col" class="text-primary fw-bold">Quantity</th>
+      <th scope="col">Total Price(KRW)</th>
+
+      <th scope="col" class="text-danger fw-bold">Inventory Status</th>
+      <th scope="col" class="text-success fw-bold">Sold out</th>
+
+      <th scope="col" class="text-danger fw-bold">Inventory</th>
+      <th scope="col">Purchase Unit Price(KRW)</th>
+      <th scope="col">Updated</th>
+      </tr>
+    {% endif %}
+    </thead>
+    <tbody>
+      {% for object in object_list_sales %}
+        <tr onclick="window.location='{{object.get_absolute_url}}'">
+          <th scope="row">{{ object.id }}</th>
+          <td>{{ object.product.name }}</td>
+
+          <td class="float_rounded">{{ object.unit_price }}</td>
+          <td class="text-primary fw-bold">{{ object.quantity }}</td>
+          <td class="float_rounded">{{ object.net_price }}</td>
+
+          <td class="text-danger fw-bold">{{ object.inventory_status }}</td>
+          <td class="text-success fw-bold">{{ object.position_sold }}</td>
+
+          <td class="text-danger fw-bold">{{ object.product.inventory }}</td>
+          <td class="float_rounded">{{ object.product.average_unit_price_KRW }}</td>
+          <td>{{ object.updated }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="col">
+  {% if user.profile.language == "Korean" %}
+  <h3 class="text-center mt-3"><b>[입고 현황]</b></h3>
+  {% else %}
+  <h3 class="text-center mt-3"><b>[Purchase Position Status]</b></h3>
+  {% endif %}
+  <table class="table text-center table-hover table-light">
+    {% if user.profile.language == "Korean" %}
+    <thead>
+      <tr>
+      <th scope="col">단위구매 ID</th>
+      <th scope="col">품목</th>
+
+      <th scope="col">단품가격</th>
+      <th scope="col">통화</th>
+      <th scope="col" class="text-primary fw-bold">단위수량</th>
+
+      <th scope="col">단위총가격</th>
+
+      <th scope="col">원화환율</th>
+      <th scope="col">단위총가격(KRW)</th>
+
+      <th scope="col" class="text-danger fw-bold">입고현황</th>
+      <th scope="col">입력일시</th>
+      </tr>
+    </thead>
+    {% else %}
+    <thead>
+        <tr>
+        <th scope="col">Position id</th>
+        <th scope="col">Product</th>
+
+        <th scope="col">Unit Price</th>
+        <th scope="col">Currency</th>
+        <th scope="col" class="text-primary fw-bold">Quantity</th>
+
+        <th scope="col">Added Price</th>
+
+        <th scope="col">Exchange Rate to KRW</th>
+        <th scope="col">Total Price(KRW)</th>
+
+        <th scope="col" class="text-danger fw-bold">Status</th>
+        <th scope="col">Updated</th>
+        </tr>
+    </thead>
+    {% endif %}
+    <tbody>
+        {% for object in object_list_purchase %}
+            <tr onclick="window.location='{{object.get_absolute_url}}'">
+                <th scope="row">{{ object.id }}</th>
+                <td>{{ object.product.name }}</td>
+
+                <td class="float_rounded">{{ object.unit_price }}</td>
+                <td>{{ object.product.currency }}</td>
+                <td class="text-primary fw-bold">{{ object.quantity }}</td>
+
+                <td class="float_rounded">{{ object.added_price }}</td>
+
+                <td class="float_rounded">{{ object.ex_rate_to_KRW }}</td>
+                <td class="float_rounded">{{ object.added_price_KRW }}</td>
+
+                <td class="text-danger fw-bold">{{ object.status }}</td>
+                <td>{{ object.updated }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 {% if user.profile.language == "Korean" %}
 <h3 class="text-center mt-3"><b>YoY 순익</b></h3>

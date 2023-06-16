@@ -46,14 +46,14 @@ class ProfileManager(models.Manager):
         profile = Profile.objects.get(user=sender)
         qs = Relationship.objects.filter(Q(sender=profile))
 
-        receiver_waiting_profiles = [rel.receiver for rel in qs if rel.status is 'send']
+        receiver_waiting_profiles = [rel.receiver for rel in qs if rel.status == 'send']
         return receiver_waiting_profiles
 
     def get_all_profiles_receive_waiting(self, receiver):
         profile = Profile.objects.get(user=receiver)
         qs = Relationship.objects.filter(Q(receiver=profile))
 
-        sender_waiting_profiles = [rel.sender for rel in qs if rel.status is 'send']
+        sender_waiting_profiles = [rel.sender for rel in qs if rel.status == 'send']
         return sender_waiting_profiles
 
     def get_all_profiles(self, me):

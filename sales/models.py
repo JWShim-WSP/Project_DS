@@ -27,7 +27,7 @@ class Position(models.Model):
         self.net_price = self.unit_price * self.quantity
         if self.product.inventory >= self.quantity: # short of inventory
             self.net_profit = (self.unit_price - self.product.average_unit_price_KRW) * self.quantity
-            self.margin_percentage = (self.unit_price / self.product.average_unit_price_KRW) * 100
+            self.margin_percentage = ((self.unit_price - self.product.average_unit_price_KRW) / self.product.average_unit_price_KRW) * 100
             self.inventory_status = "Yes"
         else:
             self.inventory_status = "No"

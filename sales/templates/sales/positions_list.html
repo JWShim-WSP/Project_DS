@@ -6,13 +6,17 @@
 BST Project - Position List
 {% endblock %}
 
+{% block scripts %}
+<script src="{% static 'table_numbers.js' %}" defer></script>
+{% endblock scripts%}
+
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'pagination.css' %}">
 
 
 {% if user.profile.language == "Korean" %}
-<h3 class="text-center"><b>출고단위 리스트</b></h3>
+<h3 class="text-center"><b>단위판매 리스트</b></h3>
 {% else %}
 <h3 class="text-center"><b>Position List</b></h3>
 {% endif %}
@@ -20,10 +24,10 @@ BST Project - Position List
 <div class="d-flex mb-3">
     {% if user.profile.language == "Korean" %}
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:saleslist' %}" role="button">돌아가기</a>
+        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">판매실행</a>
     </div>
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">판매단위추가</a>
+        <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">단위판매추가</a>
     </div>
     <div class="me-auto p-1">
         <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#positionsModal">보기 분류</button>
@@ -40,7 +44,7 @@ BST Project - Position List
     </div>
     {% else %}
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:saleslist' %}" role="button">Go Back</a>
+        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">Sales Execution</a>
     </div>
     <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">Add Position</a>
@@ -136,17 +140,17 @@ BST Project - Position List
         <th scope="col">판매단위 ID</th>
         <th scope="col">품목</th>
 
-        <th scope="col">단위가격</th>
-        <th scope="col">수량</th>
-        <th scope="col">출고가격</th>
+        <th scope="col" class="text-info fw-bold">단위가격(KRW)</th>
+        <th scope="col" class="text-success fw-bold">단위수량</th>
+        <th scope="col" class="text-primary fw-bold">출고가격(KRW)</th>
 
-        <th scope="col">출고가능</th>
-        <th scope="col">판매완료</th>
-        <th scope="col">출고이익</th>
+        <th scope="col" class="text-danger fw-bold">출고가능</th>
+        <th scope="col" class="text-success fw-bold">판매완료</th>
+        <th scope="col" class="text-danger fw-bold">출고이익(KRW)</th>
         <th scope="col">마진율</th>
 
-        <th scope="col">재고현황</th>
-        <th scope="col">단위원가</th>
+        <th scope="col" class="text-danger fw-bold">재고수량</th>
+        <th scope="col">단위원가(KRW)</th>
         <th scope="col">제품그룹</th>
         <th scope="col">생성일자</th>
         <th scope="col">변경일자</th>
@@ -156,17 +160,17 @@ BST Project - Position List
         <th scope="col">Position ID</th>
         <th scope="col">Product</th>
 
-        <th scope="col">Unit Price</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">Total Price</th>
+        <th scope="col" class="text-info fw-bold">Unit Price(KRW)</th>
+        <th scope="col" class="text-success fw-bold">Quantity</th>
+        <th scope="col" class="text-primary fw-bold">Total Price(KRW)</th>
 
-        <th scope="col">Inventory Status</th>
-        <th scope="col">Sold out</th>
-        <th scope="col">Delivery Profit</th>
+        <th scope="col" class="text-danger fw-bold">Inventory Status</th>
+        <th scope="col" class="text-success fw-bold">Sold out</th>
+        <th scope="col" class="text-danger fw-bold">Delivery Profit(KRW)</th>
         <th scope="col">Margin Percentage</th>
 
-        <th scope="col">Inventory</th>
-        <th scope="col">Purchase Unit Price</th>
+        <th scope="col" class="text-danger fw-bold">Inventory</th>
+        <th scope="col">Purchase Unit Price(KRW)</th>
         <th scope="col">Product Group</th>
         <th scope="col">Created</th>
         <th scope="col">Updated</th>
@@ -179,17 +183,17 @@ BST Project - Position List
                 <th scope="row">{{ object.id }}</th>
                 <td>{{ object.product.name }}</td>
 
-                <td>{{ object.unit_price }}</td>
-                <td>{{ object.quantity }}</td>
-                <td>{{ object.net_price }}</td>
+                <td class="float_rounded text-info fw-bold">{{ object.unit_price }}</td>
+                <td class="integer_comma text-success fw-bold">{{ object.quantity }}</td>
+                <td class="float_rounded text-primary fw-bold">{{ object.net_price }}</td>
 
-                <td>{{ object.inventory_status }}</td>
-                <td>{{ object.position_sold }}</td>
-                <td>{{ object.net_profit }}</td>
-                <td>{{ object.margin_percentage }}</td>
+                <td class="text-danger fw-bold">{{ object.inventory_status }}</td>
+                <td class="text-success fw-bold">{{ object.position_sold }}</td>
+                <td class="float_rounded text-danger fw-bold">{{ object.net_profit }}</td>
+                <td class="float_rounded">{{ object.margin_percentage }}</td>
 
-                <td>{{ object.product.inventory }}</td>
-                <td>{{ object.product.average_unit_price_KRW }}</td>
+                <td class="integer_comma text-danger fw-bold">{{ object.product.inventory }}</td>
+                <td class="float_rounded text-info fw-bold">{{ object.product.average_unit_price_KRW }}</td>
                 <td>{{ object.product.product_type }}</td>
                 <td>{{ object.created }}</td>
                 <td>{{ object.updated }}</td>

@@ -101,6 +101,18 @@ class SaleForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple
     )
 
+class ExecutedSaleForm(forms.ModelForm):
+    class Meta:
+        model = Sale
+        fields= ['positions', "tax_cost", "vat_cost", 'delivery_cost', 'extra_cost', 'customer', 'salesman']
+
+    positions = forms.ModelMultipleChoiceField(
+        queryset=Position.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
+   
+
+
 # You can modify the 'Choice of positions' with different names
 #class CustomMMPosition(forms.ModelMultipleChoiceField):
 #    def label_from_instance(self, position):

@@ -24,6 +24,12 @@
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form | crispy }}
+    {% if profile.position_sold == True %}
+    <input class="btn btn-outline-primary"
+    value="Go Back"
+    type="button"
+    onclick="location.href='{% url "sales:positionlist" %}'">
+    {% else %}
     <input class="btn btn-outline-primary"
     value="Save"
     type="submit">
@@ -31,12 +37,15 @@
     value="Cancel"
     type="button"
     onclick="location.href='{% url "sales:positionlist" %}'">
+    {% endif %}
+    <!-- You cannot delete Position Record
     {% if profile.id %}
         <input class="btn btn-outline-primary"
         value="Delete"
         type="button"
         onclick="location.href='{% url "sales:position-delete" profile.id %}'">
     {% endif %}
+    -->
 </form>
 
 {% endblock content %}

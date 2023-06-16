@@ -4,6 +4,7 @@
 
 {% block scripts %}
 <script src="{% static 'sales/home.js' %}" defer></script>
+<script src="{% static 'table_numbers.js' %}" defer></script>
 {% endblock scripts %}
 
 {% block title %}
@@ -15,18 +16,15 @@ Sales List
 <link rel="stylesheet" href="{% static 'pagination.css' %}">
 
 {% if user.profile.language == "Korean" %}
-<h3 class="text-center mt-3"><b>판매 리스트</b></h3>
+<h3 class="text-center mt-3"><b>판매완료 리스트</b></h3>
 {% else %}
-<h3 class="text-center mt-3"><b>Sales List</b></h3>
+<h3 class="text-center mt-3"><b>Executed Sales List</b></h3>
 {% endif %}
 
 <div class="d-flex mb-3">
     {% if user.profile.language == "Korean" %}
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">판매</a>
-    </div>
-    <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:positionlist' %}" role="button">단위판매등록</a>
+        <a class="btn btn-outline-primary" href="{% url 'sales:positionlist' %}" role="button">단위판매</a>
     </div>
     <div class="p-1">
         <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#salesModal">보기분류</button>
@@ -45,9 +43,6 @@ Sales List
         </button>
     </div>
     {% else %}
-    <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">Add Sales</a>
-    </div>
     <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:positionlist' %}" role="button">Sales Position</a>
     </div>
@@ -170,17 +165,17 @@ Sales List
         <tr>
         <th scope="col">판매 ID</th>
         <th scope="col">판매 고유 번호</th>
-        <th scope="col">출고단위판매</th>
+        <th scope="col">단위판매항목</th>
 
-        <th scope="col">판매가격</th>
-        <th scope="col">판매이익</th>
+        <th scope="col" class="text-primary fw-bold">판매가격(KRW)</th>
+        <th scope="col" class="text-success fw-bold">판매이익(KRW)</th>
 
-        <th scope="col">비용-세금</th>
-        <th scope="col">비용-부가세</th>
-        <th scope="col">비용-물류</th>
-        <th scope="col">비용-추가</th>
+        <th scope="col">비용-세금(KRW)</th>
+        <th scope="col">비용-부가세(KRW)</th>
+        <th scope="col">비용-물류(KRW)</th>
+        <th scope="col">비용-추가(KRW)</th>
 
-        <th scope="col">순이익</th>
+        <th scope="col" class="text-danger fw-bold">순이익(KRW)</th>
 
         <th scope="col">고객</th>
         <th scope="col">판매원</th>
@@ -193,15 +188,15 @@ Sales List
         <th scope="col">Sales Transaction ID</th>
         <th scope="col">Sales Positions</th>
 
-        <th scope="col">Sales Price</th>
-        <th scope="col">Sales Profit</th>
+        <th scope="col" class="text-primary fw-bold">Sales Price(KRW)</th>
+        <th scope="col" class="text-success fw-bold">Sales Profit(KRW)</th>
 
-        <th scope="col">Cost-TAX</th>
-        <th scope="col">Cost-VAT</th>
-        <th scope="col">Cost-Delivery</th>
-        <th scope="col">Cost-etc</th>
+        <th scope="col">Cost-TAX(KRW)</th>
+        <th scope="col">Cost-VAT(KRW)</th>
+        <th scope="col">Cost-Delivery(KRW)</th>
+        <th scope="col">Cost-etc(KRW)</th>
 
-        <th scope="col">Net Profit</th>
+        <th scope="col" class="text-danger fw-bold">Net Profit(KRW)</th>
 
         <th scope="col">Customer</th>
         <th scope="col">Salesman</th>
@@ -217,15 +212,15 @@ Sales List
                 <td>{{ object.transaction_id }}</td>
                 <td>{{ object.positions_ids }}</td>
 
-                <td>{{ object.total_net_price }}</td>
-                <td>{{ object.total_net_profit }}</td>
+                <td class="float_rounded text-primary fw-bold">{{ object.total_net_price }}</td>
+                <td class="float_rounded text-success fw-bold">{{ object.total_net_profit }}</td>
 
-                <td>{{ object.tax_cost }}</td>
-                <td>{{ object.vat_cost }}</td>
-                <td>{{ object.delivery_cost }}</td>
-                <td>{{ object.extra_cost }}</td>
+                <td class="float_rounded">{{ object.tax_cost }}</td>
+                <td class="float_rounded">{{ object.vat_cost }}</td>
+                <td class="float_rounded">{{ object.delivery_cost }}</td>
+                <td class="float_rounded">{{ object.extra_cost }}</td>
 
-                <td>{{ object.final_profit }}</td>
+                <td class="float_rounded text-danger fw-bold">{{ object.final_profit }}</td>
 
                 <td>{{ object.customer }}</td>
                 <td>{{ object.salesman }}</td>

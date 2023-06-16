@@ -57,6 +57,11 @@ def post_save_update_product_info_from_Purchase(sender, instance, **kwargs):
                     product_inventory -= position.quantity
                 else:
                     pass # system error!!!!
+            else: # sales position was blocked due to the lack of inventory. This should be updated if it is filled by the Purchase.
+                if product_inventory >= position.quantity:
+                    product_inventory -= position.quantity
+                    position.inventory_status = "Yes" # now it is OK to go
+                    position.save()
         # Finally, we have the updated 'product' information including 'inventory'
         instance.product.inventory = product_inventory
         instance.product.save()
