@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Product Delete Confirmation
+{% endblock %}
+
+{% block content %}
+
+<div class="text-center">
+
+    <h2 class="text-primary"><b>Delete Product #{{ profile.name }}</b></h2>
+    <br>
+    <h3>Are you sure you want to delete the Product?</h3>
+    <br>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input class="btn btn-outline-primary"
+            value="Yes, Delete"
+            type="submit">
+
+        <input class="btn btn-outline-primary"
+            value="Cancel"
+            type="button"
+            onclick="location.href='{% url "products:productlist" %}'">
+    </form>
+</div>
+
+{% endblock %}

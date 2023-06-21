@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load hitcount_tags %}
+
+{% block title %}
+Bulletin
+{% endblock title %}
+
+{% block content %}
+{% load static %} 
+<link rel="stylesheet" href="{% static 'pagination.css' %}">
+
+{% if user.profile.language == "Korean" %}
+<h3 class="text-center"><b>게시판</b></h3>
+{% else %}
+<h3 class="text-center"><b>Bulletin</b></h3>
+{% endif %}
+
+<div class="d-flex mb-3">
+    {% if user.profile.language == "Korean" %}
+    <div class="me-auto p-1">
+        <a class="btn btn-outline-primary" href="{% url 'bulletin:post-add' %}" role="button">글쓰기</a>
+    </div>
+    {% else %}
+    <div class="me-auto p-1">
+        <a class="btn btn-outline-primary" href="{% url 'bulletin:post-add' %}" role="button">Post</a>
+    </div>
+    {% endif %}
+</div>
+
+<table class="table text-center table-hover table-light">
+    <thead>
+        <tr>
+        {% if user.profile.language == "Korean" %}
+            <th scope="col"></th>
+            <th scope="col">게시자</th>
+            <th scope="col">제목</th>
+            <th scope="col">게시일</th>
+            <th scope="col">조회수</th>
+        {% else %}
+            <th scope="col"></th>
+            <th scope="col">Author</th>
+            <th scope="col">Title</th>
+            <th scope="col">Date</th>
+            <th scope="col">Hits</th>
+        {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for object in posts %}
+            <tr onclick="window.location='{{object.get_absolute_url}}'">
+                <th scope="row"><img src="{{object.poster.avatar.url }}" alt="my-profile" class="avatar-tnail"></th>
+                <td>{{ object.poster.user.username }}</td>
+                <td>{{ object.title }}</td>
+                <td>{{ object.update_Date }}</td>
+                <td>{% get_hit_count for object %}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="text-center">
+    <nav class="pagination">
+        {% if posts.has_previous %}
+            {% if posts.previous_page_number != 1 %}
+                <a href="?page=1">&laquo;</a>
+            {% endif %}
+            <a href="?page={{posts.previous_page_number}}"><</a>
+        {% endif %}
+
+        <a class="active">Page {{ posts.number }} of {{ posts.paginator.num_pages }}</a>
+
+        {% if posts.has_next %}
+            <a href="?page={{posts.next_page_number}}">></a>
+            {% if posts.next_page_number != posts.paginator.num_pages %}
+                <a href="?page={{posts.paginator.num_pages}}">&raquo;</a>
+            {% endif %}
+        {% endif %}
+    </nav>
+</div>
+
+<!-- End Content -->
+{% endblock %}

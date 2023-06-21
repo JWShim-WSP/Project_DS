@@ -1,0 +1,28 @@
+{% extends "base.html" %} 
+
+{% block title %}
+    To Do Item Delete Confirmation
+{% endblock %}
+
+{% block content %}
+
+<div class="text-center">
+
+    <h3 class="text-primary"><b>Delete To-do List</b></h3>
+
+    <h5>Are you sure you want to delete the To-Do:<br><b>{{ object.title }}</b> from the To-Do List?</h5>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input class="btn btn-outline-primary"
+            value="Yes, delete."
+            type="submit">
+        <input class="btn btn-outline-primary"
+            value="Cancel"
+            type="button"
+            onclick="location.href='{% url "todolist:todolist" %}'">
+    </form>
+
+</div>
+
+{% endblock %}

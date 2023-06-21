@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Calculator
+{% endblock %}
+
+{% block scripts %}
+  {% if query %}
+    <script>
+      $(document).ready(function () {
+        $("#calculatorModal").modal('show');
+      });
+    </script>
+  {% endif %}
+{% endblock scripts%}
+
+{% block content %}
+{% load static %}
+{% if query %}
+  <div class="modal fade" id="calculatorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          {% if user.profile.language == "Korean" %}
+          <h5 class="modal-title text-primary">결과</h5>
+          {% else %}
+          <h5 class="modal-title text-primary">Result</h5>
+          {% endif %}
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          {% if error %}
+          {% if user.profile.language == "Korean" %}
+          <h3 class="modal-title text-danger">계산식 에러: {{ query }}</h1>
+          {% else %}
+          <h3 class="modal-title text-danger">Expression Error: {{ query }}</h1>
+          {% endif %}
+          {% else %}
+          <h3 class="modal-title">{{ query }} = {{ answer }}</h1>
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          {% if user.profile.language == "Korean" %}
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">나가기</button>
+          {% else %}
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+          {% endif %}
+        </div>
+        </div>
+    </div>
+  </div>
+{% endif %}
+
+<div class="text-center">
+  {% if user.profile.language == "Korean" %}
+  <h3 class="text-primary"><b>계산기</b></h3>
+  {% else %}
+  <h3 class="text-primary"><b>Djangoon's Calculator</b></h3>
+  {% endif %}
+  <br>
+  <form action="{% url 'calculator:submitquery' %}" method="post">
+    {% csrf_token %}
+    <div class="input-group input-group-lg">
+      {% if user.profile.language == "Korean" %}
+      <span class="input-group-text" id="inputGroup-sizing-lg">계산식</span>
+      {% else %}
+      <span class="input-group-text" id="inputGroup-sizing-lg">Expression</span>
+      {% endif %}
+      <input type="text" name="query" id="query" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" autofocus>
+    </div>
+    <br>
+    <div class="d-grid gap-2 d-md-block">
+      {% if user.profile.language == "Korean" %}
+      <button type="submit" class="buttons btn btn-outline-primary"><b>제출</b></button>
+      &nbsp
+      <button type="reset" class="buttons btn btn-outline-danger"><b>지우기</b></button>
+      {% else %}
+      <button type="submit" class="buttons btn btn-outline-primary"><b>Submit</b></button>
+      &nbsp
+      <button type="reset" class="buttons btn btn-outline-danger"><b>Reset</b></button>
+      {% endif %}
+    </div>
+  </form>
+  <br>
+  <br>
+  <hr>
+  {% if user.profile.language == "Korean" %}
+  <h3><b>계산식 사용법</b></h3>
+  {% else %}
+  <h3><b>Instructions</b></h3>
+  {% endif %}
+  <table class="table table-hover table-light">
+    <thead>
+      <tr>
+        <th>Operators</th>
+        <th>Functions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>+</td>
+        <td>Addition</td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Subtraction</td>
+      </tr>
+      <tr>
+        <td>*, x</td>
+        <td>Multiplication</td>
+      </tr>
+      <tr>
+        <td>/</td>
+        <td>Division</td>
+      </tr>
+      <tr>
+        <td>//</td>
+        <td>Floor Division</td>
+      </tr>
+      <tr>
+        <td>**</td>
+        <td>Exponential</td>
+      </tr>
+      <tr>
+        <td>%</td>
+        <td>Modulus</td>
+      </tr>
+      <tr>
+        <td>0b, 0o, 0x</td>
+        <td>Binary, Octal, Hex into Decimal</td>
+      </tr>
+      <tr>
+        <td>bin(), oct(), hex()</td>
+        <td>Convert into Binary, Octal, Hex</td>
+      </tr>
+      <tr>
+        <td><<, >>, &, ^, |</td>
+        <td>Bitwise Shift left & right, AND, XOR, OR</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- End Content -->
+{% endblock %}

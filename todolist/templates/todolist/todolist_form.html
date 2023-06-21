@@ -1,0 +1,30 @@
+{% extends "base.html" %} 
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    To Do List Form
+{% endblock %}
+
+{% block content %}
+
+<h3 class="text-center text-primary"><b>[{{ title }}]</b></h3>
+<div>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form | crispy }}
+            <div class="text-center">
+                <input class="btn btn-outline-primary"
+                    value="Save"
+                    type="submit">
+                <input class="btn btn-outline-primary"
+                    value="Cancel"
+                    type="button"
+                    onclick="location.href='{% url "todolist:todolist" %}'">
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

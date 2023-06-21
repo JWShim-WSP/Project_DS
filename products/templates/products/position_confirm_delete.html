@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Purchase Position Delete Confirmation
+{% endblock %}
+
+{% block content %}
+
+<div class="text-center">
+
+    <h2 class="text-primary"><b>Delete Purchase Position #{{ profile.id }}</b></h2>
+    <br>
+    <h3>Are you sure you want to delete the Purchase Position?</h3>
+    <br>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input class="btn btn-outline-primary"
+            value="Yes, Delete"
+            type="submit">
+
+        <input class="btn btn-outline-primary"
+            value="Cancel"
+            type="button"
+            onclick="location.href='{% url "products:positionlist" %}'">
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Detail of Purchase Position #{{name}}
+{% endblock title %}
+
+{% block content %}
+
+{% if confirm %}
+    <div class="alert alert-primary" role="alert">
+        Purchase Position of #{{profile.id}} has been saved!
+    </div>
+{% endif %}
+
+<div class="text-center">
+    <b>Purchase Position ID: {{ profile.id }}</b>
+    <img src="{{ profile.product.image.url }}" alt="new profile" class="avatar-md">
+</div>
+
+<br>
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <input class="btn btn-outline-primary"
+    value="Save"
+    type="submit">
+    <input class="btn btn-outline-primary"
+    value="Cancel"
+    type="button"
+    onclick="location.href='{% url "products:positionlist" %}'">
+    {% if profile.id and profile.status != "Stocked" %}
+        <input class="btn btn-outline-primary"
+        value="Delete"
+        type="button"
+        onclick="location.href='{% url "products:position-delete" profile.id %}'">
+    {% endif %}
+</form>
+
+{% endblock content %}

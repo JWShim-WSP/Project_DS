@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Events
+{% endblock %}
+
+{% block content %}
+{% load static %} 
+<link rel="stylesheet" href="{% static 'pagination.css' %}">
+
+<!-- Here you start to edit the body of Event -->
+<div class="text-center">
+    <h2 class="text-primary"><b>Events</b></h2>
+    <table class="table table-hover table-light" >
+        <thead>
+            <tr class="text-primary">
+                <th>No.</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Completed</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for x in eventlist %}
+            <tr onclick="window.location='{{x.get_absolute_url}}'">
+                <td>{{x.id}}</td>
+                <td>{{x.title}}</td>
+                <td>{{x.description}}</td>
+                <td>{{x.start_date}}</td>
+                <td>{{x.end_date}}</td>
+                {% if x.event_completed == True %}
+                    <td class="text-primary" style="font-size:x-large">&#9745</td>
+                {% else %}
+                    <td style="font-size:x-large">&#9744</td>
+                {% endif %}
+        </tr>
+        {% empty %}
+            <h4>You have no events!</h4>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <nav class="pagination">
+        {% if eventlist.has_previous %}
+            {% if eventlist.previous_page_number != 1 %}
+                <a href="?page=1">&laquo;</a>
+            {% endif %}
+            <a href="?page={{eventlist.previous_page_number}}"><</a>
+        {% endif %}
+    
+        <a class="active">Page {{ eventlist.number }} of {{ eventlist.paginator.num_pages }}</a>
+    
+        {% if eventlist.has_next %}
+            <a href="?page={{eventlist.next_page_number}}">></a>
+            {% if eventlist.next_page_number != eventlist.paginator.num_pages %}
+                <a href="?page={{eventlist.paginator.num_pages}}">&raquo;</a>
+            {% endif %}
+        {% endif %}
+    </nav>
+    <br>
+    <br>
+    <a href="{% url 'calendarwithevent:calendarwithevent' %}" class="btn btn-outline-primary" role="button">Go to Calendar & Event</a>
+    &nbsp
+    <a href="{% url 'calendarwithevent:event-add' %}" class="btn btn-outline-primary" role="button">Add a new event</a>
+</div>
+<!-- End Content -->
+
+{% endblock %}

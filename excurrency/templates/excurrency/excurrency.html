@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block scripts %}
+    <script src="{% static 'excurrency/currency.js' %}" defer></script>
+{% endblock scripts %}
+
+{% block title %}
+Currency Exchange
+{% endblock %}
+
+{% block content %}
+<!-- Here you start to edit the body of Currency Exchange Service -->
+<div class="text-center">
+    <h3 class="text-primary"><b>US Dollar to </b></h3>
+    <form class="currencyform">
+        <table class="table table-hover table-light" >
+            <thead>
+                <tr>
+                    <th>Currency</th>
+                    <th>USD Amount</th>
+                    <th>Currency Amount</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <select class= "country" name="country" id="country">
+                            <option value="">--Please choose an option--</option>
+                            {% for Key, Value in Currencies.items %}
+                                <option id="currency" value={{Key}}>{{Key}} ({{Value}})</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input id="USDAmount" placeholder="USD Amount" type="number"></td>
+                    <td><input id="SelectedAmount" placeholder="Currency Amount" type="number"></td>
+                    <td><input id="convert" type="submit" value="Convert"></td>
+                </tr>
+                <tr>
+                    <td>Converted Amount</td>
+                    <td style="color:red" class="fs-4"><b><var id="resultSelected" placeholder="Converted Amount" type="number"></var></b></td>
+                    <td style="color:blue" class="fs-4"><b><var id="resultUSD" placeholder="Converted Amount" type="number"></var></b></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <div id="RateResult" class="text-large"></div>
+    <br>
+    <br>
+</div>
+
+<!-- End Content -->
+{% endblock %}

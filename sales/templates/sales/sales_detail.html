@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    detail of #{{name}}
+{% endblock title %}
+
+{% block scripts %}
+    {% if confirm %}
+    <script>
+        $(document).ready(function () {
+            $("#confirmModal").modal('show');
+        });
+    </script>
+    {% endif %}
+
+    {% if position_avail == False %}
+    <script>
+        $(document).ready(function () {
+            $("#positionModal").modal('show');
+        });
+    </script>
+    {% endif %}
+{% endblock scripts%}
+
+{% block content %}
+{% if confirm %}
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {% if user.profile.language == "Korean" %}
+                <div class="modal-header">
+                    <h5 class="modal-title text-success">판매 확인</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <div class="alert alert-primary" role="alert">
+                        Sales of #{{profile.transaction_id}} 저장 되었습니다!
+                    </div>
+                </div>
+                {% else %}
+                <div class="modal-header">
+                    <h5 class="modal-title text-success">Sales Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <div class="alert alert-primary" role="alert">
+                        Sales of #{{profile.transaction_id}} has been saved!
+                    </div>
+                </div>
+                {% endif %}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="location.href='{% url "sales:positionlist"  %}'" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    {% if position_avail %}
+        <div class="text-center">
+            <b>Sales ID: {{ profile.id }}</b>
+            <img src="{{ profile.customer.logo.url }}" alt="new profile" class="avatar-md">
+        </div>
+        <br>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form | crispy }}
+            {% if profile.transaction_id %}
+            <input class="btn btn-outline-primary"
+            value="Go Back"
+            type="button"
+            onclick="location.href='{% url "sales:saleslist" %}'">
+            {% else %}
+            <input class="btn btn-outline-primary"
+            value="Save"
+            type="submit">
+            <input class="btn btn-outline-primary"
+            value="Cancel"
+            type="button"
+            onclick="location.href='{% url "sales:positionlist" %}'">
+            {% endif %}
+            <!-- You cannot delete Sales Record
+            {% if profile.transaction_id %}
+                <input class="btn btn-outline-primary"
+                value="Delete"
+                type="button"
+                onclick="location.href='{% url "sales:sales-delete" profile.id %}'">
+            {% endif %}
+            -->
+        </form>
+    {% else %}
+        <div class="modal fade" id="positionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    {% if user.profile.language == "Korean" %}
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger">선택할 단위판매 목록이 없습니다. </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <div class="alert alert-primary" role="alert">
+                            단위판매 목록을 확인하시고 등록 하세요.
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger">No Sales Position Avialble</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <div class="alert alert-primary" role="alert">
+                            Please check and create 'Sales Position'
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="location.href='{% url "sales:positionlist"  %}'" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+{% endblock content %}

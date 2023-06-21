@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+My Invites
+{% endblock title %}
+
+{% block content %}
+
+{% if is_empty %}
+<h5>No invitations received for you...</h5>
+{% endif %}
+
+{% for obj in qs %}
+<div class="card mb-3">
+    <div class="row">
+        <div class="col-2">
+            <img src="{{obj.avatar.url}}" alt="my-profile" class="avatar-md">
+        </div>
+        <div class="col">
+            <h3>{{ obj.user }}</h3>
+            <p>{{ obj.bio }}</p>
+            <a href="{{ obj.get_absolute_url }}"><button class="btn btn-primary mb-1 w-big">See profile</button></a>
+            <br>
+            <form action="{% url 'profiles:accept-invite' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                <button type="submit" class="btn btn-outline-info mb-1 w-big">Accept invite</button>
+            </form>
+            <form action="{% url 'profiles:reject-invite' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                <button type="submit" class="btn btn-outline-danger mb-1 w-big">Reject invite</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+
+{% endblock content %}

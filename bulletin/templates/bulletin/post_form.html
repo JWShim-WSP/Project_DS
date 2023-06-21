@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    detail of Bulletin
+{% endblock title %}
+
+{% block content %}
+
+<!-- Here you start to edit the body of Bulletin -->
+
+<img src="{{ user.profile.avatar.url }}" alt="my-profile" class="avatar-md">
+
+<br>
+<br>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form | crispy }}
+
+    {% if user.profile.language == "Korean" %}
+    <input class="btn btn-outline-primary"
+        value="등록"
+        type="submit">
+    <input class="btn btn-outline-primary"
+        value="취소"
+        type="button"
+        onclick="location.href='{% url "bulletin:bstBulletin"  %}'">
+    {% else %}
+    <input class="btn btn-outline-primary"
+        value="Submit"
+        type="submit">
+    <input class="btn btn-outline-primary"
+        value="Cancel"
+        type="button"
+        onclick="location.href='{% url "bulletin:bstBulletin"  %}'">
+    {% endif %}
+</form>
+
+<!-- End Content -->
+
+{% endblock %}

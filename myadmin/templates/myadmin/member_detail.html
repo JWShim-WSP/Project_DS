@@ -1,0 +1,41 @@
+{% extends "base.html" %} 
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Details about {{ profile.username }}
+{% endblock %}
+
+{% block content %}
+
+{% if confirm %}
+    <div class="alert alert-primary" role="alert">
+        Profile of {{ profile.username }} has been saved!
+    </div>
+{% endif %}
+
+<div class="text-center">
+    <img src="{{ profile.profile.avatar.url }}" alt="my-profile" class="avatar-big">
+</div>
+
+<br>
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <input class="btn btn-outline-primary"
+    value="Save"
+    type="submit">
+    <input class="btn btn-outline-primary"
+    value="Cancel"
+    type="button"
+    onclick="location.href='{% url "myadmin:memberlist" %}'">
+    {% if profile.id %}
+        <input class="btn btn-outline-primary"
+        value="Delete"
+        type="button"
+        onclick="location.href='{% url "myadmin:member-delete" profile.id %}'">
+    {% endif %}
+</form>
+
+{% endblock %}

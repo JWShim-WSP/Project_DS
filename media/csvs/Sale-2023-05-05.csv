@@ -1,0 +1,5 @@
+id,transaction_id,positions,total_price,customer,salesman,created,updated
+4,56ABCAF21AD3,"['TrueDyne Concentration Sensor, ', 'Audiowell Waterflow Sensor, ', 'PCI Plasma Torch, ']",1045000.0,Unisem,market-02,2023-05-05 05:34:20,2023-05-05 05:34:22
+3,BF5B24EA2D8C,"['PCI Plasma Torch, ']",700000.0,GST,market-01,2023-05-05 04:58:13,2023-05-05 04:58:14
+2,E1907DA3703E,"['Audiowell Waterflow Sensor, ']",45000.0,Unisem,minjae,2023-05-05 04:57:40,2023-05-05 04:57:42
+1,00C199623539,"['TrueDyne Concentration Sensor, ']",300000.0,Gaoncell,jangwook,2023-05-05 04:57:17,2023-05-05 04:57:18

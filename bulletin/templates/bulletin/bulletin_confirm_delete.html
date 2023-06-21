@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Post Delete Confirmation
+{% endblock %}
+
+{% block scripts %}
+    {% if messages %}
+    <script>
+        $(document).ready(function () {
+            $("#bulletinModal").modal('show');
+        });
+    </script>
+    {% endif %}
+{% endblock scripts%}
+
+{% block content %}
+{% load static %}
+<div class="text-center">
+{% if messages %}
+    <div class="modal fade" id="bulletinModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">Message to You!!!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    {% for message in messages %}
+                        {% if 'warning' in message.tags %}
+                            {{ message }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="location.href='{% url "bulletin:bstBulletin"  %}'" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    {% if user.profile.language == "Korean" %}
+    <h2 class="text-primary"><b>게시글 삭제</b></h2>
+    <br>
+    <h3>이 게시글을 삭제 하시겠습니까? <b>{{ object.title }}</b>?</h3>
+    <br>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input class="btn btn-outline-primary"
+            value="네, 삭제하세요"
+            type="submit">
+
+        <input class="btn btn-outline-primary"
+            value="취소"
+            type="button"
+            onclick="location.href='{% url "bulletin:bstBulletin" %}'">
+    </form>
+    {% else %}
+    <h2 class="text-primary"><b>Delete Post</b></h2>
+    <br>
+    <h3>Are you sure you want to delete the post <b>{{ object.title }}</b>?</h3>
+    <br>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input class="btn btn-outline-primary"
+            value="Yes, Delete"
+            type="submit">
+
+        <input class="btn btn-outline-primary"
+            value="Cancel"
+            type="button"
+            onclick="location.href='{% url "bulletin:bstBulletin" %}'">
+    </form>
+    {% endif %}
+{% endif %}
+</div>
+{% endblock %}
