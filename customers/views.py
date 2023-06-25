@@ -26,7 +26,7 @@ def customer_list_view(request):
         response['Content-Disposition'] = f"attachement; filename=bstcustomer.{format}"
         return response
     else:
-        p = Paginator(Customer.objects.all().order_by('name'), 10)
+        p = Paginator(Customer.objects.all().order_by('-updated'), 10)
         try:
             object_list = p.get_page(request.GET.get("page"))
         except:
@@ -60,7 +60,7 @@ def customer_detail_view(request, pk):
 
 @staff_member_required
 def customer_add_view(request):
-    form = CustomerForm(request.POST or None)
+    form = CustomerForm(request.POST or None, request.FILES or None)
 
     if request.method == "POST":
         if form.is_valid():
@@ -102,7 +102,7 @@ def supplier_list_view(request):
         response['Content-Disposition'] = f"attachement; filename=bstsupplier.{format}"
         return response
     else:
-        p = Paginator(Supplier.objects.all().order_by('name'), 10)
+        p = Paginator(Supplier.objects.all().order_by('-updated'), 10)
         try:
             object_list = p.get_page(request.GET.get("page"))
         except:
@@ -136,7 +136,7 @@ def supplier_detail_view(request, pk):
 
 @staff_member_required
 def supplier_add_view(request):
-    form = SupplierForm(request.POST or None)
+    form = SupplierForm(request.POST or None, request.FILES or None)
 
     if request.method == "POST":
         if form.is_valid():

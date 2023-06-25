@@ -7,7 +7,7 @@
 {% endblock scripts %}
 
 {% block title %}
-BST Project - Position List
+Position List
 {% endblock %}
 
 {% block content %}
@@ -24,7 +24,7 @@ BST Project - Position List
 <div class="d-flex mb-3">
     {% if user.profile.language == "Korean" %}
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'products:position-add' %}" role="button">단위구매 추가</a>
+        <a class="btn btn-outline-primary" href="{% url 'products:position-add' %}" role="button">단위구매 등록</a>
     </div>
     <div class="me-auto p-1">
         <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#positionsModal">보기 분류</button>
@@ -152,7 +152,7 @@ BST Project - Position List
 
         <th scope="col" class="text-danger fw-bold">입고진행상태</th>
         <th scope="col">품목그룹</th>
-        <th scope="col">생성일시</th>
+        <th scope="col">변경일시</th>
         </tr>
     </thead>
     {% else %}
@@ -179,7 +179,7 @@ BST Project - Position List
 
         <th scope="col" class="text-danger fw-bold">Status</th>
         <th scope="col">Product Group</th>
-        <th scope="col">Created</th>
+        <th scope="col">Updated</th>
         </tr>
     </thead>
     {% endif %}
@@ -207,7 +207,7 @@ BST Project - Position List
 
                 <td class="text-danger fw-bold">{{ object.status }}</td>
                 <td>{{ object.product.product_type }}</td>
-                <td>{{ object.created }}</td>
+                <td>{{ object.updated }}</td>
             </tr>
         {% endfor %}
     </tbody>

@@ -30,7 +30,7 @@ def member_list_view(request):
         response['Content-Disposition'] = f"attachement; filename=bstmember.{format}"
         return response
     else:
-        p = Paginator(User.objects.order_by('is_staff'), 10)
+        p = Paginator(User.objects.order_by('-date_joined'), 10)
         try:
             object_list = p.get_page(request.GET.get("page"))
         except:

@@ -52,6 +52,7 @@ class Product(models.Model):
     customers = models.ManyToManyField(Customer, blank=True, related_name='product_customers')
     product_type = models.CharField(max_length=50, choices=PRODUCT_TYPE_CHOICES)
     inventory = models.IntegerField(default=0)
+    average_unit_price = models.FloatField(default=0, null=True)
     average_unit_price_KRW = models.FloatField(default=0, null=True)
     average_ex_rate_to_KRW = models.FloatField(default=0, null=True)
     total_quantity = models.PositiveIntegerField(default=0, null=True)
@@ -77,7 +78,7 @@ class Product(models.Model):
         ordering = ('-created', )
 
     def __str__(self):
-        return f"id: {self.id}, {self.name}-{self.product_type}"
+        return f"ID: {self.id}, {self.name}-{self.product_type}"
 
 class Purchase(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_purchase")
@@ -117,4 +118,4 @@ class Purchase(models.Model):
         ordering = ('-created', )
 
     def __str__(self):
-        return f"id: {self.id}, product: {self.product.name}, quantity: {self.quantity}"
+        return f"ID: {self.id}, Product: {self.product.name}, Quantity: {self.quantity}"

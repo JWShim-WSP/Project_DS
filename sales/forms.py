@@ -1,5 +1,6 @@
 from django import forms
 from .models import Sale, Position
+from products.models import Product
 from products.models import PRODUCT_CHOICES_FOR_SEARCH
 from django.forms import ModelForm, TextInput, EmailInput, NumberInput, Textarea, DateTimeInput, DateInput, Select
 import datetime
@@ -14,19 +15,19 @@ CHART_CHOICES = (
 )
 
 RESULT_CHOICES = (
-    ('transaction_id', 'Transaction'),
     ('product', 'Product'),
-    ('position_id', 'Position'),
     ('customer', 'Customer'),
     ('salesman', 'Salesman'),
     ('created', 'Sales date'),
     ('year', 'Yearly'),
-    ('year_month', 'Year Monthly'),
+    ('year_month', 'Year-Monthly'),
+    ('position_id', 'Position'),
+    ('transaction_id', 'Transaction'),
 )
 
 SALES_SUM_CHOICES = (
     ('total_net_price', 'Sales Price'), # Position' added_price_KRW should be used instead of 'total_added_price_KRW' of Sale
-    ('final_profit', 'Net Profit'), # Position' added_price should be used instead of 'total_added_price' of Sale
+    ('final_profit', 'Final Profit'), # Position' added_price should be used instead of 'total_added_price' of Sale
     ('net_profit', 'Sales Profit'),
 )
 
@@ -97,7 +98,7 @@ class SaleForm(forms.ModelForm):
         fields= ['positions', "tax_cost", "vat_cost", 'delivery_cost', 'extra_cost', 'customer', 'salesman']
     
     positions = forms.ModelMultipleChoiceField(
-        queryset=Position.objects.filter(inventory_status="Yes", position_sold=False),
+        queryset=Position.objects.filter(inventory_status=True, position_sold=False),
         widget=forms.CheckboxSelectMultiple
     )
 
@@ -129,6 +130,11 @@ class ExecutedSaleForm(forms.ModelForm):
 #    )
 
 class PositionForm(forms.ModelForm):
+    product = forms.ModelChoiceField(
+            widget=forms.RadioSelect,
+            queryset=Product.objects.all(),
+        )
+
     class Meta:
         model = Position
         fields= ["product", "unit_price", "quantity"]

@@ -6,13 +6,55 @@
 my profile
 {% endblock title %}
 
+{% block scripts %}
+  {% if confirm or messages %}
+    <script>
+      $(document).ready(function () {
+        $("#updateModal").modal('show');
+      });
+    </script>
+  {% endif %}
+{% endblock scripts%}
+
 {% block content %}
 
-{% if success_message %}
-<div class="alert alert-primary" role="alert">
-    {{ success_message }}
-</div>
+{% if confirm or messages %}
+  <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          {% if profile.language == "Korean" %}
+          <h5 class="modal-title text-primary">결과</h5>
+          {% else %}
+          <h5 class="modal-title text-primary">Result</h5>
+          {% endif %}
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          {% if messages %}
+            {% for message in messages %}
+                <h3 class="modal-title text-success">{{ message }}</h1>
+            {% endfor %}
+          {% else %}
+            {% if profile.language == "Korean" %}
+            <h3 class="modal-title text-success">{{ profile.user.username }}님의 프로파일 저장 완료!</h1>
+            {% else %}
+            <h3 class="modal-title text-success">{{ profile.user.username }}'s profile saved!</h1>
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          {% if profile.language == "Korean" %}
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="location.href='{% url "profiles:my" %}'">나가기</button>
+          {% else %}
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="location.href='{% url "profiles:my" %}'">Close</button>
+          {% endif %}
+        </div>
+        </div>
+    </div>
+  </div>
 {% endif %}
+
 
 <img src="{{ profile.avatar.url }}" alt="my-profile" class="avatar-big">
 
@@ -50,9 +92,9 @@ my profile
     value="Update"
     type="submit">
     <input class="btn btn-outline-primary"
-    value="Cancel"
+    value="Close"
     type="button"
-    onclick="location.href='{% url "sales:saleslist" %}'">
+    onclick="location.href='{% url "sales:home" %}'">
     <input class="btn btn-outline-primary"
     value="Change Password"
     type="button"

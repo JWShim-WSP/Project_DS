@@ -61,14 +61,14 @@ Supplier List
     <thead>
         <tr>
         {% if user.profile.language == "Korean" %}
-            <th scope="col">파트너 ID</th>
+            <th scope="col"></th>
             <th scope="col">이름</th>
             <th scope="col">이메일</th>
             <th scope="col">전화번호</th>
             <th scope="col">등록 일시</th>
             <th scope="col">참고</th>
         {% else %}
-            <th scope="col">Supplier ID</th>
+            <th scope="col"></th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Phone</th>
@@ -80,7 +80,7 @@ Supplier List
     <tbody>
         {% for object in object_list %}
             <tr onclick="window.location='{{object.get_absolute_url}}'">
-                <th scope="row">{{ object.id }}</th>
+                <th scope="row"><img src="{{object.logo.url }}" alt="my-profile" class="avatar-tnail"></th>
                 <td>{{ object.name }}</td>
                 <td>{{ object.email }}</td>
                 <td>{{ object.phone_number }}</td>

@@ -27,7 +27,7 @@ class Customer(models.Model):
 
 class Supplier(models.Model):
     name = models.CharField(max_length=120)
-    logo = models.ImageField(upload_to='customers', default='no_picture.png')
+    logo = models.ImageField(upload_to='suppliers', default='no_picture.png')
     email = models.EmailField(max_length=256, blank=True)
     cc = models.CharField(max_length=1000, blank=True, null=True)
     phone_number = models.CharField(max_length=265, blank=True)

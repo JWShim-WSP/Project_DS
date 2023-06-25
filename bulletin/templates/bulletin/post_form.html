@@ -15,7 +15,7 @@
 <br>
 <br>
 
-<form method="post">
+<form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form | crispy }}
 
@@ -26,7 +26,7 @@
     <input class="btn btn-outline-primary"
         value="취소"
         type="button"
-        onclick="location.href='{% url "bulletin:bstBulletin"  %}'">
+        onclick="location.href='{% url "bulletin:bstBulletin" %}'">
     {% else %}
     <input class="btn btn-outline-primary"
         value="Submit"
@@ -34,7 +34,7 @@
     <input class="btn btn-outline-primary"
         value="Cancel"
         type="button"
-        onclick="location.href='{% url "bulletin:bstBulletin"  %}'">
+        onclick="location.href='{% url "bulletin:bstBulletin" %}'">
     {% endif %}
 </form>
 

@@ -25,5 +25,6 @@ def calculate_total_price(sender, instance, action, **kwargs):
     qs = instance.positions.all() # position_sold status update
     for position in qs:
         position.position_sold = True
-        position.save()
+        position.save(update_fields=['position_sold'])
+        # this will signal to Product of Position Change (post_save)
 

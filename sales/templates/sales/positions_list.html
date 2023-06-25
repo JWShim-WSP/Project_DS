@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-BST Project - Position List
+Position List
 {% endblock %}
 
 {% block scripts %}
@@ -24,10 +24,10 @@ BST Project - Position List
 <div class="d-flex mb-3">
     {% if user.profile.language == "Korean" %}
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">판매실행</a>
+        <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">단위판매등록</a>
     </div>
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">단위판매추가</a>
+        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">단위판매실행</a>
     </div>
     <div class="me-auto p-1">
         <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#positionsModal">보기 분류</button>
@@ -44,10 +44,10 @@ BST Project - Position List
     </div>
     {% else %}
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">Sales Execution</a>
+        <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">Add Position</a>
     </div>
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">Add Position</a>
+        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">Sales Execution</a>
     </div>
     <div class="me-auto p-1">
         <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#positionsModal">Sort By</button>
@@ -137,12 +137,12 @@ BST Project - Position List
     <thead>
     {% if user.profile.language == "Korean" %}
         <tr>
-        <th scope="col">판매단위 ID</th>
+        <th scope="col">단위판매 ID</th>
         <th scope="col">품목</th>
 
-        <th scope="col" class="text-info fw-bold">단위가격(KRW)</th>
+        <th scope="col" class="text-info fw-bold">판매단가(KRW)</th>
         <th scope="col" class="text-success fw-bold">단위수량</th>
-        <th scope="col" class="text-primary fw-bold">출고가격(KRW)</th>
+        <th scope="col" class="text-primary fw-bold">판매가격(KRW)</th>
 
         <th scope="col" class="text-danger fw-bold">출고가능</th>
         <th scope="col" class="text-success fw-bold">판매완료</th>
@@ -150,7 +150,7 @@ BST Project - Position List
         <th scope="col">마진율</th>
 
         <th scope="col" class="text-danger fw-bold">재고수량</th>
-        <th scope="col">단위원가(KRW)</th>
+        <th scope="col">평균수입단가(KRW)</th>
         <th scope="col">제품그룹</th>
         <th scope="col">생성일자</th>
         <th scope="col">변경일자</th>
@@ -160,7 +160,7 @@ BST Project - Position List
         <th scope="col">Position ID</th>
         <th scope="col">Product</th>
 
-        <th scope="col" class="text-info fw-bold">Unit Price(KRW)</th>
+        <th scope="col" class="text-info fw-bold">Sales Unit Price(KRW)</th>
         <th scope="col" class="text-success fw-bold">Quantity</th>
         <th scope="col" class="text-primary fw-bold">Total Price(KRW)</th>
 
@@ -170,7 +170,7 @@ BST Project - Position List
         <th scope="col">Margin Percentage</th>
 
         <th scope="col" class="text-danger fw-bold">Inventory</th>
-        <th scope="col">Purchase Unit Price(KRW)</th>
+        <th scope="col">Purchase Avg. Unit Price(KRW)</th>
         <th scope="col">Product Group</th>
         <th scope="col">Created</th>
         <th scope="col">Updated</th>

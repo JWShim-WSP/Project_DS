@@ -44,9 +44,11 @@ def my_profile_view(request):
     friends_list = profile.get_friends()
     number_of_friends = profile.get_friends_no()
     
-    if form.is_valid():
-        form.save()
-        confirm = True
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            profile = Profile.objects.get(user=request.user)
+            confirm = True
 
     context = {
         'profile': profile,
@@ -210,5 +212,5 @@ def remove_from_friends(request):
 
 class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     template_name = 'profiles/change_password.html'
-    success_message = "Successfully Changed Your Password"
+    success_message = "Password changed successfully!"
     success_url = reverse_lazy('profiles:my')

@@ -16,7 +16,7 @@ class PositionResource(resources.ModelResource):
     class Meta:
         model = Position
         # enumerate the fields to export
-        fields = ("id", "product", "unit_price", "quantity", "net_price", "inventory_status", "net_profit", "margin_percentage", 'created', 'updated')
+        fields = ("id", "product", "unit_price", "quantity", "net_price", "inventory_status", "net_profit", "margin_percentage", 'position_sold', 'created', 'updated')
         export_order = fields
 
     # To change (dehydrate) the display from number('1 or 0') to text ('Ture or False') ==> Let's use ForeignKeyWidget for importing not just for exporting
@@ -49,7 +49,7 @@ class SaleResource(resources.ModelResource):
     class Meta:
         model = Sale
         # enumerate the fields to export
-        fields = ('id', 'transaction_id', 'positions', "total_net_price", "net_profit", "tax_cost", "vat_cost", 'delivery_cost', 'extra_cost', 'final_profit', 'customer', 'salesman', 'created', 'updated')
+        fields = ('id', 'transaction_id', 'positions', "total_net_price", "total_net_profit", "tax_cost", "vat_cost", 'delivery_cost', 'extra_cost', 'final_profit', 'customer', 'salesman', 'created', 'updated')
         export_order = fields
 
     #position_id is a better information than product.name of the position

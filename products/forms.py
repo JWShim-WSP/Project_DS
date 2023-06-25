@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product, Purchase, PRODUCT_CHOICES_FOR_SEARCH
+from .models import Product, Purchase, PRODUCT_CHOICES_FOR_SEARCH, CURRENCIES
 from customers.models import Customer, Supplier
 from sales.forms import CHART_CHOICES, MONTH_SELECT, current_year, current_month, year_choices
 from django.forms import ModelForm, TextInput, EmailInput, NumberInput, Textarea, DateTimeInput, DateInput, Select
@@ -27,7 +27,13 @@ class ProductForm(forms.ModelForm):
             widget=forms.RadioSelect,
             queryset=Supplier.objects.all(),
         )
-    
+
+    currency = forms.ChoiceField(
+            widget=forms.RadioSelect,
+            choices=CURRENCIES,
+        )
+
+
     class Meta:
         model = Product
         fields= ["name", 'currency', "price",  'moq', 'price_quantity_base', 'supplier', 'customers', 'remark', 'product_type', 'image']
@@ -43,6 +49,11 @@ class ProductSearchForm(forms.Form):
         )
 
 class PurchaseForm(forms.ModelForm):
+    product = forms.ModelChoiceField(
+            widget=forms.RadioSelect,
+            queryset=Product.objects.all(),
+        )
+
     class Meta:
         model = Purchase
         fields= ["product", "unit_price", "quantity", "added_cost", "ex_rate_to_KRW", "custom_tax_KRW", 'transport_cost_KRW', "bank_cost_KRW", "delivery_cost_KRW", "status"]

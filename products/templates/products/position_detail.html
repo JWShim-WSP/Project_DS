@@ -2,21 +2,175 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block scripts %}
+    <script src="{% static 'table_numbers.js' %}" defer></script>
+
+    {% if confirm or messages %}
+        <script>
+        $(document).ready(function () {
+            $("#updateModal").modal('show');
+        });
+        </script>
+    {% endif %}
+{% endblock scripts %}
+
 {% block title %}
-    Detail of Purchase Position #{{name}}
+    Detail of Purchase Position #{{profile.id}}
 {% endblock title %}
 
 {% block content %}
 
-{% if confirm %}
-    <div class="alert alert-primary" role="alert">
-        Purchase Position of #{{profile.id}} has been saved!
+{% if confirm or messages %}
+  <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          {% if profile.language == "Korean" %}
+          <h5 class="modal-title text-primary">결과</h5>
+          {% else %}
+          <h5 class="modal-title text-primary">Result</h5>
+          {% endif %}
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          {% if messages %}
+            {% for message in messages %}
+                <h3 class="modal-title text-success">{{ message }}</h1>
+            {% endfor %}
+          {% else %}
+            {% if user.profile.language == "Korean" %}
+            <h3 class="modal-title text-success">단위구매 #{{profile.id}}이 저장 되었습니다!</h1>
+            {% else %}
+            <h3 class="modal-title text-success">Purchase Position of #{{profile.id}} has been saved!</h1>
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          {% if user.profile.language == "Korean" %}
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="location.href='{% url "products:positionlist" %}'">나가기</button>
+          {% else %}
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="location.href='{% url "products:positionlist" %}'">Close</button>
+          {% endif %}
+        </div>
+        </div>
     </div>
+  </div>
 {% endif %}
 
+<!--
+{% if confirm %}
+    <div class="alert alert-primary" role="alert">
+        
+    </div>
+{% endif %}
+-->
+
 <div class="text-center">
+    {% if user.profile.language == "Korean" %}
+    <b>단위구매 ID: {{ profile.id }}</b>
+    {% else %}
     <b>Purchase Position ID: {{ profile.id }}</b>
+    {% endif %}
     <img src="{{ profile.product.image.url }}" alt="new profile" class="avatar-md">
+</div>
+
+{% if object_list_products %}
+<div class="p-1">
+    <button type="button" class="btn btn-outline-primary" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProductsInfo" aria-controls="offCanvasProductsInfo">
+      {% if user.profile.language == "Korean" %}
+      제품 정보 보기
+      {% else %}
+      Product Info
+      {% endif %}
+    </button>
+</div>
+{% endif %}
+
+<div class="offcanvas offcanvas-top" tabindex="-1" id="offCanvasProductsInfo" aria-labelledby="offcanvasProductsInfoLabel">
+  <div class="offcanvas-header">
+    {% if user.profile.language == "Korean" %}
+    <h5 class="offcanvas-title text-primary fw-bold" id="offCanvasProductsLabel">[제품 정보]</h5>
+    {% else %}
+    <h5 class="offcanvas-title text-primary fw-bold" id="offCanvasProductsLabel">[Products Info]</h5>
+    {% endif %}
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div>
+        <table class="table text-center table-hover table-light">
+            <thead>
+              {% if user.profile.language == "Korean" %}
+                <tr>
+                <th scope="col">제품 ID</th>
+                <th scope="col">이름</th>
+                <th scope="col">통화</th>
+                <th scope="col" class="text-danger"><b>재고수량</b></th>
+                <th scope="col">평균원환율</th>
+                <th scope="col" class="text-success">평균구매단가(통화)</th>
+                <th scope="col" class="text-success">평균구매단가(KRW)</th>
+                <th scope="col" class="text-info">총입고수량</th>
+                <th scope="col" class="text-primary"><b>총입고원가(KRW)</b></th>
+                <th scope="col">분류</th>
+                <th scope="col">공급사</th>
+                <th scope="col">변경일시</th>
+                </tr>
+              {% else %}
+                <tr>
+                <th scope="col">Product ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Currency</th>
+                <th scope="col" class="text-danger"><b>Inventory</b></th>
+                <th scope="col">Avg. Exchange Rate</th>
+                <th scope="col" class="text-success">Avg. Unit Price(Currency)</th>
+                <th scope="col" class="text-success">Avg. Unit Price(KRW)</th>
+                <th scope="col" class="text-info">Total Quantity</th>
+                <th scope="col" class="text-primary"><b>Total Cost(KRW)</b></th>
+                <th scope="col">Product Group</th>
+                <th scope="col">Supplier</th>
+                <th scope="col">Updated</th>
+                </tr>
+              {% endif %}
+            </thead>
+            <tbody>
+              {% for object in object_list_products %}
+                <tr>
+                    <th scope="row">{{ object.id }}</th>
+                    <td>{{ object.name }}</td>
+                    <td>{{ object.currency }}</td>
+                    <td class="integer_comma text-danger fw-bold">{{ object.inventory }}</td>
+                    <td class="float_rounded">{{ object.average_ex_rate_to_KRW }}</td>
+                    <td class="text-success float_rounded">{{ object.average_unit_price }}</td>
+                    <td class="text-success float_rounded">{{ object.average_unit_price_KRW }}</td>
+                    <td class="integer_comma text-info fw-bold">{{ object.total_quantity }}</td>
+                    <td class="text-primary float_rounded fw-bold">{{ object.total_added_price_KRW }}</td>
+                    <td>{{ object.product_type }}</td>
+                    <td>{{ object.supplier }}</td>
+                    <td>{{ object.updated }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="offcanvas-footer">
+        {% if profile.language == "Korean" %}
+        <button type="button" class="btn btn-primary" data-bs-dismiss="offcanvas">닫기</button>
+        {% else %}
+        <button type="button" class="btn btn-primary" data-bs-dismiss="offcanvas">Close</button>
+        {% endif %}
+    </div>
+  <!--
+    <div class="dropdown mt-3">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+        Dropdown button
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+      </ul>
+    </div>
+    -->
+  </div>
 </div>
 
 <br>
@@ -24,18 +178,38 @@
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form | crispy }}
-    <input class="btn btn-outline-primary"
-    value="Save"
-    type="submit">
-    <input class="btn btn-outline-primary"
-    value="Cancel"
-    type="button"
-    onclick="location.href='{% url "products:positionlist" %}'">
-    {% if profile.id and profile.status != "Stocked" %}
+    {% if user.profile.language == "Korean" %}
+      {% if profile.status != "Stocked" %}
         <input class="btn btn-outline-primary"
-        value="Delete"
-        type="button"
-        onclick="location.href='{% url "products:position-delete" profile.id %}'">
+        value="저장"
+        type="submit">
+      {% endif %}
+      <input class="btn btn-outline-primary"
+      value="돌아가기"
+      type="button"
+      onclick="location.href='{% url "products:positionlist" %}'">
+      {% if profile.id and profile.status != "Stocked" %}
+          <input class="btn btn-outline-primary"
+          value="삭제"
+          type="button"
+          onclick="location.href='{% url "products:position-delete" profile.id %}'">
+      {% endif %}
+    {% else %}
+      {% if profile.status != "Stocked" %}
+        <input class="btn btn-outline-primary"
+        value="Save"
+        type="submit">
+      {% endif %}
+      <input class="btn btn-outline-primary"
+      value="Cancel"
+      type="button"
+      onclick="location.href='{% url "products:positionlist" %}'">
+      {% if profile.id and profile.status != "Stocked" %}
+          <input class="btn btn-outline-primary"
+          value="Delete"
+          type="button"
+          onclick="location.href='{% url "products:position-delete" profile.id %}'">
+      {% endif %}
     {% endif %}
 </form>
 

@@ -3,19 +3,65 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-    detail {{object.name}}
+    Detail of {{object.name}}
 {% endblock title %}
+
+{% block scripts %}
+  {% if confirm or messages %}
+    <script>
+      $(document).ready(function () {
+        $("#updateModal").modal('show');
+      });
+    </script>
+  {% endif %}
+{% endblock scripts%}
 
 {% block content %}
 
-{% if confirm %}
-    <div class="alert alert-primary" role="alert">
-        Profile of {{profile.name}} has been saved!
+{% if confirm or messages %}
+  <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          {% if profile.language == "Korean" %}
+          <h5 class="modal-title text-primary">결과</h5>
+          {% else %}
+          <h5 class="modal-title text-primary">Result</h5>
+          {% endif %}
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          {% if messages %}
+            {% for message in messages %}
+                <h3 class="modal-title text-success">{{ message }}</h1>
+            {% endfor %}
+          {% else %}
+            {% if user.profile.language == "Korean" %}
+            <h3 class="modal-title text-success">{{profile.name}}이(가) 저장 되었습니다!</h1>
+            {% else %}
+            <h3 class="modal-title text-success">{{profile.name}} product has been saved!</h1>
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          {% if user.profile.language == "Korean" %}
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="location.href='{% url "products:productlist" %}'">나가기</button>
+          {% else %}
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="location.href='{% url "products:productlist" %}'">Close</button>
+          {% endif %}
+        </div>
+        </div>
     </div>
+  </div>
 {% endif %}
 
 <div class="text-center">
-    <img src="{{ profile.image.url }}" alt="new profile" class="avatar-big">
+    {% if user.profile.language == "Korean" %}
+    <b>제품 ID: {{ profile.id }}</b>
+    {% else %}
+    <b>Product ID: {{ profile.id }}</b>
+    {% endif %}
+    <img src="{{ profile.image.url }}" alt="new product" class="avatar-big">
 </div>
 
 <br>
@@ -23,18 +69,34 @@
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form | crispy }}
-    <input class="btn btn-outline-primary"
-    value="Save"
-    type="submit">
-    <input class="btn btn-outline-primary"
-    value="Cancel"
-    type="button"
-    onclick="location.href='{% url "products:productlist" %}'">
-    {% if profile.id %}
+    {% if user.profile.language == "Korean" %}
         <input class="btn btn-outline-primary"
-        value="Delete"
+        value="저장"
+        type="submit">
+        <input class="btn btn-outline-primary"
+        value="돌아가기"
         type="button"
-        onclick="location.href='{% url "products:product-delete" profile.id %}'">
+        onclick="location.href='{% url "products:productlist" %}'">
+        {% if profile.id %}
+            <input class="btn btn-outline-primary"
+            value="삭제"
+            type="button"
+            onclick="location.href='{% url "products:product-delete" profile.id %}'">
+        {% endif %}
+    {% else %}
+        <input class="btn btn-outline-primary"
+        value="Save"
+        type="submit">
+        <input class="btn btn-outline-primary"
+        value="Cancel"
+        type="button"
+        onclick="location.href='{% url "products:productlist" %}'">
+        {% if profile.id %}
+            <input class="btn btn-outline-primary"
+            value="Delete"
+            type="button"
+            onclick="location.href='{% url "products:product-delete" profile.id %}'">
+        {% endif %}
     {% endif %}
 </form>
 

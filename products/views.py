@@ -40,12 +40,12 @@ def product_list_view(request):
         supplier_by = request.GET.get('supplier_by')
 
         if type_by == None or type_by == 'All':
-            products_qs = Product.objects.all()
+            products_qs = Product.objects.all().order_by('-updated')
         else:
-            products_qs = Product.objects.filter(product_type=type_by)
+            products_qs = Product.objects.filter(product_type=type_by).order_by('-updated')
         
         if supplier_by is not None:
-            products_qs = products_qs.filter(supplier=supplier_by)
+            products_qs = products_qs.filter(supplier=supplier_by).order_by('-updated')
 
         # No pagination for product list
         #p = Paginator(products_qs, 10)
@@ -73,7 +73,10 @@ def product_list_view(request):
             products_df = products_df.to_html(classes='table text-center table-striped', justify='center')
 
         else:
-            no_data = 'No data is available in this date range'
+            if request.user.profile.language == "Korean":
+                no_data = '관련 자료 정보가 없습니다.'
+            else:
+                no_data = 'No data is available.'
 
         form_class = FormatForm()
         search_form = ProductSearchForm()
@@ -108,7 +111,7 @@ def product_detail_view(request, pk):
 
 @staff_member_required
 def product_add_view(request):
-    form = ProductForm(request.POST or None)
+    form = ProductForm(request.POST or None, request.FILES or None)
 
     if request.method == "POST":
         if form.is_valid():
@@ -148,7 +151,7 @@ def purchase_positions_list_view(request):
         else:
             dataset_format = dataset.json
         response = HttpResponse(dataset_format, content_type=f"text/{format}")
-        response['Content-Disposition'] = f"attachement; filename=bstposition.{format}"
+        response['Content-Disposition'] = f"attachement; filename=bstpurchase.{format}"
         return response
     else:
         positions_df = None
@@ -185,7 +188,7 @@ def purchase_positions_list_view(request):
         #qs = Sale.objects.all()
         # filter the data with lte (less than equal) and gte (greater than equal)
         if date_from and date_to:
-            positions_qs = Purchase.objects.filter(created__date__lte=date_to, created__date__gte=date_from)
+            positions_qs = Purchase.objects.filter(created__date__lte=date_to, created__date__gte=date_from).order_by('-updated')
         else:
             if year_from:
                 if not year_to: # if no year end specified, make it to 'year_from'
@@ -207,7 +210,7 @@ def purchase_positions_list_view(request):
                 else: # no month specified to make 12 months
                     date_from = str(year_from) + '-' + str(1) + '-' + str(1)
                     date_to = str(year_to) + '-' + str(12) + '-' + str(calendar.monthrange(year_to, 12)[1])
-                positions_qs = Purchase.objects.filter(created__date__lte=date_to, created__date__gte=date_from)
+                positions_qs = Purchase.objects.filter(created__date__lte=date_to, created__date__gte=date_from).order_by('-updated')
 
             elif month_from: #you want to see MoM of the year
                 if not month_to: # if no month end specified, make it to 'month_from'
@@ -219,10 +222,10 @@ def purchase_positions_list_view(request):
                 year_from = year_to = current_year()
                 date_from = str(year_from) + '-' + str(month_from) + '-' + str(1)
                 date_to = str(year_to) + '-' + str(month_to) + '-' + str(calendar.monthrange(year_to, month_to)[1])
-                positions_qs = Purchase.objects.filter(created__date__lte=date_to, created__date__gte=date_from)
+                positions_qs = Purchase.objects.filter(created__date__lte=date_to, created__date__gte=date_from).order_by('-updated')
 
             else:# you choose no period (All years and All months)
-                positions_qs = Purchase.objects.all()
+                positions_qs = Purchase.objects.all().order_by('-updated')
 
         if chart_type == None:
             chart_type = CHART_CHOICES[0][0]
@@ -254,7 +257,10 @@ def purchase_positions_list_view(request):
             chart = get_chart(chart_type, positions_df, key_by, sum_by)
             positions_df = positions_df.to_html(classes='table text-center table-striped', justify='center')
         else:
-            no_data = 'No data is available in this date range'     
+            if request.user.profile.language == "Korean":
+                no_data = '관련 자료 정보가 없습니다.'
+            else:
+                no_data = 'No data is available.'     
 
         search_form = PurchaseSearchForm()
         form_class = FormatForm()
@@ -275,6 +281,7 @@ def purchase_position_detail_view(request, pk):
     position = Purchase.objects.get(pk=pk)
     form = PurchaseForm(request.POST or None, instance=position)
     confirm = False
+    products_qs = Product.objects.all().order_by('-updated')
 
     if form.is_valid():
         form.save()
@@ -284,12 +291,14 @@ def purchase_position_detail_view(request, pk):
         'profile': position,
         'form': form,
         'confirm': confirm,
+        'object_list_products': products_qs,
     }
     return render(request, 'products/position_detail.html', context)
 
 @staff_member_required
 def purchase_position_add_view(request):
     form = PurchaseForm(request.POST or None)
+    products_qs = Product.objects.all().order_by('-updated')
 
     if request.method == "POST":
         if form.is_valid():
@@ -300,6 +309,7 @@ def purchase_position_add_view(request):
         'profile': None,
         'form': form,
         'confirm': False,
+        'object_list_products': products_qs,
     }
     return render(request, 'products/position_detail.html', context)
 

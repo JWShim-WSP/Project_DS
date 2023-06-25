@@ -45,7 +45,7 @@ BST Project - List of Members
 <table class="table text-center table-hover table-light">
     <thead>
         <tr>
-        <th scope="col">#</th>
+        <th scope="col"></th>
         <th scope="col">Username</th>
         <th scope="col">First_name</th>
         <th scope="col">Last_name</th>
@@ -57,7 +57,7 @@ BST Project - List of Members
     <tbody>
         {% for object in object_list %}
             <tr onclick="window.location='{% url "myadmin:memberdetails" object.id %}'">
-                <th scope="row">{{ forloop.counter }}</th>
+                <th scope="row"><img src="{{object.profile.avatar.url }}" alt="my-profile" class="avatar-tnail"></th>
                 <td>{{ object.username }}</td>
                 <td>{{ object.first_name }}</td>
                 <td>{{ object.last_name }}</td>

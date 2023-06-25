@@ -25,8 +25,11 @@ def login_view(request):
             else:
                 error_message = "Oops...something went wrong"
 
-    context = {
-        'form': form,
-        'error_message': error_message,
-    }
-    return render(request, 'auth/login.html', context)
+    if request.user.is_authenticated:
+        return redirect('sales:home')
+    else:
+        context = {
+            'form': form,
+            'error_message': error_message,
+        }
+        return render(request, 'auth/login.html', context)

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Sale, Position
-from products.models import PRODUCT_CHOICES_FOR_SEARCH, Purchase
+from products.models import PRODUCT_CHOICES_FOR_SEARCH, Purchase, Product
 from profiles.forms import FormatForm
 from .forms import SalesSearchForm, ExecutedSaleForm, SaleForm, PositionForm, PositionSearchForm, current_year, CHART_CHOICES, RESULT_CHOICES, POSITION_SUM_CHOICES, SALES_SUM_CHOICES
 from .resources import SaleResource, PositionResource
@@ -30,6 +30,7 @@ def sales_home_view(request):
 
     sales_positions_qs = Position.objects.order_by('inventory_status')
     purchase_positions_qs = Purchase.objects.order_by('status')
+    products_qs = Product.objects.order_by('-updated')
 
     # Make YoY chart for final_profit
     sales_qs = Sale.objects.all()
@@ -41,7 +42,10 @@ def sales_home_view(request):
         sales_df['year'] = sales_df['created'].apply(lambda x: x.strftime('%Y')) # lambda argument: expression
         chart1 = get_chart(chart_type, sales_df, key_by, sum_by)
     else:
-        no_data1 = 'No data is available in this date range'
+        if request.user.profile.language == "Korean":
+            no_data1 = '관련 자료 정보가 없습니다.'
+        else:
+            no_data1 = 'No data is available.'
 
     year_from = year_to = current_year()
     date_from = str(year_from) + '-' + str(1) + '-' + str(1)
@@ -55,7 +59,10 @@ def sales_home_view(request):
         sales_df['year_month'] = sales_df['created'].apply(lambda x: x.strftime('%Y-%m')) # lambda argument: expression
         chart2 = get_chart(chart_type, sales_df, key_by, sum_by)
     else:
-        no_data2 = 'No data is available in this date range'
+        if request.user.profile.language == "Korean":
+            no_data2 = '관련 자료 정보가 없습니다.'
+        else:
+            no_data2 = 'No data is available.'
 
     sales_qs = Sale.objects.all()
     # Make YoY chart for total sales revenue
@@ -67,7 +74,10 @@ def sales_home_view(request):
         sales_df['year'] = sales_df['created'].apply(lambda x: x.strftime('%Y')) # lambda argument: expression
         chart3 = get_chart(chart_type, sales_df, key_by, sum_by)
     else:
-        no_data3 = 'No data is available in this date range'
+        if request.user.profile.language == "Korean":
+            no_data3 = '관련 자료 정보가 없습니다.'
+        else:
+            no_data3 = 'No data is available.'
 
     # Make Monthly chart for this year sales revenue
     year_from = year_to = current_year()
@@ -82,9 +92,10 @@ def sales_home_view(request):
         sales_df['year_month'] = sales_df['created'].apply(lambda x: x.strftime('%Y-%m')) # lambda argument: expression
         chart4 = get_chart(chart_type, sales_df, key_by, sum_by)
     else:
-        no_data4 = 'No data is available in this date range'
+        no_data4 = 'is available in this date range'
 
     context = {
+        'object_list_products': products_qs,
         'object_list_sales': sales_positions_qs,
         'object_list_purchase': purchase_positions_qs,
         'current_year': current_year,
@@ -161,7 +172,7 @@ def sales_list_view(request):
         #qs = Sale.objects.all()
         # filter the data with lte (less than equal) and gte (greater than equal)
         if date_from and date_to:
-            sales_qs = Sale.objects.filter(created__date__lte=date_to, created__date__gte=date_from)
+            sales_qs = Sale.objects.filter(created__date__lte=date_to, created__date__gte=date_from).order_by('-updated')
         else:
             if year_from:
                 if not year_to: # if no year end specified, make it to 'year_from'
@@ -183,7 +194,7 @@ def sales_list_view(request):
                 else: # no month specified to make 12 months
                     date_from = str(year_from) + '-' + str(1) + '-' + str(1)
                     date_to = str(year_to) + '-' + str(12) + '-' + str(calendar.monthrange(year_to, 12)[1])
-                sales_qs = Sale.objects.filter(created__date__lte=date_to, created__date__gte=date_from)
+                sales_qs = Sale.objects.filter(created__date__lte=date_to, created__date__gte=date_from).order_by('-updated')
 
             elif month_from: #you want to see MoM of the year
                 if not month_to: # if no month end specified, make it to 'month_from'
@@ -195,10 +206,10 @@ def sales_list_view(request):
                 year_from = year_to = current_year()
                 date_from = str(year_from) + '-' + str(month_from) + '-' + str(1)
                 date_to = str(year_to) + '-' + str(month_to) + '-' + str(calendar.monthrange(year_to, month_to)[1])
-                sales_qs = Sale.objects.filter(created__date__lte=date_to, created__date__gte=date_from)
+                sales_qs = Sale.objects.filter(created__date__lte=date_to, created__date__gte=date_from).order_by('-updated')
 
             else:# you choose no period (All years and All months)
-                sales_qs = Sale.objects.all()
+                sales_qs = Sale.objects.all().order_by('-updated')
 
         # no pagination needed for sales list
         #p = Paginator(sales_qs, 10)
@@ -250,7 +261,10 @@ def sales_list_view(request):
             chart = get_chart(chart_type, merged_df, key_by, sum_by)
             merged_df = merged_df.to_html(classes='table text-center table-striped', justify='center')
         else:
-            no_data = 'No data is available in this date range'     
+            if request.user.profile.language == "Korean":
+                no_data = '관련 자료 정보가 없습니다.'
+            else:
+                no_data = 'No data is available.'     
 
         search_form = SalesSearchForm()
         form_class = FormatForm()
@@ -291,7 +305,7 @@ def sales_detail_view(request, pk):
 def sales_add_view(request):
     form = SaleForm(request.POST or None)
 
-    qs = Position.objects.filter(inventory_status="Yes", position_sold=False)
+    qs = Position.objects.filter(inventory_status=True, position_sold=False)
     if qs:
         position_avail = True
         if request.method == "POST":
@@ -443,7 +457,10 @@ def positions_list_view(request):
             chart = get_chart(chart_type, positions_df, key_by, sum_by)
             positions_df = positions_df.to_html(classes='table text-center table-striped', justify='center')
         else:
-            no_data = 'No data is available in this date range'     
+            if request.user.profile.language == "Korean":
+                no_data = '관련 자료 정보가 없습니다.'
+            else:
+                no_data = 'No data is available.'     
 
         search_form = PositionSearchForm()
         form_class = FormatForm()
@@ -464,8 +481,19 @@ def position_detail_view(request, pk):
     position = Position.objects.get(pk=pk)
     form = PositionForm(request.POST or None, instance=position)
     confirm = False
+    # let's remember the quantity for any changes!!!
+    if position.inventory_status == True:
+        position_quantity = position.quantity
+    else:
+        position_quantity = 0
+
+    products_qs = Product.objects.all().order_by('-updated')
 
     if form.is_valid():
+        # before it saves the new data, let's compensate the product inventory for update
+        if position_quantity:
+            position.product.inventory += position_quantity
+            position.product.save(update_fields=['inventory'])
         form.save()
         confirm = True
 
@@ -473,12 +501,14 @@ def position_detail_view(request, pk):
         'profile': position,
         'form': form,
         'confirm': confirm,
-    }
+        'object_list_products': products_qs,
+}
     return render(request, 'sales/position_detail.html', context)
 
 @staff_member_required
 def position_add_view(request):
     form = PositionForm(request.POST or None)
+    products_qs = Product.objects.all().order_by('-updated')
 
     if request.method == "POST":
         if form.is_valid():
@@ -489,7 +519,8 @@ def position_add_view(request):
         'profile': None,
         'form': form,
         'confirm': False,
-    }
+        'object_list_products': products_qs,
+}
     return render(request, 'sales/position_detail.html', context)
 
 @staff_member_required

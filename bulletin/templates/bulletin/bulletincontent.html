@@ -83,7 +83,13 @@
 {% endif %}
 
 <div class="card mb-3">
-    <p>{{ post.content }}</p>
+    {% if post.image %}
+        <img src="{{ post.image.url }}" alt="post-image">
+    {% endif %}
+</div>
+
+<div class="card mb-3">
+    <p><pre>{{ post.content }}</pre></p>
 </div>
 
 <form action="{% url 'bulletin:post-like' post.slug %}" method="POST">
@@ -164,11 +170,11 @@
             <input class="btn btn-outline-primary"
             value="변경"
             type="button"
-            onclick="location.href='{% url "bulletin:post-update" post.id %}'">
+            onclick="location.href='{% url "bulletin:post-update" post.slug %}'">
             <input class="btn btn-outline-primary"
             value="삭제"
             type="button"
-            onclick="location.href='{% url "bulletin:post-delete" post.id %}'">
+            onclick="location.href='{% url "bulletin:post-delete" post.slug %}'">
         {% endif %}
     </div>
     <br>
