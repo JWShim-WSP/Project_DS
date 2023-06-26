@@ -18,10 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import login_view, logout_view
+from .views import login_view, logout_view, home_view
 
 urlpatterns = [
-    path('', include('sales.urls', namespace='sales')),
+    path('', home_view, name='home'),
+    path('sales/', include('sales.urls', namespace='sales')),
     path('bulletin/', include('bulletin.urls', namespace='bulletin')),
     path('hitcount/', include(('hitcount.urls', 'hitcount'), namespace='hitcount')),
     path('products/', include('products.urls', namespace='products')),

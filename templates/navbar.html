@@ -1,6 +1,8 @@
 {% load static %}
-{% url 'sales:home' as path_to_home %}
+{% url 'home' as path_to_home %}
+{% url 'sales:dashboard' as path_to_dashboard %}
 {% url 'sales:saleslist' as path_to_sales %}
+{% url 'sales:positionlist' as path_to_position %}
 {% url 'reports:main' as path_to_reports %}
 {% url 'products:positionlist' as path_to_purchase %}
 {% url 'products:productlist' as path_to_products %}
@@ -30,7 +32,10 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
     {% if user.profile.language == "Korean" %}
         <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">판매</a>
+          <a class="nav-link {% if request.path == path_to_dashboard %}active{% endif %}" href="{{path_to_dashboard}}">현황판</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_sales or request.path == path_to_position %}active{% endif %}" href="{{path_to_sales}}">판매</a>
         </li>
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_purchase %}active{% endif %}" href="{{path_to_purchase}}">구매</a>
@@ -48,7 +53,7 @@
           <a class="nav-link {% if request.path == path_to_reports %}active{% endif %}" href="{{path_to_reports}}">보고서</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_bulletin %}active{% endif %}" href="{{path_to_bulletin}}">커뮤너티</a>
+          <a class="nav-link {% if request.path == path_to_bulletin %}active{% endif %}" href="{{path_to_bulletin}}">알림글</a>
         </li>
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_tools %}active{% endif %}" href="{{path_to_tools}}">도구함</a>
@@ -70,6 +75,9 @@
         -->
       {% else %}
         <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_dashboard %}active{% endif %}" href="{{path_to_dashboard}}">Dashboard</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">Sales</a>
         </li>
         <li class="nav-item">
@@ -88,7 +96,7 @@
           <a class="nav-link {% if request.path == path_to_reports %}active{% endif %}" href="{{path_to_reports}}">Reports</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_bulletin %}active{% endif %}" href="{{path_to_bulletin}}">Community</a>
+          <a class="nav-link {% if request.path == path_to_bulletin %}active{% endif %}" href="{{path_to_bulletin}}">Bulletin</a>
         </li>
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_tools %}active{% endif %}" href="{{path_to_tools}}">Tools</a>

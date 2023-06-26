@@ -20,7 +20,7 @@ import calendar
 # MVT (Model, View, and Template) for Django applications
 
 @login_required
-def sales_home_view(request):
+def sales_dashboard_view(request):
 
     chart1 = chart2 = chart3 = chart4 = None
     no_data1 = None
@@ -108,7 +108,7 @@ def sales_home_view(request):
         'no_data3': no_data3,
         'no_data4': no_data4,
     }
-    return render(request, 'sales/home.html', context)
+    return render(request, 'sales/dashboard.html', context)
 
 class SaleListView(LoginRequiredMixin, ListView):
     model = Sale

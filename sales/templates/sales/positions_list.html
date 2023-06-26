@@ -29,13 +29,11 @@ Position List
     <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">단위판매실행</a>
     </div>
-    <div class="me-auto p-1">
+    <div class="p-1">
         <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#positionsModal">보기 분류</button>
-        <!--
-        <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
-            Sort By
-        </button>
-        -->
+    </div>
+    <div class="me-auto p-1">
+        <a class="btn btn-outline-primary" href="{% url 'sales:saleslist' %}" role="button">돌아가기</a>
     </div>
     <div class="p-1">
         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
@@ -49,13 +47,11 @@ Position List
     <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">Sales Execution</a>
     </div>
-    <div class="me-auto p-1">
+    <div class="p-1">
         <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#positionsModal">Sort By</button>
-        <!--
-        <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProducts" aria-controls="offCanvasProducts">
-            Sort By
-        </button>
-        -->
+    </div>
+    <div class="me-auto p-1">
+        <a class="btn btn-outline-primary" href="{% url 'sales:saleslist' %}" role="button">Back to Sales</a>
     </div>
     <div class="p-1">
         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">

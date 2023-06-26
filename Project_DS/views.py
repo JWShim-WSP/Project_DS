@@ -2,10 +2,22 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 
+def home_view(request):
+    if request.user.is_authenticated:
+        return redirect('sales:dashboard')
+    else:
+        error_message = None
+        form = AuthenticationForm()
+        context = {
+            'form': form,
+            'error_message': error_message,
+        }
+        return render(request, 'auth/login.html', context)
+
 def logout_view(request):
     logout(request)
     return redirect('login')
-
+  
 def login_view(request):
     error_message = None
     form = AuthenticationForm()
@@ -20,13 +32,13 @@ def login_view(request):
                 if request.GET.get('next'):
                     return redirect(request.GET.get('next'))
                 else:
-                    return redirect('sales:home')
+                    return redirect('sales:dashboard')
                 
             else:
                 error_message = "Oops...something went wrong"
 
     if request.user.is_authenticated:
-        return redirect('sales:home')
+        return redirect('sales:dashboard')
     else:
         context = {
             'form': form,
