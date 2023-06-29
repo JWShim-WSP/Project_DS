@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Detail of {{object.name}}
+{% endblock title %}
+
+{% block scripts %}
+  {% if confirm or messages %}
+    <script>
+      $(document).ready(function () {
+        $("#updateModal").modal('show');
+      });
+    </script>
+  {% endif %}
+{% endblock scripts%}
+
+{% block content %}
+
+{% if confirm or messages %}
+  <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          {% if profile.language == "Korean" %}
+          <h5 class="modal-title text-primary">결과</h5>
+          {% else %}
+          <h5 class="modal-title text-primary">Result</h5>
+          {% endif %}
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          {% if messages %}
+            {% for message in messages %}
+                <h3 class="modal-title text-success">{{ message }}</h1>
+            {% endfor %}
+          {% else %}
+            {% if user.profile.language == "Korean" %}
+            <h3 class="modal-title text-success">{{profile.name}}그룹 이 저장 되었습니다!</h1>
+            {% else %}
+            <h3 class="modal-title text-success">{{profile.name}} group has been saved!</h1>
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          {% if user.profile.language == "Korean" %}
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="location.href='{% url "products:grouplist" %}'">나가기</button>
+          {% else %}
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="location.href='{% url "products:grouplist" %}'">Close</button>
+          {% endif %}
+        </div>
+        </div>
+    </div>
+  </div>
+{% endif %}
+
+<div class="text-center">
+    {% if user.profile.language == "Korean" %}
+    <b>그룹 ID: {{ profile.id }}</b>
+    {% else %}
+    <b>Product Group ID: {{ profile.id }}</b>
+    {% endif %}
+</div>
+
+<br>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form | crispy }}
+    {% if user.profile.language == "Korean" %}
+        <input class="btn btn-outline-primary"
+        value="저장"
+        type="submit">
+        <input class="btn btn-outline-primary"
+        value="돌아가기"
+        type="button"
+        onclick="location.href='{% url "products:grouplist" %}'">
+        {% if profile.id %}
+            <input class="btn btn-outline-primary"
+            value="삭제"
+            type="button"
+            onclick="location.href='{% url "products:group-delete" profile.id %}'">
+        {% endif %}
+    {% else %}
+        <input class="btn btn-outline-primary"
+        value="Save"
+        type="submit">
+        <input class="btn btn-outline-primary"
+        value="Cancel"
+        type="button"
+        onclick="location.href='{% url "products:grouplist" %}'">
+        {% if profile.id %}
+            <input class="btn btn-outline-primary"
+            value="Delete"
+            type="button"
+            onclick="location.href='{% url "products:group-delete" profile.id %}'">
+        {% endif %}
+    {% endif %}
+</form>
+
+  
+{% endblock content %}

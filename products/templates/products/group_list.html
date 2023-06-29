@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Product Group List
+{% endblock title %}
+
+{% block content %}
+
+{% if user.profile.language == "Korean" %}
+<h3 class="text-center"><b>제품그룹 리스트</b></h3>
+{% else %}
+<h3 class="text-center"><b>Product Group List</b></h3>
+{% endif %}
+
+<div class="d-flex mb-3">
+    {% if user.profile.language == "Korean" %}
+    <div class="p-1">
+        <a class="btn btn-outline-primary" href="{% url 'products:group-add' %}" role="button">그룹 추가</a>
+    </div>
+    <div class="me-auto p-1">
+      <a class="btn btn-outline-primary" href="{% url 'products:productlist' %}" role="button">돌아가기</a>
+    </div>
+  {% else %}
+    <div class="p-1">
+        <a class="btn btn-outline-primary" href="{% url 'products:group-add' %}" role="button">Add Group</a>
+    </div>
+    <div class="me-auto p-1">
+      <a class="btn btn-outline-primary" href="{% url 'products:productlist' %}" role="button">Go Back</a>
+    </div>
+    {% endif %}
+</div>
+
+<table class="table text-center table-hover table-light">
+    <thead>
+        <tr>
+        {% if user.profile.language == "Korean" %}
+            <th scope="col">그룹 ID</th>
+            <th scope="col">이름</th>
+            <th scope="col">참고</th>
+        {% else %}
+            <th scope="col">Group ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Remark</th>
+        {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for object in object_list %}
+            <tr onclick="window.location='{{object.get_absolute_url}}'">
+                <th scope="row">{{ object.id }}</th>
+                <td>{{ object.name }}</td>
+                <td>{{ object.remark }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}
