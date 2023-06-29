@@ -39,6 +39,22 @@ PURCHASE_STATUS = (
     ('Stocked', 'Stocked'),
 )
 
+def getProductGroupChoices():
+    qs = ProductGroup.objects.all()
+    return qs.insert(0, 'All')
+
+
+class ProductGroup(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    remark = models.TextField(max_length=1024, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('products:groupdetails', kwargs={'pk':self.pk})
+
+    def __str__(self):
+        return f"{self.name}"
+ 
+
 class Product(models.Model):
     name = models.CharField(max_length=120)
     image = models.ImageField(upload_to='products', default='no_picture.png')
@@ -50,7 +66,7 @@ class Product(models.Model):
     remark = models.TextField(max_length=1024, blank=True)
     supplier = models.ForeignKey(Supplier, null=True, on_delete=models.CASCADE, related_name='product_supplier')
     customers = models.ManyToManyField(Customer, blank=True, related_name='product_customers')
-    product_type = models.CharField(max_length=50, choices=PRODUCT_TYPE_CHOICES)
+    product_type = models.ForeignKey(ProductGroup, on_delete=models.CASCADE)
     inventory = models.IntegerField(default=0)
     average_unit_price = models.FloatField(default=0, null=True)
     average_unit_price_KRW = models.FloatField(default=0, null=True)

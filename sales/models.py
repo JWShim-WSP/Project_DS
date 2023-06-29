@@ -7,6 +7,7 @@ from .utils import generate_code
 from django.urls import reverse
 
 # Create your models here.
+
 class Position(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     unit_price = models.FloatField()
@@ -28,7 +29,10 @@ class Position(models.Model):
             if (kwargs['update_fields'] != ['inventory_status']) and (kwargs['update_fields'] != ['position_sold']): # Hey, you came here from Signal of Purchase or Sales
                 self.net_price = self.unit_price * self.quantity
                 self.net_profit = (self.unit_price - self.product.average_unit_price_KRW) * self.quantity
-                self.margin_percentage = ((self.unit_price - self.product.average_unit_price_KRW) / self.product.average_unit_price_KRW) * 100
+                if self.product.average_unit_price_KRW:
+                    self.margin_percentage = ((self.unit_price - self.product.average_unit_price_KRW) / self.product.average_unit_price_KRW) * 100
+                else:
+                    self.margin_percentage = 0
                 if self.product.inventory >= self.quantity: # short of inventory
                     self.inventory_status = True
                 else:
@@ -36,7 +40,10 @@ class Position(models.Model):
         except: # comes from normal Postion save
             self.net_price = self.unit_price * self.quantity
             self.net_profit = (self.unit_price - self.product.average_unit_price_KRW) * self.quantity
-            self.margin_percentage = ((self.unit_price - self.product.average_unit_price_KRW) / self.product.average_unit_price_KRW) * 100
+            if self.product.average_unit_price_KRW:
+                self.margin_percentage = ((self.unit_price - self.product.average_unit_price_KRW) / self.product.average_unit_price_KRW) * 100
+            else:
+                self.margin_percentage = 0
             if self.product.inventory >= self.quantity: # short of inventory
                 self.inventory_status = True
             else:
@@ -63,7 +70,7 @@ class Position(models.Model):
         return f"ID: {self.id}, Product: {self.product.name}, Quantity: {self.quantity}"
 
 class Sale(models.Model):
-    transaction_id = models.CharField(max_length=12, blank=True)
+    transaction_id = models.CharField(max_length=1024)
     positions = models.ManyToManyField(Position)
     #if multi positions are allowed, it is not easy to trace down Sale and Position
     #position = models.ForeignKey(Position, on_delete=models.CASCADE)
@@ -71,8 +78,9 @@ class Sale(models.Model):
     total_net_price = models.FloatField(null=True)
     total_net_profit = models.FloatField(null=True)
     
-    tax_cost = models.FloatField(default=0, null=True)
-    vat_cost = models.FloatField(default=0, null=True)
+    # tax/vat will be included in the price to customers, or it should not be counted here as will be returned to the government
+    #tax_cost = models.FloatField(default=0, null=True)
+    #vat_cost = models.FloatField(default=0, null=True)
     delivery_cost = models.FloatField(default=0, null=True)
     extra_cost = models.FloatField(default=0, null=True)
 
@@ -86,9 +94,12 @@ class Sale(models.Model):
     #created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    delivery_completed = models.BooleanField(default=False)
+
     def save(self, *args, **kwargs):
-        if self.transaction_id == "":
-            self.transaction_id = generate_code()
+        # No transaction_id from generate_code. This will be typed at form.
+        #if self.transaction_id == "":
+        #    self.transaction_id = generate_code()
         #if self.total_price is None: /* Signal from m2m 'post_add' or 'post_remove' will make the total_price
         #    self.total_price = self.position.price
         return super().save(*args, **kwargs)

@@ -73,6 +73,86 @@ Dashboard
 </div>
 
 <div class="row g-2 justify-content-center">
+  {% if user.profile.language == "Korean" %}
+  <h3 class="text-center mt-3"><b>[판매 출고 현황]</b></h3>
+  {% else %}
+  <h3 class="text-center mt-3"><b>[Sales Status]</b></h3>
+  {% endif %}
+  <table class="table text-center table-hover table-light">
+    <thead>
+      {% if user.profile.language == "Korean" %}
+        <tr>
+        <th scope="col">판매 ID</th>
+        <th scope="col">판매 고유 번호</th>
+        <th scope="col">단위판매항목</th>
+
+        <th scope="col" class="text-danger fw-bold">출고완료</th>
+
+        <th scope="col" class="text-primary fw-bold">판매가격(KRW)</th>
+        <th scope="col" class="text-success fw-bold">판매이익(KRW)</th>
+
+        <th scope="col">비용-물류(KRW)</th>
+        <th scope="col">비용-추가(KRW)</th>
+
+        <th scope="col" class="text-danger fw-bold">순이익(KRW)</th>
+
+        <th scope="col">고객</th>
+        <th scope="col">판매원</th>
+        <th scope="col">판매 일시</th>
+        <th scope="col">변경 일시</th>
+        </tr>
+      {% else %}
+        <tr>
+        <th scope="col">Sales ID</th>
+        <th scope="col">Sales Transaction ID</th>
+        <th scope="col">Sales Positions</th>
+
+        <th scope="col" class="text-danger fw-bold">Delivery Completed</th>
+
+        <th scope="col" class="text-primary fw-bold">Sales Price(KRW)</th>
+        <th scope="col" class="text-success fw-bold">Sales Profit(KRW)</th>
+
+        <th scope="col">Cost-Delivery(KRW)</th>
+        <th scope="col">Cost-etc(KRW)</th>
+
+        <th scope="col" class="text-danger fw-bold">Net Profit(KRW)</th>
+
+        <th scope="col">Customer</th>
+        <th scope="col">Salesman</th>
+        <th scope="col">Created</th>
+        <th scope="col">Updated</th>
+        </tr>
+      {% endif %}
+    </thead>
+    <tbody>
+      {% for object in object_list_sales %}
+        <tr onclick="window.location='{{ object.get_absolute_url }}'">
+          <th scope="row">{{ object.id }}</th>
+          <td>{{ object.transaction_id }}</td>
+          <td>{{ object.positions_ids }}</td>
+
+          <td class="text-danger fw-bold">{{ object.delivery_completed }}</td>
+
+          <td class="float_rounded text-primary fw-bold">{{ object.total_net_price }}</td>
+          <td class="float_rounded text-success fw-bold">{{ object.total_net_profit }}</td>
+
+          <td class="float_rounded">{{ object.delivery_cost }}</td>
+          <td class="float_rounded">{{ object.extra_cost }}</td>
+
+          <td class="float_rounded text-danger fw-bold">{{ object.final_profit }}</td>
+
+          <td>{{ object.customer }}</td>
+          <td>{{ object.salesman }}</td>
+          <td>{{ object.created }}</td>
+          <td>{{ object.updated }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+<div class="row g-2 justify-content-center">
   <div class="col-6">
     {% if user.profile.language == "Korean" %}
     <h3 class="text-center mt-3"><b>[단위출고 현황]</b></h3>
@@ -113,7 +193,7 @@ Dashboard
       {% endif %}
       </thead>
       <tbody>
-        {% for object in object_list_sales %}
+        {% for object in object_list_positions %}
           <tr onclick="window.location='{{object.get_absolute_url}}'">
             <th scope="row">{{ object.id }}</th>
             <td>{{ object.product.name }}</td>

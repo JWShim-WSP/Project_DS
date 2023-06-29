@@ -1,7 +1,6 @@
 from django import forms
 from .models import Sale, Position
-from products.models import Product
-from products.models import PRODUCT_CHOICES_FOR_SEARCH
+from products.models import ProductGroup, Product
 from django.forms import ModelForm, TextInput, EmailInput, NumberInput, Textarea, DateTimeInput, DateInput, Select
 import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -21,8 +20,8 @@ RESULT_CHOICES = (
     ('created', 'Sales date'),
     ('year', 'Yearly'),
     ('year_month', 'Year-Monthly'),
-    ('position_id', 'Position'),
     ('transaction_id', 'Transaction'),
+    ('position_id', 'Position'),
 )
 
 SALES_SUM_CHOICES = (
@@ -85,7 +84,12 @@ class PositionSearchForm(forms.Form):
     month_from = forms.TypedChoiceField(coerce=int, choices=MONTH_SELECT, initial=current_month, required=False)
     month_to = forms.TypedChoiceField(coerce=int, choices=MONTH_SELECT, initial=0, required=False)
     chart_type = forms.ChoiceField(choices=CHART_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
-    results_by = forms.ChoiceField(choices=PRODUCT_CHOICES_FOR_SEARCH, widget=forms.Select(attrs={'style':'width: 100%'}))
+    results_by = forms.ModelChoiceField(
+        widget = forms.RadioSelect,
+        queryset=ProductGroup.objects.all(),
+        required = False,
+        )
+
     sum_by = forms.ChoiceField(choices=POSITION_SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
 
 class CustomPositionChoice(forms.ModelMultipleChoiceField):
@@ -95,17 +99,17 @@ class CustomPositionChoice(forms.ModelMultipleChoiceField):
 class SaleForm(forms.ModelForm):
     class Meta:
         model = Sale
-        fields= ['positions', "tax_cost", "vat_cost", 'delivery_cost', 'extra_cost', 'customer', 'salesman']
+        fields= ['transaction_id', 'positions', 'delivery_cost', 'extra_cost', 'customer', 'salesman']
     
     positions = forms.ModelMultipleChoiceField(
-        queryset=Position.objects.filter(inventory_status=True, position_sold=False),
+        queryset=Position.objects.filter(position_sold=False),
         widget=forms.CheckboxSelectMultiple
     )
 
 class ExecutedSaleForm(forms.ModelForm):
     class Meta:
         model = Sale
-        fields= ['positions', "tax_cost", "vat_cost", 'delivery_cost', 'extra_cost', 'customer', 'salesman']
+        fields= ['transaction_id', 'positions', 'delivery_cost', 'extra_cost', 'customer', 'salesman']
 
     positions = forms.ModelMultipleChoiceField(
         queryset=Position.objects.all(),

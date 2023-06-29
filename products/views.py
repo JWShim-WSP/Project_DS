@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.urls import reverse
-from .models import Product, Purchase
-from .forms import ProductForm, ProductSearchForm, PurchaseForm, PurchaseSearchForm, PURCHASE_SUM_CHOICES, PRODUCT_SUM_CHOICES
+from .models import ProductGroup, Product, Purchase
+from .forms import ProductGroupForm, ProductForm, ProductSearchForm, PurchaseForm, PurchaseSearchForm, PURCHASE_SUM_CHOICES, PRODUCT_SUM_CHOICES
 from sales.forms import CHART_CHOICES, current_year
 from .resources import ProductResource, PurchaseResource
 from profiles.forms import FormatForm
@@ -14,6 +14,70 @@ from django.contrib.admin.views.decorators import staff_member_required
 import calendar
 
 # Create your views here.
+
+@staff_member_required
+def group_list_view(request):
+    product_group = ProductGroup.objects.all().order_by('name')
+    form_class = ProductGroupForm()
+
+    context = {
+        'object_list': product_group,
+        'form': form_class,
+    }
+    return render(request, 'products/group_list.html', context)
+
+
+@staff_member_required
+def group_delete_view(request, pk):
+    product_group = ProductGroup.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        product_group.delete()
+        return HttpResponseRedirect(reverse('products:grouplist'))
+    else:
+        context = {
+            'profile': product_group,
+        }
+        return render(request, 'products/group_confirm_delete.html', context)
+
+@staff_member_required
+def group_detail_view(request, pk):
+    product_group = ProductGroup.objects.get(pk=pk)
+    form = ProductGroupForm(request.POST or None, instance=product_group)
+    confirm = False
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            confirm = True
+
+
+    context = {
+        'profile': product_group,
+        'form': form,
+        'confirm': confirm,
+    }
+    return render(request, 'products/group_detail.html', context)
+
+@staff_member_required
+def group_add_view(request):
+    form = ProductGroupForm(request.POST or None)
+    confirm = False
+    product_group = ProductGroup()
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            confirm = True
+            product_group.name = form.cleaned_data['name']
+
+    context = {
+        'profile': product_group,
+        'form': form,
+        'confirm': confirm,
+    }
+    return render(request, 'products/group_detail.html', context)
+
 @staff_member_required
 def product_list_view(request):
 
@@ -98,9 +162,11 @@ def product_detail_view(request, pk):
     form = ProductForm(request.POST or None, request.FILES or None, instance=product)
     confirm = False
 
-    if form.is_valid():
-        form.save()
-        confirm = True
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            confirm = True
+
 
     context = {
         'profile': product,
@@ -112,16 +178,19 @@ def product_detail_view(request, pk):
 @staff_member_required
 def product_add_view(request):
     form = ProductForm(request.POST or None, request.FILES or None)
+    confirm = False
+    product = Product()
 
     if request.method == "POST":
         if form.is_valid():
             form.save()
-        return HttpResponseRedirect(reverse('products:productlist'))
+            confirm = True
+            product.name = form.cleaned_data['name']
 
     context = {
-        'profile': None,
+        'profile': product,
         'form': form,
-        'confirm': False,
+        'confirm': confirm,
     }
     return render(request, 'products/product_detail.html', context)
 
@@ -264,8 +333,10 @@ def purchase_positions_list_view(request):
 
         search_form = PurchaseSearchForm()
         form_class = FormatForm()
+        products_qs = Product.objects.order_by('-updated')
             
         context = {
+            'object_list_products': products_qs,
             'object_list': object_list,
             'form': form_class,
             'search_form': search_form,
@@ -283,9 +354,10 @@ def purchase_position_detail_view(request, pk):
     confirm = False
     products_qs = Product.objects.all().order_by('-updated')
 
-    if form.is_valid():
-        form.save()
-        confirm = True
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            confirm = True
 
     context = {
         'profile': position,
@@ -298,17 +370,20 @@ def purchase_position_detail_view(request, pk):
 @staff_member_required
 def purchase_position_add_view(request):
     form = PurchaseForm(request.POST or None)
+    position = Purchase()
+    confirm = False
     products_qs = Product.objects.all().order_by('-updated')
 
     if request.method == "POST":
         if form.is_valid():
             form.save()
-        return HttpResponseRedirect(reverse('products:positionlist'))
+            confirm = True
+            position.product = form.cleaned_data['product']
 
     context = {
-        'profile': None,
+        'profile': position,
         'form': form,
-        'confirm': False,
+        'confirm': confirm,
         'object_list_products': products_qs,
     }
     return render(request, 'products/position_detail.html', context)

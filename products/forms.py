@@ -1,8 +1,7 @@
 from django import forms
-from .models import Product, Purchase, PRODUCT_CHOICES_FOR_SEARCH, CURRENCIES
+from .models import getProductGroupChoices, ProductGroup, Product, Purchase, PRODUCT_CHOICES_FOR_SEARCH, CURRENCIES
 from customers.models import Customer, Supplier
 from sales.forms import CHART_CHOICES, MONTH_SELECT, current_year, current_month, year_choices
-from django.forms import ModelForm, TextInput, EmailInput, NumberInput, Textarea, DateTimeInput, DateInput, Select
 
 PURCHASE_SUM_CHOICES = (
     ('quantity', 'Quantity'),
@@ -17,22 +16,31 @@ PRODUCT_SUM_CHOICES = (
     ('total_added_price_KRW', 'Total Purchase Cost'),
 )
 
+class ProductGroupForm(forms.ModelForm):
+    class Meta:
+        model = ProductGroup
+        fields= ["name", 'remark']
+
 class ProductForm(forms.ModelForm):
     customers = forms.ModelMultipleChoiceField(
         queryset=Customer.objects.all(),
-        widget=forms.CheckboxSelectMultiple
+        widget=forms.CheckboxSelectMultiple,
     )
 
     supplier = forms.ModelChoiceField(
-            widget=forms.RadioSelect,
-            queryset=Supplier.objects.all(),
-        )
+        widget=forms.RadioSelect,
+        queryset=Supplier.objects.all(),
+    )
 
     currency = forms.ChoiceField(
-            widget=forms.RadioSelect,
-            choices=CURRENCIES,
-        )
-
+        widget=forms.RadioSelect,
+        choices=CURRENCIES,
+    )
+    
+    product_type = forms.ModelChoiceField(
+        widget=forms.RadioSelect,
+        queryset=ProductGroup.objects.all(),
+    )
 
     class Meta:
         model = Product
@@ -40,12 +48,16 @@ class ProductForm(forms.ModelForm):
 
 class ProductSearchForm(forms.Form):
     chart_type = forms.ChoiceField(choices=CHART_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
-    type_by = forms.ChoiceField(choices=PRODUCT_CHOICES_FOR_SEARCH, widget=forms.Select(attrs={'style':'width: 100%'}))
+    type_by = forms.ModelChoiceField(
+        widget = forms.RadioSelect,
+        queryset=ProductGroup.objects.all(),
+        required = False,
+        )
     sum_by = forms.ChoiceField(choices=PRODUCT_SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
     supplier_by = forms.ModelChoiceField(
-            widget=forms.RadioSelect,
-            queryset=Supplier.objects.all(),
-            required = False,
+        widget=forms.RadioSelect,
+        queryset=Supplier.objects.all(),
+        required = False,
         )
 
 class PurchaseForm(forms.ModelForm):
@@ -66,5 +78,11 @@ class PurchaseSearchForm(forms.Form):
     month_from = forms.TypedChoiceField(coerce=int, choices=MONTH_SELECT, initial=current_month, required=False)
     month_to = forms.TypedChoiceField(coerce=int, choices=MONTH_SELECT, initial=0, required=False)
     chart_type = forms.ChoiceField(choices=CHART_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
-    results_by = forms.ChoiceField(choices=PRODUCT_CHOICES_FOR_SEARCH, widget=forms.Select(attrs={'style':'width: 100%'}))
+
+    results_by = forms.ModelChoiceField(
+        widget = forms.RadioSelect,
+        queryset=ProductGroup.objects.all(),
+        required = False,
+        )
+
     sum_by = forms.ChoiceField(choices=PURCHASE_SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))

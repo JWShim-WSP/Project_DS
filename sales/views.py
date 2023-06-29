@@ -31,6 +31,7 @@ def sales_dashboard_view(request):
     sales_positions_qs = Position.objects.order_by('inventory_status')
     purchase_positions_qs = Purchase.objects.order_by('status')
     products_qs = Product.objects.order_by('-updated')
+    sales_status_qs = Sale.objects.order_by('delivery_completed')
 
     # Make YoY chart for final_profit
     sales_qs = Sale.objects.all()
@@ -96,8 +97,9 @@ def sales_dashboard_view(request):
 
     context = {
         'object_list_products': products_qs,
-        'object_list_sales': sales_positions_qs,
+        'object_list_positions': sales_positions_qs,
         'object_list_purchase': purchase_positions_qs,
+        'object_list_sales': sales_status_qs,
         'current_year': current_year,
         'chart1': chart1,
         'chart2': chart2,
@@ -269,6 +271,7 @@ def sales_list_view(request):
         search_form = SalesSearchForm()
         form_class = FormatForm()
         report_form = ReportForm()
+        products_qs = Product.objects.all().order_by('-updated')
 
         context = {
             'object_list': object_list,
@@ -278,7 +281,8 @@ def sales_list_view(request):
             'merged_df': merged_df,
             'chart': chart,
             'no_data': no_data,
-        }
+            'object_list_products': products_qs,
+    }
         return render(request, 'sales/sales_list.html', context)
 
 
@@ -286,12 +290,29 @@ def sales_list_view(request):
 def sales_detail_view(request, pk):
     sales = Sale.objects.get(pk=pk)
     form = ExecutedSaleForm(request.POST or None, instance=sales)
+    qs = sales.positions.all()
     confirm = False
+    delivery_completed = True
 
     if request.method == "POST":
-        if form.is_valid():
-            form.save()
-            confirm = True
+        for position in qs:
+            if position.inventory_status == False: # check if the inventory is supplied at this moment
+                if position.product.inventory >= position.quantity: # now it is to complete the delivery
+                    position.position_sold = False                    
+                    position.save() # this will make the product.inventory updated by Signaling!!!
+                    position.position_sold = True
+                    position.save(update_fields=['position_sold'])
+                else:
+                    delivery_completed = False
+
+        if sales.delivery_completed == False: # if it was blocked before
+            if delivery_completed == True:
+                sales.delivery_completed = True
+                sales.save()
+        else:
+            sales.error # should not happen!!!
+
+        confirm = True
 
     context = {
         'profile': sales,
@@ -304,21 +325,24 @@ def sales_detail_view(request, pk):
 @staff_member_required
 def sales_add_view(request):
     form = SaleForm(request.POST or None)
+    sales = Sale()
+    confirm = False
 
-    qs = Position.objects.filter(inventory_status=True, position_sold=False)
+    qs = Position.objects.filter(position_sold=False)
     if qs:
         position_avail = True
         if request.method == "POST":
             if form.is_valid():
                 form.save()
-            return HttpResponseRedirect(reverse('sales:saleslist'))
+                sales.transaction_id = form.cleaned_data['transaction_id']
+                confirm = True
     else:
         position_avail = False
 
     context = {
-        'profile': None,
+        'profile': sales,
         'form': form,
-        'confirm': False,
+        'confirm': confirm,
         'position_avail': position_avail
     }
     return render(request, 'sales/sales_detail.html', context)
@@ -464,6 +488,7 @@ def positions_list_view(request):
 
         search_form = PositionSearchForm()
         form_class = FormatForm()
+        products_qs = Product.objects.all().order_by('-updated')
             
         context = {
             'object_list': object_list,
@@ -472,6 +497,7 @@ def positions_list_view(request):
             'positions_df': positions_df,
             'chart': chart,
             'no_data': no_data,
+            'object_list_products': products_qs,
         }
         return render(request, 'sales/positions_list.html', context)
 
@@ -489,13 +515,14 @@ def position_detail_view(request, pk):
 
     products_qs = Product.objects.all().order_by('-updated')
 
-    if form.is_valid():
-        # before it saves the new data, let's compensate the product inventory for update
-        if position_quantity:
-            position.product.inventory += position_quantity
-            position.product.save(update_fields=['inventory'])
-        form.save()
-        confirm = True
+    if request.method == "POST":
+        if form.is_valid():
+            # before it saves the new data, let's compensate the product inventory for update
+            if position_quantity:
+                position.product.inventory += position_quantity
+                position.product.save(update_fields=['inventory'])
+            form.save()
+            confirm = True
 
     context = {
         'profile': position,
@@ -508,17 +535,20 @@ def position_detail_view(request, pk):
 @staff_member_required
 def position_add_view(request):
     form = PositionForm(request.POST or None)
+    position = Position()
     products_qs = Product.objects.all().order_by('-updated')
+    confirm = False
 
     if request.method == "POST":
         if form.is_valid():
             form.save()
-        return HttpResponseRedirect(reverse('sales:positionlist'))
+            confirm = True
+            position.product = form.cleaned_data['product']
 
     context = {
-        'profile': None,
+        'profile': position,
         'form': form,
-        'confirm': False,
+        'confirm': confirm,
         'object_list_products': products_qs,
 }
     return render(request, 'sales/position_detail.html', context)

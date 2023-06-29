@@ -39,9 +39,9 @@
             {% endfor %}
           {% else %}
             {% if user.profile.language == "Korean" %}
-            <h3 class="modal-title text-success">단위구매 #{{profile.id}}이 저장 되었습니다!</h1>
+            <h3 class="modal-title text-success">단위구매 #{{profile.product}}이 저장 되었습니다!</h1>
             {% else %}
-            <h3 class="modal-title text-success">Purchase Position of #{{profile.id}} has been saved!</h1>
+            <h3 class="modal-title text-success">Purchase Position of #{{profile.product}} has been saved!</h1>
             {% endif %}
           {% endif %}
         </div>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Purchase
+from .models import ProductGroup, Product, Purchase
 from import_export.admin import ImportExportActionModelAdmin
 from products.resources import ProductResource, PurchaseResource
 
@@ -10,5 +10,6 @@ class ProductAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
 class PurchaseAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
     resource_class = PurchaseResource
 
+admin.site.register(ProductGroup)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Purchase, PurchaseAdmin)

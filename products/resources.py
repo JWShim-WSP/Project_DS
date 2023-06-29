@@ -1,5 +1,5 @@
 from import_export import fields, resources
-from products.models import Product, Purchase
+from products.models import ProductGroup, Product, Purchase
 from customers.models import Supplier
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget, ManyToManyWidget
@@ -9,7 +9,12 @@ class ProductResource(resources.ModelResource):
         column_name='supplier',
         attribute='supplier',
         widget=ForeignKeyWidget(Supplier, field='name'))
-    
+
+    supplier = fields.Field(
+        column_name='product_type',
+        attribute='product_type',
+        widget=ForeignKeyWidget(ProductGroup, field='name'))
+
     # customers can be expessed through 'ManyToManyWidget' for exporting, but not working for import
     #customers = fields.Field(
     #    column_name='customers',

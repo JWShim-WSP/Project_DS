@@ -3,16 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 
 def home_view(request):
-    if request.user.is_authenticated:
-        return redirect('sales:dashboard')
-    else:
-        error_message = None
-        form = AuthenticationForm()
-        context = {
-            'form': form,
-            'error_message': error_message,
-        }
-        return render(request, 'auth/login.html', context)
+    return redirect('sales:dashboard')
 
 def logout_view(request):
     logout(request)

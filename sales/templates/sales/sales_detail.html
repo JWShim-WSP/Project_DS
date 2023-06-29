@@ -36,7 +36,7 @@
                 </div>
                 <div class="modal-body" id="modal-body">
                     <div class="alert alert-primary" role="alert">
-                        Sales of #{{profile.transaction_id}} 저장 되었습니다!
+                        Sales of {{profile.transaction_id}} 저장 되었습니다!
                     </div>
                 </div>
                 {% else %}
@@ -46,12 +46,12 @@
                 </div>
                 <div class="modal-body" id="modal-body">
                     <div class="alert alert-primary" role="alert">
-                        Sales of #{{profile.transaction_id}} has been saved!
+                        Sales of {{profile.transaction_id}} has been saved!
                     </div>
                 </div>
                 {% endif %}
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="location.href='{% url "sales:positionlist"  %}'" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="location.href='{% url "sales:saleslist"  %}'" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -66,19 +66,47 @@
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form | crispy }}
-            {% if profile.transaction_id %}
-            <input class="btn btn-outline-primary"
-            value="Go Back"
-            type="button"
-            onclick="location.href='{% url "sales:saleslist" %}'">
+            {% if user.profile.language == "Korean" %}
+                {% if profile.transaction_id %}
+                <input class="btn btn-outline-primary"
+                value="돌아가기"
+                type="button"
+                onclick="location.href='{% url "sales:saleslist" %}'">
+                {% if profile.delivery_completed == False %}
+                <input class="btn btn-outline-primary"
+                value="출고완료처리"
+                type="submit">
+                {% endif %}
+
+                {% else %}
+                <input class="btn btn-outline-primary"
+                value="Save"
+                type="submit">
+                <input class="btn btn-outline-primary"
+                value="Cancel"
+                type="button"
+                onclick="location.href='{% url "sales:saleslist" %}'">
+                {% endif %}
             {% else %}
-            <input class="btn btn-outline-primary"
-            value="Save"
-            type="submit">
-            <input class="btn btn-outline-primary"
-            value="Cancel"
-            type="button"
-            onclick="location.href='{% url "sales:positionlist" %}'">
+                {% if profile.transaction_id %}
+                <input class="btn btn-outline-primary"
+                value="Go Back"
+                type="button"
+                onclick="location.href='{% url "sales:saleslist" %}'">
+                {% if profile.delivery_completed == False %}
+                <input class="btn btn-outline-primary"
+                value="Complete Delivery"
+                type="submit">
+                {% endif %}
+                {% else %}
+                <input class="btn btn-outline-primary"
+                value="Save"
+                type="submit">
+                <input class="btn btn-outline-primary"
+                value="Cancel"
+                type="button"
+                onclick="location.href='{% url "sales:saleslist" %}'">
+                {% endif %}
             {% endif %}
             <!-- You cannot delete Sales Record
             {% if profile.transaction_id %}

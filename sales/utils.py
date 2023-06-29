@@ -5,6 +5,12 @@ from profiles.models import Profile
 from io import BytesIO
 import matplotlib.pyplot as plt
 import seaborn as sns
+ 
+ # 한글 폰트 사용을 위해서 세팅
+from matplotlib import font_manager, rc
+font_path = "C:/Windows/Fonts/NGULIM.TTF"
+font = font_manager.FontProperties(fname=font_path).get_name()
+rc('font', family=font)
 
 def generate_code():
     code = str(uuid.uuid4()).replace('-', '').upper()[:12]

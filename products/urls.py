@@ -23,15 +23,21 @@ Pass Converter
 
 from django.urls import path
 from .views import (
+    group_list_view, 
+    group_detail_view, 
+    group_add_view, 
+    group_delete_view,
+
     product_list_view, 
     product_detail_view, 
     product_add_view, 
     product_delete_view,
+
     purchase_positions_list_view,
     purchase_position_detail_view,
     purchase_position_add_view,
     purchase_position_delete_view,
-)
+    )
 
 app_name = 'products'
 
@@ -43,10 +49,14 @@ urlpatterns = [
     path('', product_list_view, name='productlist'),
     path('page/<int:page>/', product_list_view, name='productlist'),
     path('<int:pk>/', product_detail_view, name='productdetails'),
-    path("add/", product_add_view, name="product-add"),
-    path("<int:pk>/delete/", product_delete_view, name="product-delete"),
+    path('add/', product_add_view, name='product-add'),
+    path('<int:pk>/delete/', product_delete_view, name='product-delete'),
+    path('group/', group_list_view, name='grouplist'),
+    path('group/<int:pk>/', group_detail_view, name='groupdetails'),
+    path('group/add/', group_add_view, name="group-add"),
+    path('group/<int:pk>/delete/', group_delete_view, name='group-delete'),
     path('positions/', purchase_positions_list_view, name='positionlist'),
     path('position/<int:pk>/', purchase_position_detail_view, name='positiondetails'),
-    path("position/add/", purchase_position_add_view, name="position-add"),
-    path("position/<int:pk>/delete/", purchase_position_delete_view, name="position-delete"),
+    path('position/add/', purchase_position_add_view, name='position-add'),
+    path('position/<int:pk>/delete/', purchase_position_delete_view, name='position-delete'),
 ]

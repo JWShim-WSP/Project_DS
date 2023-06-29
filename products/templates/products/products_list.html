@@ -25,6 +25,9 @@ Product List
     <div class="p-1">
       <a class="btn btn-outline-primary" href="{% url 'products:product-add' %}" role="button">제품추가</a>
     </div>
+    <div class="p-1">
+      <a class="btn btn-outline-primary" href="{% url 'products:grouplist' %}" role="button">제품그룹</a>
+    </div>
     <div class="me-auto p-1">
       <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#productModal">보기 분류</button>
       <!--
@@ -41,6 +44,9 @@ Product List
   {% else %}
     <div class="p-1">
       <a class="btn btn-outline-primary" href="{% url 'products:product-add' %}" role="button">Add Product</a>
+    </div>
+    <div class="p-1">
+      <a class="btn btn-outline-primary" href="{% url 'products:grouplist' %}" role="button">Product Group</a>
     </div>
     <div class="me-auto p-1">
         <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#productModal">Sort By</button>
