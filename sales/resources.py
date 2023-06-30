@@ -49,7 +49,7 @@ class SaleResource(resources.ModelResource):
     class Meta:
         model = Sale
         # enumerate the fields to export
-        fields = ('id', 'transaction_id', 'positions', "total_net_price", "total_net_profit", 'delivery_cost', 'extra_cost', 'final_profit', 'customer', 'salesman', 'created', 'updated')
+        fields = ('id', 'transaction_id', 'positions', 'delivery_completed', "total_net_price", "total_net_profit", 'delivery_cost', 'extra_cost', 'final_profit', 'customer', 'salesman', 'created', 'updated')
         export_order = fields
 
     #position_id is a better information than product.name of the position
