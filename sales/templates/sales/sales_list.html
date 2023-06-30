@@ -93,10 +93,10 @@ Sales List
                     <th scope="col">이름</th>
                     <th scope="col">통화</th>
                     <th scope="col" class="text-danger"><b>재고수량</b></th>
+                    <th scope="col" class="text-info">총입고수량</th>
                     <th scope="col">평균원환율</th>
                     <th scope="col" class="text-success">평균구매단가(통화)</th>
                     <th scope="col" class="text-success">평균구매단가(KRW)</th>
-                    <th scope="col" class="text-info">총입고수량</th>
                     <th scope="col" class="text-primary"><b>총입고원가(KRW)</b></th>
                     <th scope="col">분류</th>
                     <th scope="col">공급사</th>
@@ -108,10 +108,10 @@ Sales List
                     <th scope="col">Name</th>
                     <th scope="col">Currency</th>
                     <th scope="col" class="text-danger"><b>Inventory</b></th>
+                    <th scope="col" class="text-info">Total Quantity</th>
                     <th scope="col">Avg. Exchange Rate</th>
                     <th scope="col" class="text-success">Avg. Unit Price(Currency)</th>
                     <th scope="col" class="text-success">Avg. Unit Price(KRW)</th>
-                    <th scope="col" class="text-info">Total Quantity</th>
                     <th scope="col" class="text-primary"><b>Total Cost(KRW)</b></th>
                     <th scope="col">Product Group</th>
                     <th scope="col">Supplier</th>
@@ -126,10 +126,10 @@ Sales List
                         <td>{{ object.name }}</td>
                         <td>{{ object.currency }}</td>
                         <td class="integer_comma text-danger fw-bold">{{ object.inventory }}</td>
+                        <td class="integer_comma text-info fw-bold">{{ object.total_quantity }}</td>
                         <td class="float_rounded">{{ object.average_ex_rate_to_KRW }}</td>
                         <td class="text-success float_rounded">{{ object.average_unit_price }}</td>
                         <td class="text-success float_rounded">{{ object.average_unit_price_KRW }}</td>
-                        <td class="integer_comma text-info fw-bold">{{ object.total_quantity }}</td>
                         <td class="text-primary float_rounded fw-bold">{{ object.total_added_price_KRW }}</td>
                         <td>{{ object.product_type }}</td>
                         <td>{{ object.supplier }}</td>

@@ -94,10 +94,10 @@ Position List
                     <th scope="col">이름</th>
                     <th scope="col">통화</th>
                     <th scope="col" class="text-danger"><b>재고수량</b></th>
+                    <th scope="col" class="text-info">총입고수량</th>
                     <th scope="col">평균원환율</th>
                     <th scope="col" class="text-success">평균구매단가(통화)</th>
                     <th scope="col" class="text-success">평균구매단가(KRW)</th>
-                    <th scope="col" class="text-info">총입고수량</th>
                     <th scope="col" class="text-primary"><b>총입고원가(KRW)</b></th>
                     <th scope="col">분류</th>
                     <th scope="col">공급사</th>
@@ -109,10 +109,10 @@ Position List
                     <th scope="col">Name</th>
                     <th scope="col">Currency</th>
                     <th scope="col" class="text-danger"><b>Inventory</b></th>
+                    <th scope="col" class="text-info">Total Quantity</th>
                     <th scope="col">Avg. Exchange Rate</th>
                     <th scope="col" class="text-success">Avg. Unit Price(Currency)</th>
                     <th scope="col" class="text-success">Avg. Unit Price(KRW)</th>
-                    <th scope="col" class="text-info">Total Quantity</th>
                     <th scope="col" class="text-primary"><b>Total Cost(KRW)</b></th>
                     <th scope="col">Product Group</th>
                     <th scope="col">Supplier</th>
@@ -127,10 +127,10 @@ Position List
                         <td>{{ object.name }}</td>
                         <td>{{ object.currency }}</td>
                         <td class="integer_comma text-danger fw-bold">{{ object.inventory }}</td>
+                        <td class="integer_comma text-info fw-bold">{{ object.total_quantity }}</td>
                         <td class="float_rounded">{{ object.average_ex_rate_to_KRW }}</td>
                         <td class="text-success float_rounded">{{ object.average_unit_price }}</td>
                         <td class="text-success float_rounded">{{ object.average_unit_price_KRW }}</td>
-                        <td class="integer_comma text-info fw-bold">{{ object.total_quantity }}</td>
                         <td class="text-primary float_rounded fw-bold">{{ object.total_added_price_KRW }}</td>
                         <td>{{ object.product_type }}</td>
                         <td>{{ object.supplier }}</td>
@@ -237,7 +237,9 @@ Position List
         <th scope="col">품목</th>
 
         <th scope="col" class="text-info fw-bold">판매단가(KRW)</th>
+        <th scope="col">평균수입단가(KRW)</th>
         <th scope="col" class="text-success fw-bold">단위수량</th>
+        <th scope="col" class="text-danger fw-bold">재고수량</th>
         <th scope="col" class="text-primary fw-bold">판매가격(KRW)</th>
 
         <th scope="col" class="text-danger fw-bold">출고가능</th>
@@ -245,8 +247,6 @@ Position List
         <th scope="col" class="text-danger fw-bold">출고이익(KRW)</th>
         <th scope="col">마진율</th>
 
-        <th scope="col" class="text-danger fw-bold">재고수량</th>
-        <th scope="col">평균수입단가(KRW)</th>
         <th scope="col">제품그룹</th>
         <th scope="col">생성일자</th>
         <th scope="col">변경일자</th>
@@ -257,16 +257,16 @@ Position List
         <th scope="col">Product</th>
 
         <th scope="col" class="text-info fw-bold">Sales Unit Price(KRW)</th>
+        <th scope="col">Purchase Avg. Unit Price(KRW)</th>
         <th scope="col" class="text-success fw-bold">Quantity</th>
+        <th scope="col" class="text-danger fw-bold">Inventory</th>
         <th scope="col" class="text-primary fw-bold">Total Price(KRW)</th>
 
         <th scope="col" class="text-danger fw-bold">Inventory Status</th>
-        <th scope="col" class="text-success fw-bold">Sold out</th>
+        <th scope="col" class="text-success fw-bold">Sales Completed</th>
         <th scope="col" class="text-danger fw-bold">Delivery Profit(KRW)</th>
         <th scope="col">Margin Percentage</th>
 
-        <th scope="col" class="text-danger fw-bold">Inventory</th>
-        <th scope="col">Purchase Avg. Unit Price(KRW)</th>
         <th scope="col">Product Group</th>
         <th scope="col">Created</th>
         <th scope="col">Updated</th>
@@ -280,7 +280,9 @@ Position List
                 <td>{{ object.product.name }}</td>
 
                 <td class="float_rounded text-info fw-bold">{{ object.unit_price }}</td>
+                <td class="float_rounded text-info fw-bold">{{ object.product.average_unit_price_KRW }}</td>
                 <td class="integer_comma text-success fw-bold">{{ object.quantity }}</td>
+                <td class="integer_comma text-danger fw-bold">{{ object.product.inventory }}</td>
                 <td class="float_rounded text-primary fw-bold">{{ object.net_price }}</td>
 
                 <td class="text-danger fw-bold">{{ object.inventory_status }}</td>
@@ -288,8 +290,6 @@ Position List
                 <td class="float_rounded text-danger fw-bold">{{ object.net_profit }}</td>
                 <td class="float_rounded">{{ object.margin_percentage }}</td>
 
-                <td class="integer_comma text-danger fw-bold">{{ object.product.inventory }}</td>
-                <td class="float_rounded text-info fw-bold">{{ object.product.average_unit_price_KRW }}</td>
                 <td>{{ object.product.product_type }}</td>
                 <td>{{ object.created }}</td>
                 <td>{{ object.updated }}</td>

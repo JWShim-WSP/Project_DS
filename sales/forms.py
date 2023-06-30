@@ -111,12 +111,6 @@ class ExecutedSaleForm(forms.ModelForm):
         model = Sale
         fields= ['transaction_id', 'positions', 'delivery_cost', 'extra_cost', 'customer', 'salesman']
 
-    positions = forms.ModelMultipleChoiceField(
-        queryset=Position.objects.all(),
-        widget=forms.CheckboxSelectMultiple
-    )
-   
-
 
 # You can modify the 'Choice of positions' with different names
 #class CustomMMPosition(forms.ModelMultipleChoiceField):
