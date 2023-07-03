@@ -82,8 +82,8 @@ class Sale(models.Model):
     #if multi positions are allowed, it is not easy to trace down Sale and Position
     #position = models.ForeignKey(Position, on_delete=models.CASCADE)
     # This will be automatically calculated through the signal of changes of positions in signals.py
-    total_net_price = models.FloatField(blank=True)
-    total_net_profit = models.FloatField(blank=True)
+    total_net_price = models.FloatField(blank=True, null=True)
+    total_net_profit = models.FloatField(blank=True, null=True)
     
     # tax/vat will be included in the price to customers, or it should not be counted here as will be returned to the government
     #tax_cost = models.FloatField(default=0, null=True)
@@ -91,7 +91,7 @@ class Sale(models.Model):
     delivery_cost = models.FloatField(default=0)
     extra_cost = models.FloatField(default=0)
 
-    final_profit = models.FloatField(blank=True)
+    final_profit = models.FloatField(blank=True, null=True)
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     salesman = models.ForeignKey(Profile, on_delete=models.CASCADE)
