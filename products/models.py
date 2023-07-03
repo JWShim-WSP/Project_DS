@@ -56,24 +56,24 @@ class ProductGroup(models.Model):
  
 
 class Product(models.Model):
-    name = models.CharField(max_length=120)
+    name = models.CharField(max_length=120, unique=True)
     image = models.ImageField(upload_to='products', default='no_picture.png')
-    currency = models.CharField(choices=CURRENCIES, max_length=30, null=True)
+    currency = models.CharField(choices=CURRENCIES, max_length=30)
     #price = models.FloatField(help_text='in US dollars $')
-    price = models.FloatField()
-    moq = models.IntegerField(blank=True, default=1, null=True)
+    price = models.FloatField(blank=False)
+    moq = models.IntegerField(blank=True, default=1)
     price_quantity_base = models.PositiveIntegerField(default=10)
     remark = models.TextField(max_length=1024, blank=True)
-    supplier = models.ForeignKey(Supplier, null=True, on_delete=models.CASCADE, related_name='product_supplier')
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='product_supplier')
     customers = models.ManyToManyField(Customer, blank=True, related_name='product_customers')
     product_type = models.ForeignKey(ProductGroup, on_delete=models.CASCADE)
     inventory = models.IntegerField(default=0)
-    average_unit_price = models.FloatField(default=0, null=True)
-    average_unit_price_KRW = models.FloatField(default=0, null=True)
-    average_ex_rate_to_KRW = models.FloatField(default=0, null=True)
-    total_quantity = models.PositiveIntegerField(default=0, null=True)
-    total_net_price_KRW = models.FloatField(default=0, null=True)
-    total_added_price_KRW = models.FloatField(default=0, null=True)
+    average_unit_price = models.FloatField(default=0)
+    average_unit_price_KRW = models.FloatField(default=0)
+    average_ex_rate_to_KRW = models.FloatField(default=0)
+    total_quantity = models.PositiveIntegerField(default=0)
+    total_net_price_KRW = models.FloatField(default=0)
+    total_added_price_KRW = models.FloatField(default=0)
     # you need to make 'created' as selectable to import a new data from a file
     created = models.DateTimeField(default=timezone.now)
     #created = models.DateTimeField(auto_now_add=True)
@@ -86,10 +86,9 @@ class Product(models.Model):
         return self.customers.all()
 
     def customers_ids(self):
-        return ', '.join([str(a.id)+': ' + a.name for a in self.customers.all()])
+        #return ', '.join([str(a.id)+': ' + a.name for a in self.customers.all()])
+        return ', '.join([a.name for a in self.customers.all()])
     
-    customers_ids.short_description = "Positions ID"
-
     class Meta:
         ordering = ('-created', )
 
@@ -98,19 +97,19 @@ class Product(models.Model):
 
 class Purchase(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_purchase")
-    unit_price = models.FloatField()
-    quantity = models.PositiveIntegerField()
-    net_price = models.FloatField()
+    unit_price = models.FloatField(blank=False)
+    quantity = models.PositiveIntegerField(blank=False)
+    net_price = models.FloatField(blank=True)
     added_cost = models.FloatField(default=0)
-    added_price = models.FloatField()
+    added_price = models.FloatField(blank=True)
 
-    ex_rate_to_KRW = models.FloatField()
-    net_price_KRW = models.FloatField()
+    ex_rate_to_KRW = models.FloatField(blank=False)
+    net_price_KRW = models.FloatField(blank=True)
     custom_tax_KRW = models.FloatField(default=0)
     transport_cost_KRW = models.FloatField(default=0)
     bank_cost_KRW = models.FloatField(default=0)
     delivery_cost_KRW = models.FloatField(default=0)
-    added_price_KRW = models.FloatField()
+    added_price_KRW = models.FloatField(blank=True)
     status=models.CharField(choices=PURCHASE_STATUS, max_length=30)
 
     # need to open for date selection for importing a new data from a file

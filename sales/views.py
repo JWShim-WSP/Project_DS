@@ -28,7 +28,7 @@ def sales_dashboard_view(request):
     no_data3 = None
     no_data4 = None
 
-    sales_positions_qs = Position.objects.order_by('inventory_status')
+    sales_positions_qs = Position.objects.order_by('position_sold')
     purchase_positions_qs = Purchase.objects.order_by('status')
     products_qs = Product.objects.order_by('-updated')
     sales_status_qs = Sale.objects.order_by('delivery_completed')
@@ -93,7 +93,10 @@ def sales_dashboard_view(request):
         sales_df['year_month'] = sales_df['created'].apply(lambda x: x.strftime('%Y-%m')) # lambda argument: expression
         chart4 = get_chart(chart_type, sales_df, key_by, sum_by)
     else:
-        no_data4 = 'is available in this date range'
+        if request.user.profile.language == "Korean":
+            no_data4 = '관련 자료 정보가 없습니다.'
+        else:
+            no_data4 = 'is available in this date range'
 
     context = {
         'object_list_products': products_qs,
@@ -153,6 +156,7 @@ def sales_list_view(request):
         chart_type = request.GET.get('chart_type')
         key_by = request.GET.get('results_by')
         sum_by = request.GET.get('sum_by')
+        sales_complete_by = request.GET.get('sales_complete_by')
 
         if year_from != None: # if it is not None, it should be a 'str'
             year_from = int(year_from)
@@ -212,6 +216,12 @@ def sales_list_view(request):
 
             else:# you choose no period (All years and All months)
                 sales_qs = Sale.objects.all().order_by('-updated')
+
+        if sales_complete_by != None and sales_complete_by != 'All':
+            if sales_complete_by == "Yes":
+                sales_qs = sales_qs.filter(delivery_completed=True)
+            else: # not completed
+                sales_qs = sales_qs.filter(delivery_completed=False)
 
         # no pagination needed for sales list
         #p = Paginator(sales_qs, 10)
@@ -405,6 +415,7 @@ def positions_list_view(request):
         else:
             month_to = 0
         chart_type = request.GET.get('chart_type')
+        sales_complete_by = request.GET.get('sales_complete_by')
         results_by = request.GET.get('results_by')
         sum_by = request.GET.get('sum_by')
 
@@ -456,7 +467,13 @@ def positions_list_view(request):
         
         if (results_by != None and results_by != 'All'):
             positions_qs = positions_qs.filter(product__product_type=results_by)
-
+        
+        if sales_complete_by != None and sales_complete_by != 'All':
+            if sales_complete_by == "Yes":
+                positions_qs = positions_qs.filter(position_sold=True)
+            else: # not completed
+                positions_qs = positions_qs.filter(position_sold=False)
+            
         # no pagination for positions needed
         #p = Paginator(positions_qs, 10)
         #try:

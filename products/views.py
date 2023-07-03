@@ -3,7 +3,8 @@ from django.urls import reverse
 from .models import ProductGroup, Product, Purchase
 from .forms import ProductGroupForm, ProductForm, ProductSearchForm, PurchaseForm, PurchaseSearchForm, PURCHASE_SUM_CHOICES, PRODUCT_SUM_CHOICES
 from sales.forms import CHART_CHOICES, current_year
-from .resources import ProductResource, PurchaseResource
+from sales.models import Sale, Position
+from .resources import ProductGroupResource, ProductResource, PurchaseResource
 from profiles.forms import FormatForm
 import pandas as pd
 from sales.utils import get_chart, get_product_from_id
@@ -16,15 +17,63 @@ import calendar
 # Create your views here.
 
 @staff_member_required
-def group_list_view(request):
-    product_group = ProductGroup.objects.all().order_by('name')
-    form_class = ProductGroupForm()
+def inventory_reset_view(request):
+    confirm = False
 
+    if request.method == 'POST':
+        sales_qs = Sale.objects.all()
+        for sales in sales_qs:
+            sales.delete()
+
+        positons_qs = Position.objects.all()
+        for position in positons_qs:
+            position.delete()
+
+        purchase_qs = Purchase.objects.all()
+        for purchase in purchase_qs:
+            purchase.delete()
+
+        products_qs = Product.objects.all()
+        for product in products_qs:
+            new_position = Purchase()
+            new_position.product = product
+            new_position.unit_price = product.average_unit_price
+            new_position.quantity = product.inventory
+            new_position.ex_rate_to_KRW = product.average_ex_rate_to_KRW
+            new_position.status = "Stocked"
+            new_position.save()
+
+        confirm = True
+    
     context = {
-        'object_list': product_group,
-        'form': form_class,
+        'confirm': confirm,
     }
-    return render(request, 'products/group_list.html', context)
+    return render(request, 'products/inventory_reset_confirm.html', context)
+
+
+@staff_member_required
+def group_list_view(request):
+    if request.method == 'POST':
+        dataset = ProductGroupResource().export()
+        format = request.POST.get('format')
+        if format == 'xls':
+            dataset_format = dataset.xls
+        elif format == 'csv':
+            dataset_format = dataset.csv
+        else:
+            dataset_format = dataset.json
+        response = HttpResponse(dataset_format, content_type=f"text/{format}")
+        response['Content-Disposition'] = f"attachement; filename=bstproductgroup.{format}"
+        return response
+    else:
+        product_group = ProductGroup.objects.all().order_by('name')
+        form_class = FormatForm()
+
+        context = {
+            'object_list': product_group,
+            'form': form_class,
+        }
+        return render(request, 'products/group_list.html', context)
 
 
 @staff_member_required
@@ -81,7 +130,7 @@ def group_add_view(request):
 @staff_member_required
 def product_list_view(request):
 
-    if (request.method == 'POST'):
+    if request.method == 'POST':
         dataset = ProductResource().export()
         format = request.POST.get('format')
         if format == 'xls':

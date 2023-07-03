@@ -1,8 +1,16 @@
 from import_export import fields, resources
 from products.models import ProductGroup, Product, Purchase
-from customers.models import Supplier
+from customers.models import Supplier, Customer
 from import_export.fields import Field
 from import_export.widgets import ForeignKeyWidget, ManyToManyWidget
+
+class ProductGroupResource(resources.ModelResource):
+    class Meta:
+        model = ProductGroup
+        # enumerate the fields to export
+        fields = ('id', 'name', 'remark')
+        export_order = fields
+
 
 class ProductResource(resources.ModelResource):
     supplier = fields.Field(
@@ -10,17 +18,17 @@ class ProductResource(resources.ModelResource):
         attribute='supplier',
         widget=ForeignKeyWidget(Supplier, field='name'))
 
-    supplier = fields.Field(
+    #customers can be expessed through 'ManyToManyWidget' for exporting, but not working for import
+    customers = fields.Field(
+        column_name='customers',
+        attribute='customers',
+        widget= ManyToManyWidget(Customer, field='name', separator=',')
+    )
+
+    product_type = fields.Field(
         column_name='product_type',
         attribute='product_type',
         widget=ForeignKeyWidget(ProductGroup, field='name'))
-
-    # customers can be expessed through 'ManyToManyWidget' for exporting, but not working for import
-    #customers = fields.Field(
-    #    column_name='customers',
-    #    attribute='customers',
-    #    widget= ManyToManyWidget(Customer, field='name', separator='|')
-    #)
 
     class Meta:
         model = Product
@@ -37,6 +45,6 @@ class PurchaseResource(resources.ModelResource):
     class Meta:
         model = Purchase
         # enumerate the fields to export
-        fields = ('id', "product", "unit_price", "quantity", "net_price", "added_cost", "added_price", "ex_rate_to_KRW", "net_price_KRW", "custom_tax_KRW", 'transport_cost_KRW', "bank_cost_KRW", "delivery_cost_KRW", "added_price_KRW", "status")
+        fields = ('id', "product", "unit_price", "quantity", "net_price", "added_cost", "added_price", "ex_rate_to_KRW", "net_price_KRW", "custom_tax_KRW", 'transport_cost_KRW', "bank_cost_KRW", "delivery_cost_KRW", "added_price_KRW", "status", "created", "updated")
         export_order = fields
 

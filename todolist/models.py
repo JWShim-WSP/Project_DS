@@ -26,7 +26,7 @@ class ToDoList(models.Model):
 class ToDoItemList(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
-    created_date = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(default=timezone.now)
     due_date = models.DateField(default=one_week_hence)
     todo_list = models.ForeignKey(ToDoList, on_delete=models.CASCADE)
     priority = models.CharField(choices=PriorityChoices, default='High', max_length=10)

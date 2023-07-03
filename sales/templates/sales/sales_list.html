@@ -256,16 +256,16 @@ Sales List
     {% if user.profile.language == "Korean" %}
         <tr>
         <th scope="col">판매 ID</th>
-        <th scope="col">판매 고유 번호</th>
+        <th scope="col">고객 PO 번호</th>
         <th scope="col">단위판매항목</th>
 
-        <th scope="col" class="text-danger fw-bold">출고완료</th>
+        <th scope="col" class="text-danger fw-bold">출고</th>
 
         <th scope="col" class="text-primary fw-bold">판매가격(KRW)</th>
         <th scope="col" class="text-success fw-bold">판매이익(KRW)</th>
 
         <th scope="col">비용-물류(KRW)</th>
-        <th scope="col">비용-추가(KRW)</th>
+        <th scope="col">비용-그외(KRW)</th>
 
         <th scope="col" class="text-danger fw-bold">순이익(KRW)</th>
 
@@ -279,7 +279,7 @@ Sales List
         <th scope="col">Sales ID</th>
         <th scope="col">Sales Transaction ID</th>
         <th scope="col">Sales Positions</th>
-
+        
         <th scope="col" class="text-danger fw-bold">Delivery Completed</th>
 
         <th scope="col" class="text-primary fw-bold">Sales Price(KRW)</th>
@@ -304,7 +304,11 @@ Sales List
                 <td>{{ object.transaction_id }}</td>
                 <td>{{ object.positions_ids }}</td>
 
-                <td class="text-danger fw-bold">{{ object.delivery_completed }}</td>
+                {% if user.profile.language == "Korean" %}
+                    <td class="text-danger fw-bold">{{ object.delivery_completed  | yesno:"완료, 미결, 미정" }}</td>
+                {% else %}
+                    <td class="text-danger fw-bold">{{ object.delivery_completed  | yesno:"Yes, No, Unkown" }}</td>
+                {% endif %}
 
                 <td class="float_rounded text-primary fw-bold">{{ object.total_net_price }}</td>
                 <td class="float_rounded text-success fw-bold">{{ object.total_net_profit }}</td>

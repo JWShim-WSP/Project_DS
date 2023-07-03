@@ -22,6 +22,11 @@ Product Group List
     <div class="me-auto p-1">
       <a class="btn btn-outline-primary" href="{% url 'products:productlist' %}" role="button">돌아가기</a>
     </div>
+    <div class="p-1">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+            파일에 저장
+        </button>
+    </div>
   {% else %}
     <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'products:group-add' %}" role="button">Add Group</a>
@@ -29,7 +34,31 @@ Product Group List
     <div class="me-auto p-1">
       <a class="btn btn-outline-primary" href="{% url 'products:productlist' %}" role="button">Go Back</a>
     </div>
+    <div class="p-1">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
+            Download
+        </button>
+    </div>
     {% endif %}
+</div>
+
+<!-- Modal for Form Post-->
+<div class="modal fade" id="download-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Download Product Group</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <button type="submit" class="btn btn-outline-primary">save</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <table class="table text-center table-hover table-light">

@@ -10,13 +10,13 @@ from django.urls import reverse
 
 class Position(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    unit_price = models.FloatField()
-    quantity = models.PositiveIntegerField()
-    net_price = models.FloatField()
+    unit_price = models.FloatField(blank=False)
+    quantity = models.PositiveIntegerField(blank=False)
+    net_price = models.FloatField(blank=True)
 
     inventory_status = models.BooleanField(default=False) # 'True' or 'False' will be set in 'save' of Position
-    net_profit = models.FloatField(null=True)
-    margin_percentage = models.FloatField(null=True)
+    net_profit = models.FloatField(blank=True)
+    margin_percentage = models.FloatField(blank=True)
     position_sold = models.BooleanField(default=False)
 
     # need to open for date selection for importing a new data from a file
@@ -63,6 +63,13 @@ class Position(models.Model):
         sale_obj = self.sale_set.first()
         return sale_obj.customer.name
 
+    @property
+    def get_inventory_with_quantity(self):
+        if (self.inventory_status):
+            return self.product.inventory + self.quantity
+        else:
+            return self.product.inventory
+
     class Meta:
         ordering = ('-created', )
 
@@ -75,16 +82,16 @@ class Sale(models.Model):
     #if multi positions are allowed, it is not easy to trace down Sale and Position
     #position = models.ForeignKey(Position, on_delete=models.CASCADE)
     # This will be automatically calculated through the signal of changes of positions in signals.py
-    total_net_price = models.FloatField(null=True)
-    total_net_profit = models.FloatField(null=True)
+    total_net_price = models.FloatField(blank=True)
+    total_net_profit = models.FloatField(blank=True)
     
     # tax/vat will be included in the price to customers, or it should not be counted here as will be returned to the government
     #tax_cost = models.FloatField(default=0, null=True)
     #vat_cost = models.FloatField(default=0, null=True)
-    delivery_cost = models.FloatField(default=0, null=True)
-    extra_cost = models.FloatField(default=0, null=True)
+    delivery_cost = models.FloatField(default=0)
+    extra_cost = models.FloatField(default=0)
 
-    final_profit = models.FloatField(null=True)
+    final_profit = models.FloatField(blank=True)
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     salesman = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -114,8 +121,6 @@ class Sale(models.Model):
     def positions_ids(self):
         return ', '.join([str(a.id)+': ' + a.product.name for a in self.positions.all()])
     
-    positions_ids.short_description = "Positions ID"
-
     class Meta:
         ordering = ('-created', )
 

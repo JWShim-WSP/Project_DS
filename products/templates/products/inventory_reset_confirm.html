@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Product Delete Confirmation
+{% endblock %}
+
+{% block scripts %}
+  {% if confirm or messages %}
+    <script>
+      $(document).ready(function () {
+        $("#updateModal").modal('show');
+      });
+    </script>
+  {% endif %}
+{% endblock scripts%}
+
+
+{% block content %}
+
+{% if confirm or messages %}
+  <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          {% if user.profile.language == "Korean" %}
+          <h5 class="modal-title text-primary">결과</h5>
+          {% else %}
+          <h5 class="modal-title text-primary">Result</h5>
+          {% endif %}
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          {% if messages %}
+            {% for message in messages %}
+                <h3 class="modal-title text-success">{{ message }}</h1>
+            {% endfor %}
+          {% else %}
+            {% if user.profile.language == "Korean" %}
+            <h3 class="modal-title text-success">제품별 판매/구매 이력이 삭제 되었으며, 재고 초기화 정리 되었습니다!</h1>
+            {% else %}
+            <h3 class="modal-title text-success">Product Inventory/Purchase/Sales Record Data Removed and Reset! </h1>
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          {% if user.profile.language == "Korean" %}
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="location.href='{% url "sales:dashboard" %}'">나가기</button>
+          {% else %}
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="location.href='{% url "sales:dashboard" %}'">Close</button>
+          {% endif %}
+        </div>
+        </div>
+    </div>
+  </div>
+{% endif %}
+
+<br>
+<br>
+<div class="text-center">
+  {% if user.profile.language == "Korean" %}
+    <h3 class="text-danger">제품 구매/판매 정보가 모두 삭제되며, 재고가 최종상태로 초기화 됩니다!</h3>
+    <br>
+    <h3 class="text-warning">db.sqlite3 파일이 백업으로 저장 되었습니까?</h3>
+    <br>
+    <form method="POST">
+      {% csrf_token %}
+      <input class="btn btn-outline-primary"
+          value="네, 정리 및 초기화 진행 하세요!"
+          type="submit">
+
+      <input class="btn btn-outline-primary"
+          value="아니오, 취소합니다."
+          type="button"
+          onclick="location.href='{% url "sales:dashboard" %}'">
+    </form>
+  {% else %}
+    <h3 class="text-danger">Product Purchase/Sales Record will be removed, and inventory will be initialized with the final state!</h3>
+    <br>
+    <h3 class="text-warning">db.sqlite3 has been saved, separately?</h3>
+    <br>
+    <form method="POST">
+      {% csrf_token %}
+      <input class="btn btn-outline-primary"
+          value="Yes, go ahead"
+          type="submit">
+
+      <input class="btn btn-outline-primary"
+          value="Cancel"
+          type="button"
+          onclick="location.href='{% url "sales:dashboard" %}'">
+    </form>
+  {% endif %}
+</div>
+
+{% endblock %}

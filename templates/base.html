@@ -30,18 +30,17 @@
     {% block scripts %}
     {% endblock scripts %}
 
-    <title>BST Management v1.1 | {% block title %}{% endblock title %}</title>
+    <title>BST Management v1.2 | {% block title %}{% endblock title %}</title>
   </head>
 
   <body>
     
-      {% include 'navbar.html' %}
-      <div class="container-sm ps-4 mt-3 mb-3 pe-4">
+    {% include 'navbar.html' %}
 
+    <div class="container-fluid ps-4 mt-3 mb-3 pe-4">
       {% block content %}
       {% endblock content %}
-
-      </div>
+    </div>
 
     <!-- Bootstrap js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>

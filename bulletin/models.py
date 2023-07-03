@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from profiles.models import Profile
 from django.utils.text import slugify
 from django.core.validators import FileExtensionValidator
+from django.utils import timezone
 
 # Create your models here.
 # Let's go for Class Based View for Click Count
@@ -15,7 +16,7 @@ class Bulletin(models.Model):
     title = models.CharField(max_length=256, unique=True)
     content = models.TextField(max_length=4096)
     image = models.ImageField(upload_to='posts', validators=[FileExtensionValidator(['png', 'jpg', 'jpeg'])], blank=True)
-    post_Date = models.DateField(auto_now_add=True)
+    post_Date = models.DateField(default=timezone.now)
     update_Date = models.DateField(auto_now=True)
     slug = models.SlugField(unique=True, max_length=100, blank=True)
     likers = models.ManyToManyField(Profile, blank=True, related_name='post_likers')
@@ -55,9 +56,9 @@ class Comment(models.Model):
     CommentPost = models.ForeignKey(Bulletin , on_delete=models.CASCADE)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     content = models.TextField(max_length=1024)
-    post_Date = models.DateTimeField(auto_now_add=True)
+    post_Date = models.DateTimeField(default=timezone.now)
     update_Date = models.DateField(auto_now=True)
-    parent = models.ForeignKey('self' , null=True , blank=True , on_delete=models.CASCADE , related_name='replies')
+    parent = models.ForeignKey('self' , blank=True , on_delete=models.CASCADE , related_name='replies')
 
     class Meta:
         ordering=['-post_Date']

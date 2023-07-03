@@ -187,7 +187,7 @@ Position List
       <div class="modal-content">
         {% if user.profile.language == "Korean" %}
         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="positionsModalLabel">출고단위 분류</h1>
+            <h1 class="modal-title fs-5" id="positionsModalLabel">판매단위 분류</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body" id="modal-body">
@@ -237,13 +237,13 @@ Position List
         <th scope="col">품목</th>
 
         <th scope="col" class="text-info fw-bold">판매단가(KRW)</th>
-        <th scope="col">평균수입단가(KRW)</th>
+        <th scope="col" class="text-info fw-bold">평균구매단가(KRW)</th>
         <th scope="col" class="text-success fw-bold">단위수량</th>
         <th scope="col" class="text-danger fw-bold">재고수량</th>
         <th scope="col" class="text-primary fw-bold">판매가격(KRW)</th>
 
-        <th scope="col" class="text-danger fw-bold">출고가능</th>
-        <th scope="col" class="text-success fw-bold">판매완료</th>
+        <th scope="col" class="text-danger fw-bold">출고</th>
+        <th scope="col" class="text-success fw-bold">판매</th>
         <th scope="col" class="text-danger fw-bold">출고이익(KRW)</th>
         <th scope="col">마진율</th>
 
@@ -257,7 +257,7 @@ Position List
         <th scope="col">Product</th>
 
         <th scope="col" class="text-info fw-bold">Sales Unit Price(KRW)</th>
-        <th scope="col">Purchase Avg. Unit Price(KRW)</th>
+        <th scope="col" class="text-info fw-bold">Purchase Avg. Unit Price(KRW)</th>
         <th scope="col" class="text-success fw-bold">Quantity</th>
         <th scope="col" class="text-danger fw-bold">Inventory</th>
         <th scope="col" class="text-primary fw-bold">Total Price(KRW)</th>
@@ -282,11 +282,18 @@ Position List
                 <td class="float_rounded text-info fw-bold">{{ object.unit_price }}</td>
                 <td class="float_rounded text-info fw-bold">{{ object.product.average_unit_price_KRW }}</td>
                 <td class="integer_comma text-success fw-bold">{{ object.quantity }}</td>
-                <td class="integer_comma text-danger fw-bold">{{ object.product.inventory }}</td>
+
+                <td class="integer_comma text-danger fw-bold">{{ object.get_inventory_with_quantity }}</td>
+
                 <td class="float_rounded text-primary fw-bold">{{ object.net_price }}</td>
 
-                <td class="text-danger fw-bold">{{ object.inventory_status }}</td>
-                <td class="text-success fw-bold">{{ object.position_sold }}</td>
+                {% if user.profile.language == "Korean" %}
+                    <td class="text-danger fw-bold">{{ object.inventory_status | yesno:"가능, 불가, 미정"}}</td>
+                    <td class="text-success fw-bold">{{ object.position_sold | yesno:"완료, 미결, 미정"}}</td>
+                {% else %}
+                    <td class="text-danger fw-bold">{{ object.inventory_status | yesno:"OK, NG, Unkown"}}</td>
+                    <td class="text-success fw-bold">{{ object.position_sold | yesno:"Yes, No, Unkown"}}</td>
+                {% endif %}
                 <td class="float_rounded text-danger fw-bold">{{ object.net_profit }}</td>
                 <td class="float_rounded">{{ object.margin_percentage }}</td>
 

@@ -23,6 +23,7 @@ Pass Converter
 
 from django.urls import path
 from .views import (
+    inventory_reset_view,
     group_list_view, 
     group_detail_view, 
     group_add_view, 
@@ -47,6 +48,7 @@ urlpatterns = [
     #path('sales/<pk>/', SaleDetailView.as_view(), name='detail'),
     # go for FBV this time!
     path('', product_list_view, name='productlist'),
+    path('inventoryreset', inventory_reset_view, name='inventoryreset'),
     path('page/<int:page>/', product_list_view, name='productlist'),
     path('<int:pk>/', product_detail_view, name='productdetails'),
     path('add/', product_add_view, name='product-add'),

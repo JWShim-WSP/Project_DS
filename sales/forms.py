@@ -30,6 +30,18 @@ SALES_SUM_CHOICES = (
     ('net_profit', 'Sales Profit'),
 )
 
+SALES_COMPLETE_CHOICES = (
+    ('All', '전체 보기'), 
+    ('Yes', '판매 완료'), 
+    ('No', '판매 미결'), 
+)
+
+DELIVERY_COMPLETE_CHOICES = (
+    ('All', '전체 보기'), 
+    ('Yes', '출고 완료'), 
+    ('No', '출고 미결'), 
+)
+
 POSITION_SUM_CHOICES = (
     ('net_price', 'Sales Price'), # Position' added_price_KRW should be used instead of 'total_added_price_KRW' of Sale
     ('margin_percentage', 'Margin Percentage'), # Position' added_price should be used instead of 'total_added_price' of Sale
@@ -74,6 +86,7 @@ class SalesSearchForm(forms.Form):
     month_to = forms.TypedChoiceField(coerce=int, choices=MONTH_SELECT, initial=0, required=False)
     chart_type = forms.ChoiceField(choices=CHART_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
     results_by = forms.ChoiceField(choices=RESULT_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
+    sales_complete_by = forms.ChoiceField(choices=DELIVERY_COMPLETE_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}), required=False)
     sum_by = forms.ChoiceField(choices=SALES_SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
 
 class PositionSearchForm(forms.Form):
@@ -84,12 +97,12 @@ class PositionSearchForm(forms.Form):
     month_from = forms.TypedChoiceField(coerce=int, choices=MONTH_SELECT, initial=current_month, required=False)
     month_to = forms.TypedChoiceField(coerce=int, choices=MONTH_SELECT, initial=0, required=False)
     chart_type = forms.ChoiceField(choices=CHART_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
+    sales_complete_by = forms.ChoiceField(choices=SALES_COMPLETE_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}), required=False)
     results_by = forms.ModelChoiceField(
         widget = forms.RadioSelect,
         queryset=ProductGroup.objects.all(),
         required = False,
         )
-
     sum_by = forms.ChoiceField(choices=POSITION_SUM_CHOICES, widget=forms.Select(attrs={'style':'width: 100%'}))
 
 class CustomPositionChoice(forms.ModelMultipleChoiceField):
