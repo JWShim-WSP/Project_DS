@@ -44,13 +44,25 @@
 
 .navbar {
     .nav-link {
-        color: blue !important;
+        color: white !important;
     }
+    .nav-link:hover {
+        color: blue !important;
+        background-color: rgb(68, 234, 237) !important;
+    }
+    .dropdown-item:hover {
+        color: blue !important;
+        background-color: rgb(68, 234, 237) !important;
+    }
+}
+
+.navbar-toggler {
+    border-color: white !important;
 }
 
 .navbar {
     .active {
-       color: white !important;
+       background-color: blue !important;
     }
 }
 

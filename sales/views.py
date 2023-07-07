@@ -360,8 +360,16 @@ def sales_add_view(request):
 @staff_member_required
 def sales_delete_view(request, pk):
     sales = Sale.objects.get(pk=pk)
+    positions = sales.positions.all()
 
     if request.method == 'POST':
+        for position in positions:
+            # compensate the inventory before save position as it will signal to Product's inventory
+            if position.inventory_status == True:
+                position.product.inventory += position.quantity
+                position.product.save(update_fields=['inventory'])
+            position.position_sold = False
+            position.save(update_fields=['position_sold'])
         sales.delete()
         return HttpResponseRedirect(reverse('sales:saleslist'))
     else:
@@ -524,9 +532,11 @@ def position_detail_view(request, pk):
     position = Position.objects.get(pk=pk)
     form = PositionForm(request.POST or None, instance=position)
     confirm = False
+    
     # let's remember the quantity for any changes!!!
     if position.inventory_status == True:
         position_quantity = position.quantity
+        position_product = position.product
     else:
         position_quantity = 0
 
@@ -536,8 +546,12 @@ def position_detail_view(request, pk):
         if form.is_valid():
             # before it saves the new data, let's compensate the product inventory for update
             if position_quantity:
-                position.product.inventory += position_quantity
-                position.product.save(update_fields=['inventory'])
+                if position_product == position.product: # not changed
+                    position.product.inventory += position_quantity
+                    position.product.save(update_fields=['inventory'])
+                else: # changed
+                    position_product.inventory += position_quantity
+                    position_product.save(update_fields=['inventory'])
             form.save()
             confirm = True
 

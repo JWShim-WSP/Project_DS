@@ -68,43 +68,51 @@
             {{ form | crispy }}
             {% if user.profile.language == "Korean" %}
                 {% if profile.transaction_id %}
-                <input class="btn btn-outline-primary"
-                value="돌아가기"
-                type="button"
-                onclick="location.href='{% url "sales:saleslist" %}'">
-                {% if profile.delivery_completed == False %}
-                <input class="btn btn-outline-primary"
-                value="출고완료처리"
-                type="submit">
-                {% endif %}
+                    <input class="btn btn-outline-primary"
+                    value="돌아가기"
+                    type="button"
+                    onclick="location.href='{% url "sales:saleslist" %}'">
+                    {% if profile.delivery_completed == False %}
+                        <input class="btn btn-outline-primary"
+                        value="출고완료처리"
+                        type="submit">
+                    {% endif %}
+                    <input class="btn btn-outline-primary"
+                    value="삭제"
+                    type="button"
+                    onclick="location.href='{% url "sales:sales-delete" profile.id %}'">
                 {% else %}
-                <input class="btn btn-outline-primary"
-                value="저장"
-                type="submit">
-                <input class="btn btn-outline-primary"
-                value="돌아가기"
-                type="button"
-                onclick="location.href='{% url "sales:positionlist" %}'">
+                    <input class="btn btn-outline-primary"
+                    value="저장"
+                    type="submit">
+                    <input class="btn btn-outline-primary"
+                    value="돌아가기"
+                    type="button"
+                    onclick="location.href='{% url "sales:positionlist" %}'">
                 {% endif %}
             {% else %}
                 {% if profile.transaction_id %}
-                <input class="btn btn-outline-primary"
-                value="Go Back"
-                type="button"
-                onclick="location.href='{% url "sales:saleslist" %}'">
-                {% if profile.delivery_completed == False %}
-                <input class="btn btn-outline-primary"
-                value="Complete Delivery"
-                type="submit">
-                {% endif %}
+                    <input class="btn btn-outline-primary"
+                    value="Go Back"
+                    type="button"
+                    onclick="location.href='{% url "sales:saleslist" %}'">
+                    {% if profile.delivery_completed == False %}
+                        <input class="btn btn-outline-primary"
+                        value="Complete Delivery"
+                        type="submit">
+                    {% endif %}
+                    <input class="btn btn-outline-primary"
+                    value="Delete"
+                    type="button"
+                    onclick="location.href='{% url "sales:sales-delete" profile.id %}'">
                 {% else %}
-                <input class="btn btn-outline-primary"
-                value="Save"
-                type="submit">
-                <input class="btn btn-outline-primary"
-                value="Cancel"
-                type="button"
-                onclick="location.href='{% url "sales:positionlist" %}'">
+                    <input class="btn btn-outline-primary"
+                    value="Save"
+                    type="submit">
+                    <input class="btn btn-outline-primary"
+                    value="Cancel"
+                    type="button"
+                    onclick="location.href='{% url "sales:positionlist" %}'">
                 {% endif %}
             {% endif %}
             <!-- You cannot delete Sales Record

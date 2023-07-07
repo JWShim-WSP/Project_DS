@@ -63,7 +63,7 @@ class Product(models.Model):
     price = models.FloatField(blank=False)
     moq = models.IntegerField(blank=True, default=1)
     price_quantity_base = models.PositiveIntegerField(default=10)
-    remark = models.TextField(max_length=1024, blank=True)
+    remark = models.TextField(max_length=1024, blank=True, null=True)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='product_supplier')
     customers = models.ManyToManyField(Customer, blank=True, related_name='product_customers')
     product_type = models.ForeignKey(ProductGroup, on_delete=models.CASCADE)

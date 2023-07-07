@@ -58,7 +58,7 @@ class Comment(models.Model):
     content = models.TextField(max_length=1024)
     post_Date = models.DateTimeField(default=timezone.now)
     update_Date = models.DateField(auto_now=True)
-    parent = models.ForeignKey('self' , blank=True , on_delete=models.CASCADE , related_name='replies')
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
 
     class Meta:
         ordering=['-post_Date']

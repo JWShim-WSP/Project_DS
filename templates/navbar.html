@@ -19,9 +19,9 @@
 
 
 {% if user.profile.menubar == "Button" %}
-<nav class="navbar nav-pills navbar-light bg-light">
+<nav class="navbar nav-pills bg-primary">
 {% else %}
-<nav class="navbar navbar-expand-lg nav-pills navbar-light bg-light">
+<nav class="navbar navbar-expand-lg bg-primary">
 {% endif %}
   <div class="container-fluid">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -125,7 +125,7 @@
             <form action="https://google.com/search" method="get">
               <div class="input-group">
                 <input type="search" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2" name="query">
-                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Google Search</button>
+                <button class="btn btn-light btn-outline-primary" type="submit" id="button-addon2">Google Search</button>
               </div>
             </form>
           </li>
@@ -148,7 +148,7 @@
 
       {% if request.user.is_authenticated %}
       <div class="nav-item dropdown">
-        <div class="nav-link dropdown-toggle" style="color:white" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="{{picture.url}}" class="avatar-sm">&nbsp;{{request.user}}
         </div>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">

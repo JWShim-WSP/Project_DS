@@ -6,6 +6,15 @@ Tools
 
 {% block content %}
 
+<div class="d-flex mb-3">
+    <div class="p-1">
+        <a class="btn btn-outline-primary" href="{% url 'tools:chatbot' %}" role="button">ChatGPT</a>
+    </div>
+    <div class="p-1">
+        <a class="btn btn-outline-primary" href="{% url 'tools:davinci' %}" role="button">Generate Image</a>
+    </div>
+</div>
+
 <div class="mt-5 text-center">
     {% if user.profile.language == "Korean" %}
     <h3 class="text-primary">도구함</h3>

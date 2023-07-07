@@ -399,12 +399,24 @@ def purchase_positions_list_view(request):
 @staff_member_required
 def purchase_position_detail_view(request, pk):
     position = Purchase.objects.get(pk=pk)
+    position_product = Product.objects.get(pk=position.product.id)
     form = PurchaseForm(request.POST or None, instance=position)
     confirm = False
     products_qs = Product.objects.all().order_by('-updated')
 
+    # let's save current status for changes
+    position_quantity = position.quantity
+    position_status = position.status
+
     if request.method == "POST":
         if form.is_valid():
+            if position_status == "Stocked": # if it was "Stocked", inventory should be rearranged!!!
+                if position_product == position.product: # not changed
+                    position.product.inventory -= position_quantity
+                    position.product.save(update_fields=['inventory'])
+                else: # product changed from the previous one
+                    position_product.inventory -= position_quantity
+                    position_product.save(update_fields=['inventory'])
             form.save()
             confirm = True
 
@@ -441,7 +453,14 @@ def purchase_position_add_view(request):
 def purchase_position_delete_view(request, pk):
     position = Purchase.objects.get(pk=pk)
 
+    # let's save current status for changes
+    position_quantity = position.quantity
+    position_status = position.status
+
     if request.method == 'POST':
+        if position_status == "Stocked":
+            position.product.inventory -= position_quantity
+            position.product.save(update_fields=['inventory'])
         position.delete()
         return HttpResponseRedirect(reverse('products:positionlist'))
     else:

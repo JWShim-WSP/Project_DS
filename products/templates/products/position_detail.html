@@ -105,11 +105,15 @@
                 <th scope="col">이름</th>
                 <th scope="col">통화</th>
                 <th scope="col" class="text-danger"><b>재고수량</b></th>
+                <!--
                 <th scope="col" class="text-info">총입고수량</th>
+                -->
                 <th scope="col">평균원환율</th>
                 <th scope="col" class="text-success">평균구매단가(통화)</th>
                 <th scope="col" class="text-success">평균구매단가(KRW)</th>
+                <!--
                 <th scope="col" class="text-primary"><b>총입고원가(KRW)</b></th>
+                -->
                 <th scope="col">분류</th>
                 <th scope="col">공급사</th>
                 <th scope="col">변경일시</th>
@@ -120,11 +124,15 @@
                 <th scope="col">Name</th>
                 <th scope="col">Currency</th>
                 <th scope="col" class="text-danger"><b>Inventory</b></th>
+                <!--
                 <th scope="col" class="text-info">Total Quantity</th>
+                -->
                 <th scope="col">Avg. Exchange Rate</th>
                 <th scope="col" class="text-success">Avg. Unit Price(Currency)</th>
                 <th scope="col" class="text-success">Avg. Unit Price(KRW)</th>
+                <!--
                 <th scope="col" class="text-primary"><b>Total Cost(KRW)</b></th>
+                -->
                 <th scope="col">Product Group</th>
                 <th scope="col">Supplier</th>
                 <th scope="col">Updated</th>
@@ -138,14 +146,18 @@
                     <td>{{ object.name }}</td>
                     <td>{{ object.currency }}</td>
                     <td class="integer_comma text-danger fw-bold">{{ object.inventory }}</td>
+                    <!--
                     <td class="integer_comma text-info fw-bold">{{ object.total_quantity }}</td>
+                    -->
                     <td class="float_rounded">{{ object.average_ex_rate_to_KRW }}</td>
                     <td class="text-success float_rounded">{{ object.average_unit_price }}</td>
                     <td class="text-success float_rounded">{{ object.average_unit_price_KRW }}</td>
+                    <!--
                     <td class="text-primary float_rounded fw-bold">{{ object.total_added_price_KRW }}</td>
+                    -->
                     <td>{{ object.product_type }}</td>
                     <td>{{ object.supplier }}</td>
-                    <td>{{ object.updated }}</td>
+                    <td class="date_string">{{ object.updated }}</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -179,32 +191,28 @@
     {% csrf_token %}
     {{ form | crispy }}
     {% if user.profile.language == "Korean" %}
-      {% if profile.status != "Stocked" %}
-        <input class="btn btn-outline-primary"
-        value="저장"
-        type="submit">
-      {% endif %}
+      <input class="btn btn-outline-primary"
+      value="저장"
+      type="submit">
       <input class="btn btn-outline-primary"
       value="돌아가기"
       type="button"
       onclick="location.href='{% url "products:positionlist" %}'">
-      {% if profile.id and profile.status != "Stocked" %}
+      {% if profile.id %}
           <input class="btn btn-outline-primary"
           value="삭제"
           type="button"
           onclick="location.href='{% url "products:position-delete" profile.id %}'">
       {% endif %}
     {% else %}
-      {% if profile.status != "Stocked" %}
-        <input class="btn btn-outline-primary"
-        value="Save"
-        type="submit">
-      {% endif %}
+      <input class="btn btn-outline-primary"
+      value="Save"
+      type="submit">
       <input class="btn btn-outline-primary"
       value="Cancel"
       type="button"
       onclick="location.href='{% url "products:positionlist" %}'">
-      {% if profile.id and profile.status != "Stocked" %}
+      {% if profile.id %}
           <input class="btn btn-outline-primary"
           value="Delete"
           type="button"

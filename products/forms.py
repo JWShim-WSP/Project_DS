@@ -12,8 +12,8 @@ PURCHASE_SUM_CHOICES = (
 PRODUCT_SUM_CHOICES = (
     ('inventory', 'Inventory'),
     ('average_unit_price_KRW', 'Average Unit Price_KRW'),
-    ('total_quantity', 'Total quantity'),
-    ('total_added_price_KRW', 'Total Purchase Cost'),
+    #('total_quantity', 'Total quantity'),
+    #('total_added_price_KRW', 'Total Purchase Cost'),
 )
 
 class ProductGroupForm(forms.ModelForm):

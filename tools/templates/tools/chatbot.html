@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+ChatGPT and Davinci
+{% endblock title %}
+
+{% block content %}
+<h3>write an instruction</h3>
+
+<form method="POST" autocomplete="off">
+    {% csrf_token %}
+    <input type="text" class="form-control" name="user_input">
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+</form>
+
+<br>
+
+{% if response %}
+<div>
+    {{ response | safe }}
+</div>
+{% endif %}
+
+{% if image %}
+<div>
+    {{ image.phrase }}
+    <br>
+    <img src="{{ image.ai_image.url }}" alt="{{ image.phrase }}">
+</div>
+{% endif %}
+
+{% endblock content %}

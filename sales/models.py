@@ -37,7 +37,7 @@ class Position(models.Model):
                     self.inventory_status = True
                 else:
                     self.inventory_status = False
-        except: # comes from normal Postion save
+        except: # comes from normal Position save
             self.net_price = self.unit_price * self.quantity
             self.net_profit = (self.unit_price - self.product.average_unit_price_KRW) * self.quantity
             if self.product.average_unit_price_KRW:
