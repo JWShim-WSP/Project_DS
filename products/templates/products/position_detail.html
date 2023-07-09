@@ -97,12 +97,13 @@
   </div>
   <div class="offcanvas-body">
     <div>
-        <table class="table text-center table-hover table-light">
-            <thead>
+        <table class="table text-center table-hover">
+            <thead class="table-light">
               {% if user.profile.language == "Korean" %}
                 <tr>
                 <th scope="col">제품 ID</th>
                 <th scope="col">이름</th>
+                <th scope="col" class="text-danger">기준가격</th>
                 <th scope="col">통화</th>
                 <th scope="col" class="text-danger"><b>재고수량</b></th>
                 <!--
@@ -122,6 +123,7 @@
                 <tr>
                 <th scope="col">Product ID</th>
                 <th scope="col">Name</th>
+                <th scope="col" class="text-danger">Ref. Price</th>
                 <th scope="col">Currency</th>
                 <th scope="col" class="text-danger"><b>Inventory</b></th>
                 <!--
@@ -139,11 +141,12 @@
                 </tr>
               {% endif %}
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
               {% for object in object_list_products %}
                 <tr>
                     <th scope="row">{{ object.id }}</th>
                     <td>{{ object.name }}</td>
+                    <td class="text-danger">{{ object.price }}</td>
                     <td>{{ object.currency }}</td>
                     <td class="integer_comma text-danger fw-bold">{{ object.inventory }}</td>
                     <!--

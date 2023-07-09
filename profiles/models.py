@@ -78,7 +78,8 @@ class Profile(models.Model):
     objects = ProfileManager()
 
     def __str__(self):
-        return f"{self.user.username}-{self.created.strftime('%d-%m-%Y')}"
+        #return f"{self.user.username}-{self.created.strftime('%d-%m-%Y')}"
+        return f"{self.user.username}"
 
     def get_friends(self):
         return self.friends.all()

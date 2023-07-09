@@ -24,18 +24,18 @@ Sales List
 <div class="d-flex mb-3">
     {% if user.profile.language == "Korean" %}
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:positionlist' %}" role="button">단위판매</a>
+        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">단위판매 PO</a>
+    </div>
+    <div class="p-1">
+        <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#salesModal">보기분류</button>
     </div>
     {% if object_list_products %}
     <div class="p-1">
         <button type="button" class="btn btn-outline-primary" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProductsInfo" aria-controls="offCanvasProductsInfo">
-          제품 정보 보기
+        제품 정보 보기
         </button>
     </div>
     {% endif %}    
-    <div class="p-1">
-        <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#salesModal">보기분류</button>
-    </div>
     <div class="me-auto p-1">
         <button type="button" class="btn btn-outline-primary not-visible" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">리포트</button>
     </div>
@@ -46,7 +46,10 @@ Sales List
     </div>
     {% else %}
     <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:positionlist' %}" role="button">Sales Position</a>
+        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">Position PO</a>
+    </div>
+    <div class="p-1">
+        <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#salesModal">Sort By</button>
     </div>
     {% if object_list_products %}
     <div class="p-1">
@@ -55,9 +58,6 @@ Sales List
         </button>
     </div>
     {% endif %}    
-    <div class="p-1">
-        <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#salesModal">Sort By</button>
-    </div>
     <div class="me-auto p-1">
         <button type="button" class="btn btn-outline-primary not-visible" id="report-btn" data-bs-toggle="modal" data-bs-target="#reportModal">Report</button>
     </div>
@@ -85,8 +85,8 @@ Sales List
     </div>
     <div class="offcanvas-body">
         <div>
-            <table class="table text-center table-hover table-light">
-                <thead>
+            <table class="table text-center table-hover">
+                <thead class="table-light">
                 {% if user.profile.language == "Korean" %}
                     <tr>
                     <th scope="col">제품 ID</th>
@@ -127,7 +127,7 @@ Sales List
                     </tr>
                 {% endif %}
                 </thead>
-                <tbody>
+                <tbody class="table-group-divider">
                 {% for object in object_list_products %}
                     <tr>
                         <th scope="row">{{ object.id }}</th>
@@ -263,8 +263,8 @@ Sales List
 <br>
 <br>
 
-<table class="table text-center table-hover table-light">
-    <thead>
+<table class="table text-center table-hover">
+    <thead class="table-light">
     {% if user.profile.language == "Korean" %}
         <tr>
         <th scope="col">판매 ID</th>
@@ -309,7 +309,7 @@ Sales List
         </tr>
     {% endif %}
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
         {% for object in object_list %}
             <tr onclick="window.location='{{object.get_absolute_url}}'">
                 <th scope="row">{{ object.id }}</th>

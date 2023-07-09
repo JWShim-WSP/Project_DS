@@ -1,27 +1,19 @@
 {% extends "base.html" %}
 
 {% block title %}
-Tools
+Webmail Box
 {% endblock title %}
 
 {% block content %}
 
-<div class="d-flex mb-3">
-    <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'tools:chatbot' %}" role="button">ChatGPT</a>
-    </div>
-    <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'tools:davinci' %}" role="button">Generate Image</a>
-    </div>
-</div>
-
 <div class="mt-5 text-center">
     {% if user.profile.language == "Korean" %}
-    <h3 class="text-primary">도구함</h3>
+    <h3 class="text-primary">Webmail Box</h3>
     {% else %}
-    <h3 class="text-primary">Tools</h3>
+    <h3 class="text-primary">Webmail Box</h3>
     {% endif %}
     <div class="card mt-3 pt-5">
+        <!--
         <div class="row mb-5 pb-5">
             <div class="col-4">
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-calendar-check-fill" viewBox="0 0 16 16">
@@ -97,6 +89,7 @@ Tools
                 {% endif %}
             </div>
         </div>
+        -->
         <div class="row mb-3 pb-5">
             <div class="col-4">
                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-envelope-at-fill" viewBox="0 0 16 16">

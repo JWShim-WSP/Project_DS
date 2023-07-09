@@ -96,8 +96,8 @@
   </div>
   <div class="offcanvas-body">
     <div>
-        <table class="table text-center table-hover table-light">
-            <thead>
+        <table class="table text-center table-hover">
+            <thead class="table-light">
               {% if user.profile.language == "Korean" %}
                 <tr>
                 <th scope="col">제품 ID</th>
@@ -138,7 +138,7 @@
                 </tr>
               {% endif %}
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
               {% for object in object_list_products %}
                 <tr>
                     <th scope="row">{{ object.id }}</th>

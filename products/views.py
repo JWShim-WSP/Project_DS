@@ -35,13 +35,8 @@ def inventory_reset_view(request):
 
         products_qs = Product.objects.all()
         for product in products_qs:
-            new_purchase = Purchase()
-            new_purchase.product = product
-            new_purchase.quantity = product.inventory
-            new_purchase.unit_price = product.average_unit_price
-            new_purchase.ex_rate_to_KRW = product.average_ex_rate_to_KRW
-            new_purchase.status = "Stocked"
-            new_purchase.save() # this will signal to create new product information, too.
+            product.inventory = 0
+            product.save() # this will signal to create new product information, too.
 
         confirm = True
     

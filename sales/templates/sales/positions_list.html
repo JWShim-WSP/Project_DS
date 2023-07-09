@@ -26,22 +26,20 @@ Position List
     <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">단위판매등록</a>
     </div>
-    <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">단위판매실행</a>
-    </div>
+    {% if object_list_products %}
     <div class="p-1">
         <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#positionsModal">보기 분류</button>
     </div>
-    {% if object_list_products %}
-    <div class="p-1">
+    <div class="me-auto p-1">
         <button type="button" class="btn btn-outline-primary" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProductsInfo" aria-controls="offCanvasProductsInfo">
           제품 정보 보기
         </button>
     </div>
-    {% endif %}    
+    {% else %}
     <div class="me-auto p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:saleslist' %}" role="button">판매 PO 리스트</a>
+        <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#positionsModal">보기 분류</button>
     </div>
+    {% endif %}    
     <div class="p-1">
         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
             파일에 저장
@@ -51,22 +49,20 @@ Position List
     <div class="p-1">
         <a class="btn btn-outline-primary" href="{% url 'sales:position-add' %}" role="button">Add Position</a>
     </div>
-    <div class="p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:sales-add' %}" role="button">Sales Execution</a>
-    </div>
+    {% if object_list_products %}
     <div class="p-1">
         <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#positionsModal">Sort By</button>
     </div>
-    {% if object_list_products %}
-    <div class="p-1">
+    <div class="me-auto p-1">
         <button type="button" class="btn btn-outline-primary" data-bs-toggle="offcanvas" data-bs-target="#offCanvasProductsInfo" aria-controls="offCanvasProductsInfo">
           Product Info
         </button>
     </div>
-    {% endif %}    
+    {% else %}
     <div class="me-auto p-1">
-        <a class="btn btn-outline-primary" href="{% url 'sales:saleslist' %}" role="button">Back to Sales</a>
+        <button type="button" class="btn btn-outline-primary" id="search-btn" data-bs-toggle="modal" data-bs-target="#positionsModal">Sort By</button>
     </div>
+    {% endif %}    
     <div class="p-1">
         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-modal">
             Download
@@ -86,8 +82,8 @@ Position List
     </div>
     <div class="offcanvas-body">
         <div>
-            <table class="table text-center table-hover table-light">
-                <thead>
+            <table class="table text-center table-hover">
+                <thead class="table-light">
                 {% if user.profile.language == "Korean" %}
                     <tr>
                     <th scope="col">제품 ID</th>
@@ -128,7 +124,7 @@ Position List
                     </tr>
                 {% endif %}
                 </thead>
-                <tbody>
+                <tbody class="table-group-divider">
                 {% for object in object_list_products %}
                     <tr>
                         <th scope="row">{{ object.id }}</th>
@@ -241,8 +237,8 @@ Position List
 
 {% endif %}
 
-<table class="table text-center table-hover table-light">
-    <thead>
+<table class="table text-center table-hover">
+    <thead class="table-light">
     {% if user.profile.language == "Korean" %}
         <tr>
         <th scope="col">단위판매 ID</th>
@@ -285,7 +281,7 @@ Position List
         </tr>
     {% endif %}
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
         {% for object in object_list %}
             <tr onclick="window.location='{{object.get_absolute_url}}'">
                 <th scope="row">{{ object.id }}</th>

@@ -1,11 +1,12 @@
 from django.urls import path
-from .views import tools_main_view, chatbot, generate_image_from_txt
+from .views import tools_main_view, chatbot_general, chatbot_translation, generate_image_from_txt
 
 
 app_name = 'tools'
 
 urlpatterns = [
     path('', tools_main_view, name='main'),
-    path('chatbot/', chatbot, name='chatbot'),
-    path('davinci/', generate_image_from_txt, name='davinci'),
+    path('openai/general/', chatbot_general, name='openai-general'),
+    path('openai/translation/', chatbot_translation, name='openai-translation'),
+    path('openai/image/', generate_image_from_txt, name='openai-image'),
 ]

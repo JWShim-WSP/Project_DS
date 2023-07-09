@@ -58,7 +58,7 @@ Supplier List
 </div>
 
 <table class="table text-center table-hover table-light">
-    <thead>
+    <thead class="table-light">
         <tr>
         {% if user.profile.language == "Korean" %}
             <th scope="col"></th>
@@ -77,7 +77,7 @@ Supplier List
         {% endif %}
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
         {% for object in object_list %}
             <tr onclick="window.location='{{object.get_absolute_url}}'">
                 <th scope="row"><img src="{{object.logo.url }}" alt="my-profile" class="avatar-tnail"></th>

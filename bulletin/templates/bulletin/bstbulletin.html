@@ -29,8 +29,8 @@ Bulletin
     {% endif %}
 </div>
 
-<table class="table text-center table-hover table-light">
-    <thead>
+<table class="table text-center table-hover">
+    <thead class="table-light">
         <tr>
         {% if user.profile.language == "Korean" %}
             <th scope="col"></th>
@@ -47,7 +47,7 @@ Bulletin
         {% endif %}
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
         {% for object in posts %}
             <tr onclick="window.location='{{object.get_absolute_url}}'">
                 <th scope="row"><img src="{{object.poster.avatar.url }}" alt="my-profile" class="avatar-tnail"></th>

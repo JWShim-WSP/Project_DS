@@ -7,8 +7,8 @@
 {% block content %}
 <div class="text-center">
     <h3 class="text-primary"><b>[{{ todo_list.title }}]</b></h3>
-    <table class="table table-hover table-light" >
-        <thead>
+    <table class="table table-hover" >
+        <thead class="table-light">
             <tr class="text-primary">
                 <th>To Do Item</th>
                 <th>Created Date</th>
@@ -18,7 +18,7 @@
             </tr>
         </thead>
         {% for x in todoitemlist %}
-        <tbody>
+        <tbody class="table-group-divider">
             <tr onclick="window.location='{{x.get_absolute_url}}'">
                 <td>{{x.title}}</td>
                 <td>{{x.created_date}}</td>

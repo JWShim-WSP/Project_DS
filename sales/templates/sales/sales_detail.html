@@ -88,7 +88,7 @@
                     <input class="btn btn-outline-primary"
                     value="돌아가기"
                     type="button"
-                    onclick="location.href='{% url "sales:positionlist" %}'">
+                    onclick="location.href='{% url "sales:saleslist" %}'">
                 {% endif %}
             {% else %}
                 {% if profile.transaction_id %}
@@ -112,7 +112,7 @@
                     <input class="btn btn-outline-primary"
                     value="Cancel"
                     type="button"
-                    onclick="location.href='{% url "sales:positionlist" %}'">
+                    onclick="location.href='{% url "sales:saleslist" %}'">
                 {% endif %}
             {% endif %}
             <!-- You cannot delete Sales Record
@@ -150,7 +150,7 @@
                     </div>
                     {% endif %}
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" onclick="location.href='{% url "sales:positionlist"  %}'" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="location.href='{% url "sales:saleslist"  %}'" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

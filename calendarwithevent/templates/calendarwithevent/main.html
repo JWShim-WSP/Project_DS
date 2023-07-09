@@ -171,8 +171,8 @@ Calendar with Event
 
     <div class="col">
         <h5 class="text-primary"><b>Events in {{ month }}</b></h5>
-        <table class="table table-hover table-light">
-            <thead>
+        <table class="table table-hover">
+            <thead class="table-light">
                 <tr class="text-primary">
                     <th><b>Title</b></th>
                     <th><b>When</b></th>
@@ -180,7 +180,7 @@ Calendar with Event
                     <th><b>Completed</b></th>                    
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
             {% for event in events %}
                 <tr onclick="window.location='{{event.get_absolute_url}}'">
                     <td>{{event.title}}</td>
@@ -218,7 +218,7 @@ Calendar with Event
 
         <h5 class="text-primary"><b>To-Do Items in {{month}}</b></h5>
         <table class="table table-hover table-light">
-            <thead>
+            <thead class="table-light">
                 <tr class="text-primary">
                     <th><b>What to do</b></th>
                     <th><b>Created Date</b></th>
@@ -227,7 +227,7 @@ Calendar with Event
                     <th><b>Completed</b></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
             {% for todoitem in todoitems %}
                 <tr onclick="window.location='{{todoitem.get_absolute_url}}'">
                     <td>{{todoitem.title}}</td>

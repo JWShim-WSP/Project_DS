@@ -43,7 +43,7 @@ BST Project - List of Members
 </div>
 
 <table class="table text-center table-hover table-light">
-    <thead>
+    <thead class="table-light">
         <tr>
         <th scope="col"></th>
         <th scope="col">Username</th>
@@ -54,7 +54,7 @@ BST Project - List of Members
         <th scope="col">Date Joined</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
         {% for object in object_list %}
             <tr onclick="window.location='{% url "myadmin:memberdetails" object.id %}'">
                 <th scope="row"><img src="{{object.profile.avatar.url }}" alt="my-profile" class="avatar-tnail"></th>
