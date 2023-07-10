@@ -57,19 +57,19 @@
           </ul>
         </div>
 
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_purchase %}active{% endif %}" href="{{path_to_purchase}}">구매</a>
+        </li>
+
         <div class="nav-item dropdown">
           <div class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             판매
           </div>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">판매 PO 실행</a></li>
             <li><a class="dropdown-item {% if request.path == path_to_salesposition %}active{% endif %}" href="{{path_to_salesposition}}">단위판매등록</a></li>
+            <li><a class="dropdown-item {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">판매 PO 실행</a></li>
           </ul>
         </div>
-
-        <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_purchase %}active{% endif %}" href="{{path_to_purchase}}">구매</a>
-        </li>
 
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_reports %}active{% endif %}" href="{{path_to_reports}}">보고서</a>
@@ -183,19 +183,19 @@
           </ul>
         </div>
 
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == path_to_purchase %}active{% endif %}" href="{{path_to_purchase}}">Purchase</a>
+        </li>
+
         <div class="nav-item dropdown">
           <div class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Sales
           </div>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">Sales PO</a></li>
             <li><a class="dropdown-item {% if request.path == path_to_salesposition %}active{% endif %}" href="{{path_to_salesposition}}">Sales Position</a></li>
+            <li><a class="dropdown-item {% if request.path == path_to_sales %}active{% endif %}" href="{{path_to_sales}}">Sales PO</a></li>
           </ul>
         </div>
-
-        <li class="nav-item">
-          <a class="nav-link {% if request.path == path_to_purchase %}active{% endif %}" href="{{path_to_purchase}}">Purchase</a>
-        </li>
 
         <li class="nav-item">
           <a class="nav-link {% if request.path == path_to_reports %}active{% endif %}" href="{{path_to_reports}}">Reports</a>
