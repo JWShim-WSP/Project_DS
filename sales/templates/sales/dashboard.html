@@ -17,6 +17,7 @@ Dashboard
   {% else %}
   <h3 class="text-center mt-3"><b>[Inventory Status]</b></h3>
   {% endif %}
+  <!--
   <div class="d-flex mb-3">
     {% if user.profile.language == "Korean" %}
     <div class="p-1">
@@ -28,6 +29,7 @@ Dashboard
     </div>
     {% endif %}
   </div>
+  -->
   <table class="table text-center table-hover">
     <thead  class="table-light">
       {% if user.profile.language == "Korean" %}
@@ -97,7 +99,7 @@ Dashboard
 
 <div class="row">
   {% if user.profile.language == "Korean" %}
-  <h3 class="text-center mt-3"><b>[판매 출고 현황]</b></h3>
+  <h3 class="text-center mt-3"><b>[판매 PO 현황]</b></h3>
   {% else %}
   <h3 class="text-center mt-3"><b>[Sales Status]</b></h3>
   {% endif %}
@@ -164,6 +166,52 @@ Dashboard
 <div class="row">
   <div class="col-6">
     {% if user.profile.language == "Korean" %}
+    <h3 class="text-center mt-3"><b>[단위입고 현황]</b></h3>
+    {% else %}
+    <h3 class="text-center mt-3"><b>[Purchase Position Status]</b></h3>
+    {% endif %}
+    <table class="table text-center table-hover">
+      <thead class="table-light">
+        <tr>
+        {% if user.profile.language == "Korean" %}
+        <th scope="col">ID</th>
+        <th scope="col">품목</th>
+        <th scope="col">통화</th>
+        <th scope="col" class="text-primary fw-bold">단위수량</th>
+        <th scope="col">구매가격(KRW)</th>
+        <th scope="col" class="text-danger fw-bold">입고현황</th>
+        <th scope="col">입력일</th>
+        {% else %}
+        <th scope="col">ID</th>
+        <th scope="col">Product</th>
+        <th scope="col">Currency</th>
+        <th scope="col" class="text-primary fw-bold">Quantity</th>
+        <th scope="col">Total Price(KRW)</th>
+        <th scope="col" class="text-danger fw-bold">Status</th>
+        <th scope="col">Updated</th>
+        {% endif %}
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        {% for object in object_list_purchase %}
+          <tr onclick="window.location='{{object.get_absolute_url}}'">
+          <th scope="row">{{ object.id }}</th>
+          <td>{{ object.product.name }}</td>
+
+          <td>{{ object.product.currency }}</td>
+          <td class="integer_comma text-primary fw-bold">{{ object.quantity }}</td>
+
+          <td class="float_rounded">{{ object.added_price_KRW }}</td>
+
+          <td class="text-danger fw-bold">{{ object.status }}</td>
+          <td class="date_string">{{ object.updated }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="col-6">
+    {% if user.profile.language == "Korean" %}
     <h3 class="text-center mt-3"><b>[단위출고 현황]</b></h3>
     {% else %}
     <h3 class="text-center mt-3"><b>[Sales Position Status]</b></h3>
@@ -213,74 +261,26 @@ Dashboard
       </tbody>
     </table>
   </div>
-
-  <div class="col-6">
-    {% if user.profile.language == "Korean" %}
-    <h3 class="text-center mt-3"><b>[단위입고 현황]</b></h3>
-    {% else %}
-    <h3 class="text-center mt-3"><b>[Purchase Position Status]</b></h3>
-    {% endif %}
-    <table class="table text-center table-hover">
-      <thead class="table-light">
-        <tr>
-        {% if user.profile.language == "Korean" %}
-        <th scope="col">ID</th>
-        <th scope="col">품목</th>
-        <th scope="col">통화</th>
-        <th scope="col" class="text-primary fw-bold">단위수량</th>
-        <th scope="col">구매가격(KRW)</th>
-        <th scope="col" class="text-danger fw-bold">입고현황</th>
-        <th scope="col">입력일</th>
-        {% else %}
-        <th scope="col">ID</th>
-        <th scope="col">Product</th>
-        <th scope="col">Currency</th>
-        <th scope="col" class="text-primary fw-bold">Quantity</th>
-        <th scope="col">Total Price(KRW)</th>
-        <th scope="col" class="text-danger fw-bold">Status</th>
-        <th scope="col">Updated</th>
-        {% endif %}
-        </tr>
-      </thead>
-      <tbody class="table-group-divider">
-        {% for object in object_list_purchase %}
-          <tr onclick="window.location='{{object.get_absolute_url}}'">
-          <th scope="row">{{ object.id }}</th>
-          <td>{{ object.product.name }}</td>
-
-          <td>{{ object.product.currency }}</td>
-          <td class="integer_comma text-primary fw-bold">{{ object.quantity }}</td>
-
-          <td class="float_rounded">{{ object.added_price_KRW }}</td>
-
-          <td class="text-danger fw-bold">{{ object.status }}</td>
-          <td class="date_string">{{ object.updated }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
 </div>
 
 <div class="row">
   <div class="col-6">
     {% if user.profile.language == "Korean" %}
-    <h3 class="text-center mt-3"><b>YoY 순익</b></h3>
+    <h3 class="text-center mt-3"><b>{{ current_year }} 매출</b></h3>
     {% else %}
-    <h3 class="text-center mt-3"><b>YoY Profit</b></h3>
+    <h3 class="text-center mt-3"><b>{{ current_year }} Revenue</b></h3>
     {% endif %}
 
-    {% if no_data1 %}
+    {% if no_data4 %}
       <div class="alert alert-warning" role="alert">
-        {{ no_data1 }}
+        {{ no_data4 }}
       </div>
     {% else %}
       <div class="card mb-3 text-center">
-        <img src="data:image/png;base64, {{chart1 | safe}}" id='img'>
+        <img src="data:image/png;base64, {{chart4 | safe}}" id='img'>
       </div>
     {% endif %}
   </div>
-
   <div class="col-6">
     {% if user.profile.language == "Korean" %}
     <h3 class="text-center mt-3"><b>{{ current_year }} 순익</b></h3>
@@ -318,21 +318,20 @@ Dashboard
       </div>
     {% endif %}
   </div>
-
   <div class="col-6">
     {% if user.profile.language == "Korean" %}
-    <h3 class="text-center mt-3"><b>{{ current_year }} 매출</b></h3>
+    <h3 class="text-center mt-3"><b>YoY 순익</b></h3>
     {% else %}
-    <h3 class="text-center mt-3"><b>{{ current_year }} Revenue</b></h3>
+    <h3 class="text-center mt-3"><b>YoY Profit</b></h3>
     {% endif %}
 
-    {% if no_data4 %}
+    {% if no_data1 %}
       <div class="alert alert-warning" role="alert">
-        {{ no_data4 }}
+        {{ no_data1 }}
       </div>
     {% else %}
       <div class="card mb-3 text-center">
-        <img src="data:image/png;base64, {{chart4 | safe}}" id='img'>
+        <img src="data:image/png;base64, {{chart1 | safe}}" id='img'>
       </div>
     {% endif %}
   </div>

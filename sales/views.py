@@ -28,7 +28,7 @@ def sales_dashboard_view(request):
     no_data3 = None
     no_data4 = None
 
-    sales_positions_qs = Position.objects.order_by('position_sold')
+    sales_positions_qs = Position.objects.order_by('inventory_status', 'position_sold')
     purchase_positions_qs = Purchase.objects.order_by('status')
     products_qs = Product.objects.order_by('-updated')
     sales_status_qs = Sale.objects.order_by('delivery_completed')

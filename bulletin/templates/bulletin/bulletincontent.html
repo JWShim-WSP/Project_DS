@@ -82,13 +82,13 @@
 <h5 class="text-primary"><b>Content:</b></h5>
 {% endif %}
 
-<div class="card mb-3">
+<div>
     {% if post.image %}
-        <img src="{{ post.image.url }}" alt="post-image">
+        <img src="{{ post.image.url }}" alt="post-image" width="350" height="350">
     {% endif %}
 </div>
 
-<div class="card mb-3">
+<div class="card mb-3 post-content">
     <p><pre>{{ post.content }}</pre></p>
 </div>
 

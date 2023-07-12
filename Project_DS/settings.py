@@ -185,6 +185,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'reports' / 'static',
     BASE_DIR / 'excurrency' / 'static',
     BASE_DIR / 'emailsend' / 'static',
+    BASE_DIR / 'tools' / 'static',
 ]
 STATIC_ROOT = BASE_DIR / 'productionfiles'
 
